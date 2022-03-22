@@ -1,0 +1,1 @@
+alias algo1='cd /mnt/c/Users/PC/Documents/UBA/FIUBA/Algo-I'

@@ -1,0 +1,2 @@
+gcc program.c -o compiled   # Para compilar con un nombre especifico
+./nombre_del_bin    # Para ejecutar el programa complilado

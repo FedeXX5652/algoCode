@@ -1,7 +1,12 @@
 #include <stdio.h>
 
 int main(){
-    int edad = 23;
-    printf("%d\n", edad);
-    return 0;
+
+    for(int i=0; i<20; i++){
+        printf("%d\n", i+1);
+    }
+    printf("---------------------\n");
+    for(int i=0; i<20; i++){
+        printf("%d\n", 20-i);
+    }
 }

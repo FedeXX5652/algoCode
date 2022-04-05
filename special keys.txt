@@ -1,0 +1,9 @@
+para usar teclas especiales tenes que usar ctrl+shift+u
+
+dsps pones el nro hex del caracter a ingresar
+
+Ej:
+
+ascii = hex = character
+92 = 5c = \
+64 = 40 = @

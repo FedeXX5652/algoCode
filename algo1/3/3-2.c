@@ -2,6 +2,9 @@
 
 // las funciones tienen return, los procedimientos no (llevan void)
 
+// este es un pasaje de valor por referencia (cambia las originales)
+// el pasaje de valor por valor es por copia (no cambia las originales)
+
 char* function(int* ref_n1, int* ref_n2) {      // le pasamos punteros
     printf("punteros a int: %i %i\n", *ref_n1, *ref_n2);    // accedemos a los valores de los punteros
     int n3 = (*ref_n1);

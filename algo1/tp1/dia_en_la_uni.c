@@ -47,7 +47,7 @@ void qst_1(int* score){
         *score = 20;
     }
 
-    printf("Socre from qst_1: %d\n", *score);
+    //printf("Socre from qst_1: %d\n", *score);
 }
 
 
@@ -88,7 +88,7 @@ void qst_2(int* qst_score){
         (*qst_score) = 12;
     }
 
-    printf("Socre from qst_2: %d\n", (*qst_score));
+    //printf("Socre from qst_2: %d\n", (*qst_score));
 }
 
 
@@ -124,7 +124,7 @@ void qst_3(int* qst_score){
         (*qst_score) = 1;     // 1 equivale a llegar tarde
     }
 
-    printf("Socre from qst_3: %d\n", (*qst_score));
+    //printf("Socre from qst_3: %d\n", (*qst_score));
 }
 
 
@@ -140,22 +140,18 @@ void qst_3(int* qst_score){
 */
 void qst_4(int* qst_score){
     float exam_score = 0;       // PREGUNTAR XQ SE USA FLOAT EN EL EJEMPLO 2 AIUUUUUUUUUUUUUUDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AIUDA
-    int int_exam_score = 0;
 
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Por fin llegó la nota del parcial! ¿Qué nota lograste sacarte?\n");
     printf("Ingrese el valor de su nota en entero (1-10): ");
 
     // Espero la respuesta
-    scanf(" %f", &exam_score);
-    int_exam_score = (int)exam_score;
+    scanf(" %f", &exam_score);;
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
     while(exam_score < 1 || exam_score > 10){
         printf("\nIngrese una nota valida: ");
         scanf(" %f", &exam_score);
-        int_exam_score = (int)exam_score;
-        printf("exam input: %d\n", int_exam_score);
     }
 
     if(exam_score >= 1 && exam_score <= 3){
@@ -171,7 +167,7 @@ void qst_4(int* qst_score){
         (*qst_score) = 4;
     }
 
-    printf("Socre from qst_4: %d\n", (*qst_score));
+    //printf("Socre from qst_4: %d\n", (*qst_score));
 }
 
 
@@ -197,6 +193,14 @@ void character_selector(int final_score, int ans_3_score){
         }
         else if(ans_3_score == 1){
             printf("Con un puntaje de %d puntos se definió el personaje - %s -.\n", final_score, O);
+            printf("          _________________\n");
+            printf("         |I like warm hugs!|\n");
+            printf("     __  |_________________|\n");
+            printf("   _|==|_  v\n");
+            printf("    ('')___/\n");
+            printf(">--(`^^')\n");
+            printf("  (`^'^'`)\n");
+            printf("  `======'\n");
         }
     }
     else if(final_score >= 42 && final_score <= 68){
@@ -229,12 +233,12 @@ int main(){
     qst_4(&ans_4_score);
 
 
-    printf("\n\nans_1: %i\n", ans_1_score);
-    printf("ans_2: %i\n", ans_2_score);
-    printf("ans_3: %i\n", ans_3_score);
-    printf("ans_4: %i\n\n", ans_4_score);
+    //printf("\n\nans_1: %i\n", ans_1_score);
+    //printf("ans_2: %i\n", ans_2_score);
+    //printf("ans_3: %i\n", ans_3_score);
+    //printf("ans_4: %i\n\n", ans_4_score);
 
-    printf("Final Score: %i\n", ans_1_score+(ans_2_score*ans_4_score));
+    //printf("Final Score: %i\n", ans_1_score+(ans_2_score*ans_4_score));
 
     character_selector(ans_1_score+(ans_2_score*ans_4_score), ans_3_score);
 

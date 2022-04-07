@@ -7,11 +7,13 @@ int main(){
 
     // Espero la respuesta
     scanf(" %d", &exam_score);
+    printf("input: %d\n", exam_score);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(exam_score < 1 || exam_score > 10){
+    while(!(exam_score < 1) && !(exam_score > 10)){
         printf("\nIngrese una nota valida: ");
         scanf(" %d", &exam_score);
+        printf("input: %d\n", exam_score);
     }
 
     printf("Valor de la nota: %d\n", exam_score);

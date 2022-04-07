@@ -1,14 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-int main(){
-    char ans_1 = qst_1();
-    char ans_2 = qst_2();
-    float ans_3 = qst_3();
-    char ans_4 = qst_4();
-}
-
-
 char qst_1(){
     char n;
     printf("--------------------------------------------------------------------------------------------\n");
@@ -54,6 +46,8 @@ char qst_2(){
 float qst_3(){
     float n;
     int flag = 0;
+    float integer;
+    float decimal;
     printf("--------------------------------------------------------------------------------------------\n");
     printf("Lograste superar la manifestación, ¿A qué hora conseguiste llegar a la universidad?\n");
     do
@@ -67,6 +61,22 @@ float qst_3(){
         float decimal = n-integer;
         printf("integer: %f\n", integer);
         printf("decimal: %f\n", decimal);
-    } while (integer <=);
+    } while (integer <= 23 && decimal <= 59 && decimal >= 0 && integer >= 0);
     return n;
+}
+
+
+int main(){
+    char ans_1;
+    char ans_2;
+    float ans_3;
+    //char ans_4 = qst_4();
+
+    ans_1 = qst_1();
+    ans_2 = qst_2();
+    ans_3 = qst_3();
+
+    printf("ans_1: %c\n", ans_1);
+    printf("ans_2: %c\n", ans_2);
+    printf("ans_3: %f\n", ans_3);
 }

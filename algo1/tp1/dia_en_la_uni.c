@@ -3,17 +3,25 @@
 
 char qst_1(){
     char n;
+    int flag = 0;
     printf("--------------------------------------------------------------------------------------------\n");
     printf("Estás saliendo de tu casa, y te enteras que hay paro de trenes, ¿Qué otro transporte elegís?\n");
     do
     {
-        printf("Ingrese el cartacter correspondiente a la respuesta elegida:\n");
-        printf("1. Trineo (T)\n");
-        printf("2. Nave (N)\n");
-        printf("3. Camion (C)\n");
-        printf("4. Alfombra (A)\n");
+        if (flag == 0){
+            printf("Ingrese el cartacter correspondiente a la respuesta elegida:\n");
+            printf("1. Trineo (T)\n");
+            printf("2. Nave (N)\n");
+            printf("3. Camion (C)\n");
+            printf("4. Alfombra (A)\n");
+            flag = 1;
+        }
+        else if (flag == 1){
+            printf("Ingrese una respuesta valida:\n");
+        }
+
         scanf("%c", &n);
-    } while (n != 't' || n != 'T' || n != 'n' || n != 'N' || n != 'c' || n != 'C' || n != 'a' || n != 'A');
+    } while (n != 't' && n != 'T' && n != 'n' && n != 'N' && n != 'c' && n != 'C' && n != 'a' && n != 'A');
     return tolower(n);
 }
 
@@ -31,14 +39,14 @@ char qst_2(){
             printf("2. Pium pium (P)\n");
             printf("3. Kuchau (K)\n");
             printf("4. Genio (G)\n");
+            flag = 1;
         }
-        else{
+        else if (flag == 1){
             printf("Ingrese una respuesta valida:\n");
         }
 
         scanf("%c", &n);
-        flag = 1;
-    } while (n != 'b' || n != 'B' || n != 'p' || n != 'P' || n != 'k' || n != 'K' || n != 'g' || n != 'G');
+    } while (n != 'b' && n != 'B' && n != 'p' && n != 'P' && n != 'k' && n != 'K' && n != 'g' && n != 'G');
     return tolower(n);
 }
 
@@ -54,6 +62,10 @@ float qst_3(){
     {
         if(flag == 0){
             printf("Ingrese la hora en forma decimal:\n");
+            flag = 1;
+        }
+        else if (flag == 1){
+            printf("Ingrese una hora valida:\n");
         }
         
         scanf("%f", &n);
@@ -70,7 +82,7 @@ int main(){
     char ans_1;
     char ans_2;
     float ans_3;
-    //char ans_4 = qst_4();
+    //char ans_4 = qst_4(); //TODO: implementar
 
     ans_1 = qst_1();
     ans_2 = qst_2();

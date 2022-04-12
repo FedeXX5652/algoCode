@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define J "Jasmin (J)"
-#define R "Rayo McQueen (R)"
-#define O "Olaf (O)"
-#define S "Stitch (S)"
+#define getName(var)  #var      // me permite obtener el nombre de la variable, getName(J) devuelve "J"
+
+#define J "Jasmin"
+#define R "Rayo McQueen"
+#define O "Olaf"
+#define S "Stitch"
 
 #define trineo 'T'
 #define nave 'N'
@@ -16,6 +18,14 @@
 #define kuchau 'K'
 #define genio  'G'
 
+/*
+    Precondifiones:
+        - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
+
+    Postcondiciones:
+        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
+            en la pregunta 1
+*/
 void qst_1(int* score){
     char ans;
 
@@ -23,10 +33,10 @@ void qst_1(int* score){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Estás saliendo de tu casa, y te enteras que hay paro de trenes, ¿Qué otro transporte elegís?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Trineo (T)\n");
-    printf("2. Nave (N)\n");
-    printf("3. Camion (C)\n");
-    printf("4. Alfombra (A)\n\n");
+    printf("1. Trineo (%c)\n", trineo);
+    printf("2. Nave (%c)\n", nave);
+    printf("3. Camion (%c)\n", camion);
+    printf("4. Alfombra (%c)\n\n", alfombra);
 
     // Espero la respuesta
     scanf(" %c", &ans);
@@ -51,6 +61,14 @@ void qst_1(int* score){
 }
 
 
+/*
+    Precondifiones:
+        - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
+
+    Postcondiciones:
+        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
+            en la pregunta 2
+*/
 void qst_2(int* qst_score){
     char ans;
 
@@ -58,10 +76,10 @@ void qst_2(int* qst_score){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("En medio del camino te encontras con una manifestación, ¿Que medio utilizas para deshacerte de la manifestación?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Bolas de nieve (B)\n");
-    printf("2. Pium pium (P)\n");
-    printf("3. Kuchau (K)\n");
-    printf("4. Genio (G)\n\n");
+    printf("1. Bola de nieve (%c)\n", bola_de_nieve);
+    printf("2. Pium pium (%c)\n", pium_pium);
+    printf("3. Kuchau (%c)\n", kuchau);
+    printf("4. Genio (%c)\n\n", genio);
 
     // Espero la respuesta
     scanf(" %c", &ans);
@@ -93,7 +111,13 @@ void qst_2(int* qst_score){
 
 
 /*
+    Precondifiones:
+        - Requiere que el usuario ingrese un horario valido en forma de FLOAT,
+            siendo que la parte entera debe ser entre 0 y 23 (horas), y la parte decimal entre 0 y 59 (minutos)
 
+    Postcondiciones:
+        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
+            en la pregunta 3
 */
 void qst_3(int* qst_score){
     float hour_value;
@@ -139,7 +163,7 @@ void qst_3(int* qst_score){
             + Si el valor ingresado es mayor o igual a 9 y menor o igual a 10, asigna un valor de 4 al score
 */
 void qst_4(int* qst_score){
-    float exam_score = 0;       // PREGUNTAR XQ SE USA FLOAT EN EL EJEMPLO 2 AIUUUUUUUUUUUUUUDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AIUDA
+    float exam_score = 0;       // PREGUNTAR XQ SE USA FLOAT EN EL EJEMPLO 2 AIUUUUUUUUUUUUUUDAAAAAAAAAAAAAAAAAAAAAA AIUDA
 
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Por fin llegó la nota del parcial! ¿Qué nota lograste sacarte?\n");
@@ -189,10 +213,10 @@ void character_selector(int final_score, int ans_3_score){
     printf("\nYa tenemos el resultado del analisis!!!\n");
     if(final_score >= 13 && final_score <= 41){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s -.\n", final_score, S);
+            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, S, getName(S));
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s -.\n", final_score, O);
+            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, O, getName(O));
             printf("          _________________\n");
             printf("         |I like warm hugs!|\n");
             printf("     __  |_________________|\n");
@@ -205,10 +229,10 @@ void character_selector(int final_score, int ans_3_score){
     }
     else if(final_score >= 42 && final_score <= 68){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s -.\n", final_score, J);
+            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, J, getName(J));
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s -.\n", final_score, R);
+            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, R, getName(R));
             printf("  ______\n");
             printf(" /|_||_\\`.__\n");
             printf("(   _    _ _\\\n");

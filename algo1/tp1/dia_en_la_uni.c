@@ -9,7 +9,6 @@
 #define trineo 'T'
 #define nave 'N'
 #define camion 'C'
-
 #define alfombra 'A'
 
 #define bola_de_nieve 'B'

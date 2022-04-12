@@ -20,9 +20,10 @@
 
 /*
     Precondifiones:
-        - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
+        -
 
     Postcondiciones:
+        - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
         - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
             en la pregunta 1
 */
@@ -63,11 +64,17 @@ void qst_1(int* score){
 
 /*
     Precondifiones:
-        - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
+        -
 
     Postcondiciones:
+        - Requiere que el usuario ingrese alguno de los valores indicados (B, P, K, G)
         - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
             en la pregunta 2
+
+            + Si la respuesta es "B" (Bola de nieve), el puntaje es de 3
+            + Si la respuesta es "P" (Pium pium), el puntaje es de 6
+            + Si la respuesta es "K" (Kuchau), el puntaje es de 9
+            + Si la respuesta es "G" (Genio), el puntaje es de 12
 */
 void qst_2(int* qst_score){
     char ans;
@@ -112,12 +119,16 @@ void qst_2(int* qst_score){
 
 /*
     Precondifiones:
-        - Requiere que el usuario ingrese un horario valido en forma de FLOAT,
-            siendo que la parte entera debe ser entre 0 y 23 (horas), y la parte decimal entre 0 y 59 (minutos)
+        -
 
     Postcondiciones:
+        - Requiere que el usuario ingrese un horario valido en forma de FLOAT,
+            siendo que la parte entera debe ser entre 0 y 23 (horas), y la parte decimal entre 0 y 59 (minutos)
         - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
             en la pregunta 3
+
+            + Si el horario ingresado es menor o igual a 15.30, el puntaje es 0 (llega temprano)
+            + Si el horario ingresado es mayor a 15.30, el puntaje es 1 (llega tarde)
 */
 void qst_3(int* qst_score){
     float hour_value;
@@ -153,9 +164,11 @@ void qst_3(int* qst_score){
 
 
 /*
-    Precondicion:
-        - Requiere que se le ingrese un valor del 1 al 10 en forma de entero
-    Postcondicion:
+    Precondiciones:
+        -
+
+    Postcondiciones:
+        - Requiere que el usuario ingrese un valor del 1 al 10 en forma de entero
         - Asigna un valor por referencia a la variable score alocada en el main
             + Si el valor ingresado es mayor o igual a 1 y menor o igual a 3, asigna un valor de 1 al score
             + Si el valor ingresado es mayor o igual a 4 y menor o igual a 6, asigna un valor de 2 al score

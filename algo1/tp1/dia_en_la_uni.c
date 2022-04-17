@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define getName(var)  #var      // me permite obtener el nombre de la variable, getName(J) devuelve "J"
+//#define getName(var)  #var      // me permite obtener el nombre de la variable, getName(J) devuelve "J"
 
-#define J "Jasmin"
-#define R "Rayo McQueen"
-#define O "Olaf"
-#define S "Stitch"
+#define JASMIN "Jasmín"
+#define RAYO "Rayo McQueen"
+#define OLAF "Olaf"
+#define STITCH "Stitch"
 
-#define trineo 'T'
-#define nave 'N'
-#define camion 'C'
-#define alfombra 'A'
+#define TRINEO 'T'
+#define NAVE 'N'
+#define CAMION 'C'
+#define ALFOMBRA 'A'
 
-#define bola_de_nieve 'B'
-#define pium_pium 'P'
-#define kuchau 'K'
-#define genio  'G'
+#define BOLA_DE_NIEVE 'B'
+#define PIUM_PIUM 'P'
+#define KUCHAU 'K'
+#define GENIO  'G'
 
 
 /*
@@ -32,15 +32,15 @@ void validate_ans_1(char* ans){
     *ans = (char)toupper(*ans);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(*ans != trineo && *ans != nave && *ans != camion && *ans != alfombra){
-        printf("Ingrese una respuesta valida: ");
+    while(*ans != TRINEO && *ans != NAVE && *ans != CAMION && *ans != ALFOMBRA){
+        printf("Ingrese una respuesta válida: ");
         scanf(" %c", ans);
         *ans = (char)toupper(*ans);
     }
 }
 
 /*
-    Precondifiones:
+    Precondiciones:
         -
 
     Postcondiciones:
@@ -53,18 +53,18 @@ void qst_1(int* score){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Estás saliendo de tu casa, y te enteras que hay paro de trenes, ¿Qué otro transporte elegís?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Trineo (%c)\n", trineo);
-    printf("2. Nave (%c)\n", nave);
-    printf("3. Camion (%c)\n", camion);
-    printf("4. Alfombra (%c)\n\n", alfombra);
+    printf("1. Trineo (%c)\n", TRINEO);
+    printf("2. Nave (%c)\n", NAVE);
+    printf("3. Camión (%c)\n", CAMION);
+    printf("4. Alfombra (%c)\n\n", ALFOMBRA);
 
     validate_ans_1(&ans);
 
     // Asigno un score a la respuesta
-    if(ans == trineo || ans == nave){
+    if(ans == TRINEO || ans == NAVE){
         *score = 10;
     }
-    else if(ans == camion || ans == alfombra){
+    else if(ans == CAMION || ans == ALFOMBRA){
         *score = 20;
     }
 
@@ -73,7 +73,7 @@ void qst_1(int* score){
 
 
 /*
-    Precondifiones:
+    Precondiciones:
         -
 
     Postcondiciones:
@@ -86,15 +86,15 @@ void validate_ans_2(char* ans){
     *ans = (char)toupper(*ans);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(*ans != bola_de_nieve && *ans != pium_pium && *ans != kuchau && *ans != genio){
-        printf("Ingrese una respuesta valida: ");
+    while(*ans != BOLA_DE_NIEVE && *ans != PIUM_PIUM && *ans != KUCHAU && *ans != GENIO){
+        printf("Ingrese una respuesta válida: ");
         scanf(" %c", ans);
         *ans = (char)toupper(*ans);
     }
 }
 
 /*
-    Precondifiones:
+    Precondiciones:
         -
 
     Postcondiciones:G)
@@ -111,25 +111,25 @@ void qst_2(int* qst_score){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("En medio del camino te encontras con una manifestación, ¿Que medio utilizas para deshacerte de la manifestación?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Bola de nieve (%c)\n", bola_de_nieve);
-    printf("2. Pium pium (%c)\n", pium_pium);
-    printf("3. Kuchau (%c)\n", kuchau);
-    printf("4. Genio (%c)\n\n", genio);
+    printf("1. Bola de nieve (%c)\n", BOLA_DE_NIEVE);
+    printf("2. Pium pium (%c)\n", PIUM_PIUM);
+    printf("3. Kuchau (%c)\n", KUCHAU);
+    printf("4. Genio (%c)\n\n", GENIO);
 
 
     validate_ans_2(&ans);
 
     // Asigno un score a la respuesta
-    if(ans == bola_de_nieve){
+    if(ans == BOLA_DE_NIEVE){
         (*qst_score) = 3;
     }
-    else if(ans == pium_pium){
+    else if(ans == PIUM_PIUM){
         (*qst_score) = 6;
     }
-    else if(ans == kuchau){
+    else if(ans == KUCHAU){
         (*qst_score) = 9;
     }
-    else if(ans == genio){
+    else if(ans == GENIO){
         (*qst_score) = 12;
     }
 
@@ -138,7 +138,7 @@ void qst_2(int* qst_score){
 
 
 /*
-    Precondifiones:
+    Precondiciones:
         -
 
     Postcondiciones:
@@ -153,7 +153,7 @@ void validate_ans_3(float* hour_value){
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
     while(decimal < 0 || decimal > 59 || integer < 0 || integer > 23){
-        printf("\nIngrese una hora valida: ");
+        printf("\nIngrese una hora válida: ");
         scanf(" %f", hour_value);
         integer = (int)*hour_value;
         decimal = ((int)(*hour_value-(float)integer))*10;
@@ -163,7 +163,7 @@ void validate_ans_3(float* hour_value){
 
 
 /*
-    Precondifiones:
+    Precondiciones:
         -
 
     Postcondiciones:
@@ -194,7 +194,7 @@ void qst_3(int* qst_score){
 
 
 /*
-    Precondifiones:
+    Precondiciones:
         -
 
     Postcondiciones:
@@ -207,7 +207,7 @@ void validate_ans_4(int* exam_score){
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
     while(*exam_score < 1 || *exam_score > 10){
-        printf("\nIngrese una nota valida: ");
+        printf("\nIngrese una nota válida: ");
         scanf(" %i", exam_score);
     }
 }
@@ -252,11 +252,11 @@ void qst_4(int* qst_score){
 
 
 /*
-    Pre condiciones:
+    Precondiciones:
         - El final_score debe tener un valor entre 13 y 68
         - ans_3_score debe tener un valor de 0 o 1 (los cuales definen si la persona llego temprano o tarde respectivamente)
     
-    Post condiciones:
+    Postcondiciones:
         - Imprime el resultado del analisis asignando un personaje al usuario
     
             + Si el final_score es mayor o igual a 13 y menor o igual a 41
@@ -273,30 +273,18 @@ void character_selector(int final_score, int ans_3_score){
     // Asigno un personaje al usuario segun el resultado del analisis
     if(final_score >= 13 && final_score <= 41){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, S, getName(S));
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, STITCH);
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, O, getName(O));
-            printf("          _________________\n");
-            printf("         |I like warm hugs!|\n");
-            printf("     __  |_________________|\n");
-            printf("   _|==|_  v\n");
-            printf("    ('')___/\n");
-            printf(">--(`^^')\n");
-            printf("  (`^'^'`)\n");
-            printf("  `======'\n");
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, OLAF);
         }
     }
     else if(final_score >= 42 && final_score <= 68){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, J, getName(J));
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, JASMIN);
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje - %s(%s) -.\n", final_score, R, getName(R));
-            printf("  ______\n");
-            printf(" /|_||_\\`.__\n");
-            printf("(   _    _ _\\\n");
-            printf("=`-(_)--(_)-'       KUCHAU!\n");
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, RAYO);
         }
     }
     else{

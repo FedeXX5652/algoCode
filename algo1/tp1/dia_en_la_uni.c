@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-//#define getName(var)  #var      // me permite obtener el nombre de la variable, getName(J) devuelve "J"
-
 const char *jasmin_name = "Jasmín";
 const char *rayo_name = "Rayo McQueen";
 const char *olaf_name = "Olaf";
@@ -29,9 +27,9 @@ const char genio_id = 'G';
 
     Postcondiciones:
         - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
-        - Guarda el caracter de la respuesta en una variable por referencia
+        - Retorna ans, el caracter de la respuesta ingresada
 */
-void qst_1(char* qst_1_response){
+char qst_1(){
     char ans;
 
     // Realizo la pregunta 1
@@ -54,7 +52,7 @@ void qst_1(char* qst_1_response){
         ans = (char)toupper(ans);
     }
 
-    *qst_1_response = ans;
+    return ans;
 }
 
 
@@ -64,9 +62,9 @@ void qst_1(char* qst_1_response){
 
     Postcondiciones:
         - Requiere que el usuario ingrese alguno de los valores indicados (B, P, K, G)
-        - Guarda el caracter de la respuesta en una variable por referencia
+        - Retorna ans, el caracter de la respuesta ingresada
 */
-void qst_2(char* qst_2_response){
+char qst_2(){
     char ans;
 
     // Realizo la pregunta 2
@@ -89,7 +87,7 @@ void qst_2(char* qst_2_response){
         ans = (char)toupper(ans);
     }
 
-    *qst_2_response = ans;
+    return ans;
 }
 
 
@@ -98,10 +96,12 @@ void qst_2(char* qst_2_response){
         -
 
     Postcondiciones:
-        - Requiere que el usuario ingrese un numero el fomra de float representando la hora de llegada (hh.mm)
-        - Guarda el float de la respuesta en una variable por referencia
+        - Requiere que el usuario ingrese un numero el fomra de float representando la hora de llegada (hh.mm) con:
+            + hh: horas (entre 0 y 23)
+            + mm: minutos (entre 0 y 59)
+        - Retorna hour_value, el valor de tipo float de la hora de llegada
 */
-void qst_3(float* qst_3_response){
+float qst_3(){
     float hour_value;
 
     // Realizo la pregunta 3
@@ -112,17 +112,17 @@ void qst_3(float* qst_3_response){
     // Espero la respuesta
     scanf(" %f", &hour_value);
     int integer = (int)hour_value;
-    int decimal = ((int)(hour_value-(float)integer))*10;
+    float decimal = (hour_value-(float)integer);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(decimal < 0 || decimal > 59 || integer < 0 || integer > 23){
+    while(!(decimal >= 0 && decimal <= 0.59 && integer >= 0 && integer <= 23)){
         printf("\nIngrese una hora valida: ");
         scanf(" %f", &hour_value);
         integer = (int)hour_value;
-        decimal = ((int)(hour_value-(float)integer))*10;
+        decimal = ((hour_value-(float)integer));
     }
 
-    *qst_3_response = hour_value;
+    return hour_value;
 }
 
 
@@ -132,9 +132,9 @@ void qst_3(float* qst_3_response){
 
     Postcondiciones:
         - Requiere que el usuario ingrese un valor del 1 al 10 en forma de entero
-        - Guarda el numero de la respuesta en una variable por referencia
+        - Retorna exam_score, el valor de tipo int de la respuesta ingresada
 */
-void qst_4(int* qst_4_response){
+int qst_4(){
     int exam_score = 0;
 
     printf("\n--------------------------------------------------------------------------------------------\n");
@@ -150,14 +150,21 @@ void qst_4(int* qst_4_response){
         scanf(" %d", &exam_score);
     }
 
-    *qst_4_response = (int)exam_score;
+    return exam_score;
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //                      CALCULO DE SCORE POR PREGUNTA
 //----------------------------------------------------------------------------------------------------------------------
 
+/*
+    Precondiciones:
+        - Requiere que el qst_1_response contenga de los valores indicados (T, N, C, A)
 
+    Postcondiciones:
+        - Asigna un valor entero por referencia a la variable qst_1_score que representa la cantidad de puntos obtenidos
+*/
 void qst_1_get_score(int* qst_1_score, char* qst_1_response){
     if(*qst_1_response == trineo_id || *qst_1_response == nave_id){
         *qst_1_score = 10;
@@ -168,6 +175,13 @@ void qst_1_get_score(int* qst_1_score, char* qst_1_response){
 }
 
 
+/*
+    Precondiciones:
+        - Requiere que el qst_2_response contenga de los valores indicados (B, P, K, G)
+
+    Postcondiciones:
+        - Asigna un valor entero por referencia a la variable qst_2_score que representa la cantidad de puntos obtenidos
+*/
 void qst_2_get_score(int* qst_2_score, char* qst_2_response){
     if(*qst_2_response == bola_de_nieve_id){
         *qst_2_score = 3;
@@ -184,6 +198,13 @@ void qst_2_get_score(int* qst_2_score, char* qst_2_response){
 }
 
 
+/*
+    Precondiciones:
+        - Requiere que el qst_3_response contenga un valor de tipo float
+    
+    Postcondiciones:
+        - Asigna un valor entero por referencia a la variable qst_3_score que representa la cantidad de puntos obtenidos
+*/
 void qst_3_get_score(int* qst_3_score, float* qst_3_response){
     if(*qst_3_response<=15.30){
         *qst_3_score = 0;     // 0 equivale a llegar temprano
@@ -194,6 +215,13 @@ void qst_3_get_score(int* qst_3_score, float* qst_3_response){
 }
 
 
+/*
+    Precondiciones:
+        - Requiere que el qst_4_response contenga un valor de tipo entero entre 1 y 10
+
+    Postcondiciones:
+        - Asigna un valor entero por referencia a la variable qst_4_score que representa la cantidad de puntos obtenidos
+*/
 void qst_4_get_score(int* qst_4_score, int* qst_4_response){
     if(*qst_4_response >= 1 && *qst_4_response <= 3){
         (*qst_4_score) = 1;
@@ -246,25 +274,22 @@ void character_selector(int final_score, int ans_3_score){
     }
 }
 
+
 //----------------------------------------------------------------------------------------------------------------------
 //                                                    MAIN
 //----------------------------------------------------------------------------------------------------------------------
 
 int main(){
-    char qst_1_response;
-    char qst_2_response;
-    float qst_3_response;
-    int qst_4_response;
+    char qst_1_response  = qst_1();
+    char qst_2_response  = qst_2();
+    float qst_3_response = qst_3();
+    int qst_4_response   = qst_4();
 
     int qst_1_score;
     int qst_2_score;
     int qst_3_score;
     int qst_4_score;
 
-    qst_1(&qst_1_response);
-    qst_2(&qst_2_response);
-    qst_3(&qst_3_response);
-    qst_4(&qst_4_response);
 
     qst_1_get_score(&qst_1_score, &qst_1_response);
     qst_2_get_score(&qst_2_score, &qst_2_response);

@@ -3,41 +3,25 @@
 
 //#define getName(var)  #var      // me permite obtener el nombre de la variable, getName(J) devuelve "J"
 
-#define JASMIN "Jasmín"
-#define RAYO "Rayo McQueen"
-#define OLAF "Olaf"
-#define STITCH "Stitch"
+const char *jasmin_name = "Jasmín";
+const char *rayo_name = "Rayo McQueen";
+const char *olaf_name = "Olaf";
+const char *stitch_name = "Stitch";
 
-#define TRINEO 'T'
-#define NAVE 'N'
-#define CAMION 'C'
-#define ALFOMBRA 'A'
+const char trineo_id = 'T';
+const char nave_id = 'N';
+const char camion_id = 'C';
+const char alfombra_id = 'A';
 
-#define BOLA_DE_NIEVE 'B'
-#define PIUM_PIUM 'P'
-#define KUCHAU 'K'
-#define GENIO  'G'
+const char bola_de_nieve_id = 'B';
+const char pium_pium_id = 'P';
+const char kuchau_id = 'K';
+const char genio_id = 'G';
 
 
-/*
-    Precondiciones:
-        -
-    Postcondiciones:
-        - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
-        - Guarda el resultado en la variable ans en caso de ser correcto
-*/
-void validate_ans_1(char* ans){
-
-    scanf(" %c", ans);
-    *ans = (char)toupper(*ans);
-
-    // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(*ans != TRINEO && *ans != NAVE && *ans != CAMION && *ans != ALFOMBRA){
-        printf("Ingrese una respuesta válida: ");
-        scanf(" %c", ans);
-        *ans = (char)toupper(*ans);
-    }
-}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
+//    PREGUNTAS
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
 
 /*
     Precondiciones:
@@ -45,41 +29,32 @@ void validate_ans_1(char* ans){
 
     Postcondiciones:
         - Requiere que el usuario ingrese alguno de los valores indicados (T, N, C, A)
-        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
-            en la pregunta 1
+        - Guarda el caracter de la respuesta en una variable por referencia
 */
-void qst_1(int* score){
+void qst_1(char* qst_1_response){
     char ans;
 
     // Realizo la pregunta 1
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Estás saliendo de tu casa, y te enteras que hay paro de trenes, ¿Qué otro transporte elegís?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Trineo (%c)\n", TRINEO);
-    printf("2. Nave (%c)\n", NAVE);
-    printf("3. Camión (%c)\n", CAMION);
-    printf("4. Alfombra (%c)\n\n", ALFOMBRA);
+    printf("1. Trineo (%c)\n", trineo_id);
+    printf("2. Nave (%c)\n", nave_id);
+    printf("3. Camión (%c)\n", camion_id);
+    printf("4. Alfombra (%c)\n\n", alfombra_id);
 
     // Espero la respuesta
     scanf(" %c", &ans);
     ans = (char)toupper(ans);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(ans != trineo && ans != nave && ans != camion && ans != alfombra){
+    while(ans != trineo_id && ans != nave_id && ans != camion_id && ans != alfombra_id){
         printf("Ingrese una respuesta valida: ");
         scanf(" %c", &ans);
         ans = (char)toupper(ans);
     }
 
-    // Asigno un score a la respuesta
-    if(ans == TRINEO || ans == NAVE){
-        *score = 10;
-    }
-    else if(ans == CAMION || ans == ALFOMBRA){
-        *score = 20;
-    }
-
-    //printf("Socre from qst_1: %d\n", *score);
+    *qst_1_response = ans;
 }
 
 
@@ -89,70 +64,32 @@ void qst_1(int* score){
 
     Postcondiciones:
         - Requiere que el usuario ingrese alguno de los valores indicados (B, P, K, G)
-        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
-            en la pregunta 2
-
-void validate_ans_2(char* ans){
-    scanf(" %c", ans);
-    *ans = (char)toupper(*ans);
-
-    // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(*ans != BOLA_DE_NIEVE && *ans != PIUM_PIUM && *ans != KUCHAU && *ans != GENIO){
-        printf("Ingrese una respuesta válida: ");
-        scanf(" %c", ans);
-        *ans = (char)toupper(*ans);
-    }
-}
-
-/*
-    Precondiciones:
-        -
-
-    Postcondiciones:G)
-        - Asigna un valor por referencia a la variable score con el puntaje correspondiente
-            + Si la respuesta es "B" (Bola de nieve), el puntaje es de 3
-            + Si la respuesta es "P" (Pium pium), el puntaje es de 6
-            + Si la respuesta es "K" (Kuchau), el puntaje es de 9
-            + Si la respuesta es "G" (Genio), el puntaje es de 12
+        - Guarda el caracter de la respuesta en una variable por referencia
 */
-void qst_2(int* qst_score){
+void qst_2(char* qst_2_response){
     char ans;
 
     // Realizo la pregunta 2
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("En medio del camino te encontras con una manifestación, ¿Que medio utilizas para deshacerte de la manifestación?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Bola de nieve (%c)\n", BOLA_DE_NIEVE);
-    printf("2. Pium pium (%c)\n", PIUM_PIUM);
-    printf("3. Kuchau (%c)\n", KUCHAU);
-    printf("4. Genio (%c)\n\n", GENIO);
+    printf("1. Bola de nieve (%c)\n", bola_de_nieve_id);
+    printf("2. Pium pium (%c)\n", pium_pium_id);
+    printf("3. Kuchau (%c)\n", kuchau_id);
+    printf("4. Genio (%c)\n\n", genio_id);
 
     // Espero la respuesta
     scanf(" %c", &ans);
     ans = (char)toupper(ans);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(ans != bola_de_nieve && ans != pium_pium && ans != kuchau && ans != genio){
+    while(ans != bola_de_nieve_id && ans != pium_pium_id && ans != kuchau_id && ans != genio_id){
         printf("Ingrese una respuesta valida: ");
         scanf(" %c", &ans);
         ans = (char)toupper(ans);
     }
 
-    // Asigno un score a la respuesta
-    if(ans == BOLA_DE_NIEVE){
-        (*qst_score) = 3;
-    }
-    else if(ans == PIUM_PIUM){
-        (*qst_score) = 6;
-    }
-    else if(ans == KUCHAU){
-        (*qst_score) = 9;
-    }
-    else if(ans == GENIO){
-        (*qst_score) = 12;
-    }
-
-    //printf("Socre from qst_2: %d\n", (*qst_score));
+    *qst_2_response = ans;
 }
 
 
@@ -161,42 +98,10 @@ void qst_2(int* qst_score){
         -
 
     Postcondiciones:
-        - Requiere que el usuario ingrese un horario valido en forma de FLOAT,
-            siendo que la parte entera debe ser entre 0 y 23 (horas), y la parte decimal entre 0 y 59 (minutos)
-        - Guarda el resultado en la variable hour_value en caso de ser correcto
+        - Requiere que el usuario ingrese un numero el fomra de float representando la hora de llegada (hh.mm)
+        - Guarda el float de la respuesta en una variable por referencia
 */
-void validate_ans_3(float* hour_value){
-    scanf(" %f", hour_value);
-    int integer = (int)*hour_value;
-    int decimal = ((int)(*hour_value-(float)integer))*10;
-
-    // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(decimal < 0 || decimal > 59 || integer < 0 || integer > 23){
-        printf("\nIngrese una hora válida: ");
-        scanf(" %f", hour_value);
-        integer = (int)*hour_value;
-        decimal = ((int)(*hour_value-(float)integer))*10;
-    }
-
-}
-
-
-/*
-    Precondiciones:
-        -
-
-    Postcondiciones:
-        - Asigna un valor por referencia a la variable score con el puntaje correspondiente
-        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
-            en la pregunta 3
-
-        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
-            en la pregunta 3
-
-            + Si el horario ingresado es menor o igual a 15.30, el puntaje es 0 (llega temprano)
-            + Si el horario ingresado es mayor a 15.30, el puntaje es 1 (llega tarde)
-*/
-void qst_3(int* qst_score){
+void qst_3(float* qst_3_response){
     float hour_value;
 
     // Realizo la pregunta 3
@@ -217,15 +122,7 @@ void qst_3(int* qst_score){
         decimal = ((int)(hour_value-(float)integer))*10;
     }
 
-    // Asigno un score a la respuesta
-    if(hour_value<=15.30){
-        (*qst_score) = 0;     // 0 equivale a llegar temprano
-    }
-    else if(hour_value>15.30){
-        (*qst_score) = 1;     // 1 equivale a llegar tarde
-    }
-
-    //printf("Socre from qst_3: %d\n", (*qst_score));
+    *qst_3_response = hour_value;
 }
 
 
@@ -235,64 +132,87 @@ void qst_3(int* qst_score){
 
     Postcondiciones:
         - Requiere que el usuario ingrese un valor del 1 al 10 en forma de entero
-        - Guarda el resultado en la variable hour_value en caso de ser correcto
+        - Guarda el numero de la respuesta en una variable por referencia
 */
-
-void validate_ans_4(int* exam_score){
-    scanf(" %i", exam_score);
-
-    // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(*exam_score < 1 || *exam_score > 10){
-        printf("\nIngrese una nota válida: ");
-        scanf(" %i", exam_score);
-    }
-}
-
-
-/*
-    Precondiciones:
-        -
-
-    Postcondiciones:
-        - Requiere que el usuario ingrese un valor del 1 al 10 en forma de entero
-        - Asigna un valor por referencia a la variable score alocada en el main
-            + Si el valor ingresado es mayor o igual a 1 y menor o igual a 3, asigna un valor de 1 al score
-            + Si el valor ingresado es mayor o igual a 4 y menor o igual a 6, asigna un valor de 2 al score
-            + Si el valor ingresado es mayor o igual a 7 y menor o igual a 8, asigna un valor de 3 al score
-            + Si el valor ingresado es mayor o igual a 9 y menor o igual a 10, asigna un valor de 4 al score
-*/
-void qst_4(int* qst_score){
-    float exam_score = 0;       // PREGUNTAR XQ SE USA FLOAT EN EL EJEMPLO 2 AIUUUUUUUUUUUUUUDAAAAAAAAAAAAAAAAAAAAAA AIUDA
+void qst_4(int* qst_4_response){
+    int exam_score = 0;
 
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Por fin llegó la nota del parcial! ¿Qué nota lograste sacarte?\n");
     printf("Ingrese el valor de su nota en entero (1-10): ");
 
     // Espero la respuesta
-    scanf(" %f", &exam_score);;
+    scanf(" %d", &exam_score);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
     while(exam_score < 1 || exam_score > 10){
         printf("\nIngrese una nota valida: ");
-        scanf(" %f", &exam_score);
+        scanf(" %d", &exam_score);
     }
 
-    if(exam_score >= 1 && exam_score <= 3){
-        (*qst_score) = 1;
-    }
-    else if(exam_score >= 4 && exam_score <= 6){
-        (*qst_score) = 2;
-    }
-    else if(exam_score >= 7 && exam_score <= 8){
-        (*qst_score) = 3;
-    }
-    else if(exam_score >= 9 && exam_score <= 10){
-        (*qst_score) = 4;
-    }
-
-    //printf("Socre from qst_4: %d\n", (*qst_score));
+    *qst_4_response = (int)exam_score;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+//                      CALCULO DE SCORE POR PREGUNTA
+//----------------------------------------------------------------------------------------------------------------------
+
+
+void qst_1_get_score(int* qst_1_score, char* qst_1_response){
+    if(*qst_1_response == trineo_id || *qst_1_response == nave_id){
+        *qst_1_score = 10;
+    }
+    else if(*qst_1_response == camion_id || *qst_1_response == alfombra_id){
+        *qst_1_score = 20;
+    }
+}
+
+
+void qst_2_get_score(int* qst_2_score, char* qst_2_response){
+    if(*qst_2_response == bola_de_nieve_id){
+        *qst_2_score = 3;
+    }
+    else if(*qst_2_response == pium_pium_id){
+        *qst_2_score = 6;
+    }
+    else if(*qst_2_response == kuchau_id){
+        *qst_2_score = 9;
+    }
+    else if(*qst_2_response == genio_id){
+        *qst_2_score = 12;
+    }
+}
+
+
+void qst_3_get_score(int* qst_3_score, float* qst_3_response){
+    if(*qst_3_response<=15.30){
+        *qst_3_score = 0;     // 0 equivale a llegar temprano
+    }
+    else if(*qst_3_response>15.30){
+        *qst_3_score = 1;     // 1 equivale a llegar tarde
+    }
+}
+
+
+void qst_4_get_score(int* qst_4_score, int* qst_4_response){
+    if(*qst_4_response >= 1 && *qst_4_response <= 3){
+        (*qst_4_score) = 1;
+    }
+    else if(*qst_4_response >= 4 && *qst_4_response <= 6){
+        (*qst_4_score) = 2;
+    }
+    else if(*qst_4_response >= 7 && *qst_4_response <= 8){
+        (*qst_4_score) = 3;
+    }
+    else if(*qst_4_response >= 9 && *qst_4_response <= 10){
+        (*qst_4_score) = 4;
+    }
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
+//                                            CALCULO DE PUNTAJE FINAL
+//----------------------------------------------------------------------------------------------------------------------
 
 /*
     Precondiciones:
@@ -301,33 +221,24 @@ void qst_4(int* qst_score){
     
     Postcondiciones:
         - Imprime el resultado del analisis asignando un personaje al usuario
-    
-    Post condiciones:
-        - Asigna un caracter por referencia a la variable score alocada en el main
-            + Si el final_score es mayor o igual a 13 y menor o igual a 41
-                · Si ans_3_score es igual a 0 (llega temprano), asigna el personaje de Stitch al usuario con el resultado del analisis
-                · Si ans_3_score es igual a 1 (llega tarde), asigna el personaje de Olaf al usuario con el resultado del analisis
-            + Si el final_score es mayor o igual a 42 y menor o igual a 68
-                · Si ans_3_score es igual a 0 (llega temprano), asigna el personaje de Jasmin al usuario con el resultado del analisis
-                · Si ans_3_score es igual a 1 (llega tarde), asigna el personaje de Rayo al usuario con el resultado del analisis
 */
 void character_selector(int final_score, int ans_3_score){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("\nYa tenemos el resultado del analisis!!!\n");
     if(final_score >= 13 && final_score <= 41){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, STITCH);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, stitch_name);
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, OLAF);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, olaf_name);
         }
     }
     else if(final_score >= 42 && final_score <= 68){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, JASMIN);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, jasmin_name);
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, RAYO);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, rayo_name);
         }
     }
     else{
@@ -335,27 +246,32 @@ void character_selector(int final_score, int ans_3_score){
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+//                                                    MAIN
+//----------------------------------------------------------------------------------------------------------------------
 
 int main(){
-    int ans_1_score;
-    int ans_2_score;
-    int ans_3_score;
-    int ans_4_score;
+    char qst_1_response;
+    char qst_2_response;
+    float qst_3_response;
+    int qst_4_response;
 
-    qst_1(&ans_1_score);
-    qst_2(&ans_2_score);
-    qst_3(&ans_3_score);
-    qst_4(&ans_4_score);
+    int qst_1_score;
+    int qst_2_score;
+    int qst_3_score;
+    int qst_4_score;
 
+    qst_1(&qst_1_response);
+    qst_2(&qst_2_response);
+    qst_3(&qst_3_response);
+    qst_4(&qst_4_response);
 
-    //printf("\n\nans_1: %i\n", ans_1_score);
-    //printf("ans_2: %i\n", ans_2_score);
-    //printf("ans_3: %i\n", ans_3_score);
-    //printf("ans_4: %i\n\n", ans_4_score);
+    qst_1_get_score(&qst_1_score, &qst_1_response);
+    qst_2_get_score(&qst_2_score, &qst_2_response);
+    qst_3_get_score(&qst_3_score, &qst_3_response);
+    qst_4_get_score(&qst_4_score, &qst_4_response);
 
-    //printf("Final Score: %i\n", ans_1_score+(ans_2_score*ans_4_score));
-
-    character_selector(ans_1_score+(ans_2_score*ans_4_score), ans_3_score);
+    character_selector(qst_1_score+(qst_2_score*qst_4_score), qst_3_score);
 
     printf("\n--------------------------------------------------------------------------------------------\n");
     return 0;

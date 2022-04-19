@@ -1,3 +1,8 @@
+/*
+    GUARD BLOCK
+    #ifndef CALCULATOR_H
+    #define CALCULATOR_H
+*/
 
 /*
     Pre:
@@ -5,7 +10,7 @@
     Post:
         - Devuelve la suma entre a y b (a + b)
 */
-int add(int a, int b);
+int add(int a, int b);      // esto se denomina FIRMA
 
 
 /*

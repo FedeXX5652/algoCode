@@ -190,6 +190,9 @@ void validate_ans_3(float* hour_value){
         - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
             en la pregunta 3
 
+        - Asigna un valor por referencia a la variable score alocada en el main que representa el puntaje obtenido
+            en la pregunta 3
+
             + Si el horario ingresado es menor o igual a 15.30, el puntaje es 0 (llega temprano)
             + Si el horario ingresado es mayor a 15.30, el puntaje es 1 (llega tarde)
 */

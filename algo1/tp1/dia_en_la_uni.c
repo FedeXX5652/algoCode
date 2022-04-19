@@ -96,7 +96,7 @@ char qst_2(){
         -
 
     Postcondiciones:
-        - Requiere que el usuario ingrese un numero el fomra de float representando la hora de llegada (hh.mm) con:
+        - Requiere que el usuario ingrese un numero el fomra de float representando la hora de llegada (hh.mm) siendo:
             + hh: horas (entre 0 y 23)
             + mm: minutos (entre 0 y 59)
         - Retorna hour_value, el valor de tipo float de la hora de llegada

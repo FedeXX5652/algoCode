@@ -27,3 +27,8 @@ int main(){
 
     return 0;
 }
+
+/*
+    (*algo).campo
+    algo->campo
+*/

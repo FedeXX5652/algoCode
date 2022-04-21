@@ -163,7 +163,7 @@ int qst_4(){
         - Requiere que el qst_1_response contenga de los valores indicados (T, N, C, A)
 
     Postcondiciones:
-        - Asigna un valor entero por referencia a la variable qst_1_score que representa la cantidad de puntos obtenidos
+        - Asigna un numero entero por referencia a la variable qst_1_score que representa la cantidad de puntos obtenidos
 */
 void qst_1_get_score(int* qst_1_score, char* qst_1_response){
     if(*qst_1_response == trineo_id || *qst_1_response == nave_id){
@@ -180,7 +180,7 @@ void qst_1_get_score(int* qst_1_score, char* qst_1_response){
         - Requiere que el qst_2_response contenga de los valores indicados (B, P, K, G)
 
     Postcondiciones:
-        - Asigna un valor entero por referencia a la variable qst_2_score que representa la cantidad de puntos obtenidos
+        - Asigna un numero entero por referencia a la variable qst_2_score que representa la cantidad de puntos obtenidos
 */
 void qst_2_get_score(int* qst_2_score, char* qst_2_response){
     if(*qst_2_response == bola_de_nieve_id){
@@ -203,7 +203,7 @@ void qst_2_get_score(int* qst_2_score, char* qst_2_response){
         - Requiere que el qst_3_response contenga un valor de tipo float
     
     Postcondiciones:
-        - Asigna un valor entero por referencia a la variable qst_3_score que representa la cantidad de puntos obtenidos
+        - Asigna un numero entero por referencia a la variable qst_3_score que representa la cantidad de puntos obtenidos
 */
 void qst_3_get_score(int* qst_3_score, float* qst_3_response){
     if(*qst_3_response<=15.30){
@@ -220,7 +220,7 @@ void qst_3_get_score(int* qst_3_score, float* qst_3_response){
         - Requiere que el qst_4_response contenga un valor de tipo entero entre 1 y 10
 
     Postcondiciones:
-        - Asigna un valor entero por referencia a la variable qst_4_score que representa la cantidad de puntos obtenidos
+        - Asigna un numero entero por referencia a la variable qst_4_score que representa la cantidad de puntos obtenidos
 */
 void qst_4_get_score(int* qst_4_score, int* qst_4_response){
     if(*qst_4_response >= 1 && *qst_4_response <= 3){

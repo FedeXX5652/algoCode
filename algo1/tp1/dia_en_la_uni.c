@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <ctype.h>
 
-const char *jasmin_name = "Jasmín";
-const char *rayo_name = "Rayo McQueen";
-const char *olaf_name = "Olaf";
-const char *stitch_name = "Stitch";
+const char *JASMIN_NAME = "Jasmín";
+const char *RAYO_NAME = "Rayo McQueen";
+const char *OLAF_NAME = "Olaf";
+const char *STITCH_NAME = "Stitch";
 
-const char trineo_id = 'T';
-const char nave_id = 'N';
-const char camion_id = 'C';
-const char alfombra_id = 'A';
+const char TRINEO_ID = 'T';
+const char NAVE_ID = 'N';
+const char CAMION_ID = 'C';
+const char ALFOMBRA_ID = 'A';
 
-const char bola_de_nieve_id = 'B';
-const char pium_pium_id = 'P';
-const char kuchau_id = 'K';
-const char genio_id = 'G';
+const char BOLA_DE_NIEVE_ID = 'B';
+const char PIUM_PIUM_ID = 'P';
+const char KUCHAU_ID = 'K';
+const char GENIO_ID = 'G';
 
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -36,17 +36,17 @@ char qst_1(){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("Estás saliendo de tu casa, y te enteras que hay paro de trenes, ¿Qué otro transporte elegís?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Trineo (%c)\n", trineo_id);
-    printf("2. Nave (%c)\n", nave_id);
-    printf("3. Camión (%c)\n", camion_id);
-    printf("4. Alfombra (%c)\n\n", alfombra_id);
+    printf("1. Trineo (%c)\n", TRINEO_ID);
+    printf("2. Nave (%c)\n", NAVE_ID);
+    printf("3. Camión (%c)\n", CAMION_ID);
+    printf("4. Alfombra (%c)\n\n", ALFOMBRA_ID);
 
     // Espero la respuesta
     scanf(" %c", &ans);
     ans = (char)toupper(ans);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(ans != trineo_id && ans != nave_id && ans != camion_id && ans != alfombra_id){
+    while(ans != TRINEO_ID && ans != NAVE_ID && ans != CAMION_ID && ans != ALFOMBRA_ID){
         printf("Ingrese una respuesta valida: ");
         scanf(" %c", &ans);
         ans = (char)toupper(ans);
@@ -71,17 +71,17 @@ char qst_2(){
     printf("\n--------------------------------------------------------------------------------------------\n");
     printf("En medio del camino te encontras con una manifestación, ¿Que medio utilizas para deshacerte de la manifestación?\n");
     printf("Ingrese el cartacter correspondiente a la respuesta elegida EN MAYUSCULA:\n\n");
-    printf("1. Bola de nieve (%c)\n", bola_de_nieve_id);
-    printf("2. Pium pium (%c)\n", pium_pium_id);
-    printf("3. Kuchau (%c)\n", kuchau_id);
-    printf("4. Genio (%c)\n\n", genio_id);
+    printf("1. Bola de nieve (%c)\n", BOLA_DE_NIEVE_ID);
+    printf("2. Pium pium (%c)\n", PIUM_PIUM_ID);
+    printf("3. Kuchau (%c)\n", KUCHAU_ID);
+    printf("4. Genio (%c)\n\n", GENIO_ID);
 
     // Espero la respuesta
     scanf(" %c", &ans);
     ans = (char)toupper(ans);
 
     // Verifico la respuesta con las condiciones dadas y re pregunto en caso de no ser correcta
-    while(ans != bola_de_nieve_id && ans != pium_pium_id && ans != kuchau_id && ans != genio_id){
+    while(ans != BOLA_DE_NIEVE_ID && ans != PIUM_PIUM_ID && ans != KUCHAU_ID && ans != GENIO_ID){
         printf("Ingrese una respuesta valida: ");
         scanf(" %c", &ans);
         ans = (char)toupper(ans);
@@ -166,10 +166,10 @@ int qst_4(){
         - Asigna un numero entero por referencia a la variable qst_1_score que representa la cantidad de puntos obtenidos
 */
 void qst_1_get_score(int* qst_1_score, char* qst_1_response){
-    if(*qst_1_response == trineo_id || *qst_1_response == nave_id){
+    if(*qst_1_response == TRINEO_ID || *qst_1_response == NAVE_ID){
         *qst_1_score = 10;
     }
-    else if(*qst_1_response == camion_id || *qst_1_response == alfombra_id){
+    else if(*qst_1_response == CAMION_ID || *qst_1_response == ALFOMBRA_ID){
         *qst_1_score = 20;
     }
 }
@@ -183,16 +183,16 @@ void qst_1_get_score(int* qst_1_score, char* qst_1_response){
         - Asigna un numero entero por referencia a la variable qst_2_score que representa la cantidad de puntos obtenidos
 */
 void qst_2_get_score(int* qst_2_score, char* qst_2_response){
-    if(*qst_2_response == bola_de_nieve_id){
+    if(*qst_2_response == BOLA_DE_NIEVE_ID){
         *qst_2_score = 3;
     }
-    else if(*qst_2_response == pium_pium_id){
+    else if(*qst_2_response == PIUM_PIUM_ID){
         *qst_2_score = 6;
     }
-    else if(*qst_2_response == kuchau_id){
+    else if(*qst_2_response == KUCHAU_ID){
         *qst_2_score = 9;
     }
-    else if(*qst_2_response == genio_id){
+    else if(*qst_2_response == GENIO_ID){
         *qst_2_score = 12;
     }
 }
@@ -255,18 +255,18 @@ void character_selector(int final_score, int ans_3_score){
     printf("\nYa tenemos el resultado del analisis!!!\n");
     if(final_score >= 13 && final_score <= 41){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, stitch_name);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, STITCH_NAME);
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, olaf_name);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, OLAF_NAME);
         }
     }
     else if(final_score >= 42 && final_score <= 68){
         if(ans_3_score == 0){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, jasmin_name);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, JASMIN_NAME);
         }
         else if(ans_3_score == 1){
-            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, rayo_name);
+            printf("Con un puntaje de %d puntos se definió el personaje -%s-.\n", final_score, RAYO_NAME);
         }
     }
     else{

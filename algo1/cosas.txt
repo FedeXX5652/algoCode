@@ -1,0 +1,27 @@
+que es un algoritmo?
+son una serie de pasos para resolver un problema
+
+para que nos sirven las estructuras de control?
+sirven para controlar el flujo del programa, pueden ser:
+-selectivos: seleccionan por donde ir (if, if else, switch)
+
+funciones y procedimientos, que problema resuelven?
+nos permite modularizar nuestro programa para poder hacerlo mas prolijo y legible
+
+para que nos sirven las buenas practicas?
+para poder crear un codigo entendible en un futuro tanto para uno mismo como para otro programador
+
+pasajes de variable:
+-por referencia: puede modificar la original
+-por valor: no modifica la original
+
+bibliotecas:
+nos permiten agrupar funciones que tengan una funcionalidad de misma naturaleza
+
+structs:
+permiten agrupar variables sobre un mismo contexto, creando una nueva variable para poderse usar varias veces
+
+vectores:
+es buena practica poner el nombre del dato en plural
+nos resuelven el problema de tener muchas variables del mismo contexto
+permiten agrupar variables de un mismo contexto

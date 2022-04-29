@@ -1,4 +1,7 @@
 {
     "workbench.colorTheme": "Default Dark+",
-    "workbench.preferredDarkColorTheme": "Default Dark+"
+    "workbench.preferredDarkColorTheme": "Default Dark+",
+    "files.associations": {
+        "papeleo.h": "c"
+    }
 }

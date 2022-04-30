@@ -34,12 +34,23 @@ int main(){
     
     juego_t juego;
     nivel_t nivel_1;
-    juego.nivel_actual = 1;
+    nivel_t nivel_2;
+    nivel_t nivel_3;
 
     obtener_paredes(3, nivel_1.paredes, &nivel_1.tope_paredes, &nivel_1.pos_inicial_jugador);
+    obtener_paredes(2, nivel_2.paredes, &nivel_2.tope_paredes, &nivel_2.pos_inicial_jugador);
+    obtener_paredes(1, nivel_3.paredes, &nivel_3.tope_paredes, &nivel_3.pos_inicial_jugador);
+
     juego.niveles[0] = nivel_1;
+    juego.niveles[1] = nivel_2;
+    juego.niveles[2] = nivel_3;
     juego.personaje_tp1 = 'R';
 
+    juego.nivel_actual = 1;
+    imprimir_terreno(juego);
+    juego.nivel_actual = 2;
+    imprimir_terreno(juego);
+    juego.nivel_actual = 3;
     imprimir_terreno(juego);
 
     return 0;

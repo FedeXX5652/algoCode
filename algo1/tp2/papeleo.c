@@ -14,9 +14,14 @@ void imprimir_terreno(juego_t juego){
     printf("MOVIMIENTOS: %d\n", juego.jugador.movimientos);
     printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
 
+    for(int i = 0; i < DIM_NIVEL_1; i++){
+        for(int j = 0; j < DIM_NIVEL_1; j++){
+            terreno[i][j] = ' ';
+        }
+    }
+
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_paredes; i++){
-        printf("%d, %d ES PARED\n", juego.niveles[0].paredes[i].fil, juego.niveles[0].paredes[i].col);
-        terreno[juego.niveles[0].paredes[i].fil][juego.niveles[0].paredes[i].col] = '|';
+        terreno[juego.niveles[0].paredes[i].fil][juego.niveles[0].paredes[i].col] = '#';
     }
 
     for(int i=0; i<DIM_NIVEL_1; i++){

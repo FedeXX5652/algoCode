@@ -22,7 +22,7 @@ typedef struct objeto{
 typedef struct nivel{
     coordenada_t paredes[MAX_PAREDES];
     int tope_paredes;
-    objeto_t obstaculos[MAX_OBSTACULOS];
+    objeto_t obstaculos[MAX_OBSTACULOS];    
     int tope_obstaculos;
     objeto_t herramientas[MAX_HERRAMIENTAS];
     int tope_herramientas;

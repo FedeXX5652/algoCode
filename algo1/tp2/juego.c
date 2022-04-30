@@ -32,18 +32,17 @@ int main(){
 
     // printf("PERSONAJE ELEJIDO: %c\n", personaje_elegido);
     
-    // nivel_t nivel_1;
-    // papeleo_t papeleo;
-    // objeto_t objeto;
-    // coordenada_t coordenada;
-    // jugador_t jugador;
-    // juego_t juego;
+    juego_t juego;
+    coordenada_t paredes[MAX_PAREDES];
+    nivel_t nivel_1;
 
-    coordenada_t pos_inicial_jugador;
-    coordenada_t paredes[12];
-    int tope_paredes;
+    juego.nivel_actual = 1;
 
-    obtener_paredes(1, paredes, &tope_paredes, &pos_inicial_jugador);
+    obtener_paredes(juego.nivel_actual, paredes, &nivel_1.tope_paredes, &nivel_1.pos_inicial_jugador);
+    juego.niveles[0] = nivel_1;
+    juego.personaje_tp1 = 'R';
+
+    imprimir_terreno(juego);
 
     return 0;
 }

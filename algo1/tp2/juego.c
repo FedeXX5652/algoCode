@@ -33,12 +33,10 @@ int main(){
     // printf("PERSONAJE ELEJIDO: %c\n", personaje_elegido);
     
     juego_t juego;
-    coordenada_t paredes[MAX_PAREDES];
     nivel_t nivel_1;
-
     juego.nivel_actual = 1;
 
-    obtener_paredes(juego.nivel_actual, paredes, &nivel_1.tope_paredes, &nivel_1.pos_inicial_jugador);
+    obtener_paredes(3, nivel_1.paredes, &nivel_1.tope_paredes, &nivel_1.pos_inicial_jugador);
     juego.niveles[0] = nivel_1;
     juego.personaje_tp1 = 'R';
 

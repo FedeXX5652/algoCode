@@ -15,8 +15,7 @@ void imprimir_terreno(juego_t juego){
     printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
 
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_paredes; i++){
-        printf("%d\n", i);
-        printf("%d, %d\n", juego.niveles[juego.nivel_actual-1].paredes[i].fil, juego.niveles[juego.nivel_actual-1].paredes[i].col);
+        printf("%d, %d ES PARED\n", juego.niveles[0].paredes[i].fil, juego.niveles[0].paredes[i].col);
         terreno[juego.niveles[0].paredes[i].fil][juego.niveles[0].paredes[i].col] = '|';
     }
 

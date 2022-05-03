@@ -2,6 +2,7 @@
 #define __PAPELEO_H__
 
 #include "utiles.h"
+#include <stdbool.h>
 
 #define MAX_OBSTACULOS 100
 #define MAX_HERRAMIENTAS 100
@@ -55,12 +56,13 @@ void imprimir_terreno(juego_t juego);
  * Inicializará un nivel, cargando toda la información inicial, las paredes,
  * los objetos, los papeleos y la posición inicial del jugador en dicho nivel.
  */
-void inicializar_nivel(nivel_t* nivel, int numero_nivel, char amigo_pide_favor);
+void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1);
 
 /*
  * Inicializará el juego, cargando toda la información inicial, los datos del jugador, 
- * el personaje resultado del tp anterior, y los 3 niveles.
+ * el personaje resultado del tp anterior, y los 3 niveles. El campo "nivel_actual"
+ * comienza en 1.
  */
-void inicializar_juego(juego_t* juego, char amigo_pide_favor);
+void inicializar_juego(juego_t* juego, char personaje_tp1);
 
 #endif /* __PAPELEO_H__ */

@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <ctype.h>
+#include "dia_en_la_uni.h"
 
 const char *JASMIN_NAME = "Jasmín";
 const char *RAYO_NAME = "Rayo McQueen";
 const char *OLAF_NAME = "Olaf";
 const char *STITCH_NAME = "Stitch";
-
-const char STITCH_ID = 'S';
-const char JASMIN_ID = 'J';
-const char RAYO_ID = 'R';
-const char OLAF_ID = 'O';
 
 const char TRINEO_ID = 'T';
 const char NAVE_ID = 'N';

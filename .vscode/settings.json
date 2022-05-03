@@ -3,5 +3,6 @@
     "workbench.preferredDarkColorTheme": "Default Dark+",
     "files.associations": {
         "papeleo.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

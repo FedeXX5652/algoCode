@@ -70,7 +70,6 @@ void imprimir_terreno(juego_t juego){
     printf("EXTINTORES: %i\n", juego.jugador.extintores);
     printf("\n");
     printf("--------------OBSTACULOS Y OBJETOS--------------\n");
-    printf("\n");
     printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
 
     for(int i = 0; i < dim_nivel; i++){
@@ -97,6 +96,7 @@ void imprimir_terreno(juego_t juego){
 
 void get_espacios_libres(nivel_t* nivel, coordenada_t* espacios_libres, int numero_nivel, int* tope_espacios_libres){
     int dim_nivel;
+    bool espacio_invalido = false;
 
     if(numero_nivel == 1){
         dim_nivel = DIM_NIVEL_1;
@@ -110,28 +110,39 @@ void get_espacios_libres(nivel_t* nivel, coordenada_t* espacios_libres, int nume
 
     // printf("DIM_NIVEL: %d\n", dim_nivel);
     // printf("TOPE PAREDES: %d\n", nivel->tope_paredes);
+    printf("POS INICIAL JUGADOR: %d, %d\n", nivel->pos_inicial_jugador.fil, nivel->pos_inicial_jugador.col);
 
-    for(int i = 0; i < dim_nivel; i++){
-        for(int j = 0; j < dim_nivel; j++){
-            for(int k = 0; k<nivel->tope_paredes; k++){
-                if(nivel->paredes[k].fil == i && nivel->paredes[k].col == j){
-                    k = nivel->tope_paredes;
+    for(int fila = 0; fila < dim_nivel; fila++){
+        for(int columna = 0; columna < dim_nivel; columna++){
+            for(int coords_pared = 0; coords_pared<nivel->tope_paredes; coords_pared++){
+                if((nivel->pos_inicial_jugador.fil == fila && nivel->pos_inicial_jugador.col == columna) && espacio_invalido == false){
+                    espacio_invalido = true;
                 }
-                else if(k == nivel->tope_paredes-1){
-                    espacios_libres[*tope_espacios_libres].fil = i;
-                    espacios_libres[*tope_espacios_libres].col = j;
+                else if(nivel->paredes[coords_pared].fil == fila && nivel->paredes[coords_pared].col == columna && espacio_invalido == false){
+                    coords_pared = nivel->tope_paredes;
+                    espacio_invalido = true;
+                }
+                else if(coords_pared == nivel->tope_paredes-1 && espacio_invalido == false){
+                    espacios_libres[*tope_espacios_libres].fil = fila;
+                    espacios_libres[*tope_espacios_libres].col = columna;
                     *tope_espacios_libres = *tope_espacios_libres + 1;
                 }
+                espacio_invalido = false;
             }
         }
     }
 
-    // printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
+    printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
+}
+
+
+void posicionar_fuegos(nivel_t* nivel, coordenada_t* espacios_libres, int tope_espacios_libres, int cantidad_fuegos){
+    printf("PONGO FUEGOS\n");
 }
 
 
 void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, int cantidad_fuegos, int cantidad_medias, char personaje_tp1){
-    coordenada_t espacios_libres[MAX_OBSTACULOS];
+    coordenada_t espacios_libres[MAX_PAREDES];
     int tope_espacios_libres = 0;
 
     printf("INICIALIZANDO OBSTACULOS EN MAPA\n");
@@ -144,6 +155,8 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, int cantidad_fuego
     }
 
     get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
+
+    posicionar_fuegos(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos);
 }
 
 

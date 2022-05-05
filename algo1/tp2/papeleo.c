@@ -78,31 +78,35 @@ void imprimir_terreno(juego_t juego){
 }
 
 
-void es_pared_adyacente(nivel_t* nivel, int fila, int columna, coordenada_libre_t* espacios_libres, int* tope_espacios_libres){
+bool es_pared_adyacente(nivel_t* nivel, int fila, int columna, coordenada_libre_t espacios_libres[MAX_PAREDES]){
+    bool es_adyacente = false;
+
     for(int i = 0; i < nivel->tope_paredes; i++){
-        if(nivel->paredes[i].fil == fila-1 && nivel->paredes[i].col == columna && espacios_libres[*tope_espacios_libres].es_adyacente == false){
-            espacios_libres[*tope_espacios_libres].es_adyacente = true;
-            //printf("ES ADYACENTE CON FILA ANTERIOR: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        if(nivel->paredes[i].fil == fila-1 && nivel->paredes[i].col == columna && es_adyacente == false){
+            es_adyacente = true;
+            printf("ES ADYACENTE CON FILA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
         }
-        else if(nivel->paredes[i].fil == fila+1 && nivel->paredes[i].col == columna && espacios_libres[*tope_espacios_libres].es_adyacente == false){
-            espacios_libres[*tope_espacios_libres].es_adyacente = true;
-            //printf("ES ADYACENTE CON FILA SIGUIENTE: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        else if(nivel->paredes[i].fil == fila+1 && nivel->paredes[i].col == columna && es_adyacente == false){
+            es_adyacente = true;
+            printf("ES ADYACENTE CON FILA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
         }
-        else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna-1 && espacios_libres[*tope_espacios_libres].es_adyacente == false){
-            espacios_libres[*tope_espacios_libres].es_adyacente = true;
-            //printf("ES ADYACENTE CON COLUMNA ANTERIOR: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna-1 && es_adyacente == false){
+            es_adyacente = true;
+            printf("ES ADYACENTE CON COLUMNA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
         }
-        else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna+1 && espacios_libres[*tope_espacios_libres].es_adyacente == false){
-            espacios_libres[*tope_espacios_libres].es_adyacente = true;
-            //printf("ES ADYACENTE CON COLUMNA SIGUIENTE: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna+1 && es_adyacente == false){
+            es_adyacente = true;
+            printf("ES ADYACENTE CON COLUMNA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
         }
     }
+    return es_adyacente;
 }
 
 
-void get_espacios_libres(nivel_t* nivel, coordenada_libre_t* espacios_libres, int numero_nivel, int* tope_espacios_libres){
+void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int numero_nivel, int* tope_espacios_libres){
     int dim_nivel = DIM_POR_NIVEL[numero_nivel - 1];
     bool espacio_invalido = false;
+    int index_esp_libre = 0;
 
     // printf("DIM_NIVEL: %d\n", dim_nivel);
     // printf("TOPE PAREDES: %d\n", nivel->tope_paredes);
@@ -119,21 +123,28 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t* espacios_libres, in
                     espacio_invalido = true;
                 }
                 else if(coords_pared == nivel->tope_paredes-1 && espacio_invalido == false){
-                    espacios_libres[*tope_espacios_libres].fil = fila;
-                    espacios_libres[*tope_espacios_libres].col = columna;
-                    *tope_espacios_libres = *tope_espacios_libres + 1;
+                    espacios_libres[index_esp_libre].fil = fila;
+                    espacios_libres[index_esp_libre].col = columna;
+                    index_esp_libre = index_esp_libre+1;
+                    *tope_espacios_libres += 1;
+                    printf("Es adyacente?? %d\n", es_pared_adyacente(nivel, fila, columna, espacios_libres));
 
-                    es_pared_adyacente(nivel, fila, columna, espacios_libres, tope_espacios_libres);
-                    printf("ESPACIO LIBRE: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+                    espacios_libres[*tope_espacios_libres].es_adyacente = es_pared_adyacente(nivel, fila, columna, espacios_libres);
                 }
                 espacio_invalido = false;
             }
         }
     }
+
+    printf("tope: %d\n", *tope_espacios_libres);
+
+    for(int i = 0; i<*tope_espacios_libres; i++){
+        printf("ESPACIO LIBRE: %d, %d; %d\n", espacios_libres[i].fil, espacios_libres[i].col, espacios_libres[i].es_adyacente);
+    }
 }
 
 
-void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t* espacios_libres, int* tope_espacios_libres, int cantidad_fuegos){
+void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_fuegos){
     // int posicion_fuego;
     //int index_espacio_libre;
 
@@ -158,10 +169,10 @@ void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t* espacios_libres, int*
 }
 
 
-void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t* espacios_libres, int* tope_espacios_libres){
+void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
 
     printf("INICIALIZANDO OBSTACULOS EN MAPA\n");
-    printf("TOPE ESPACIOS LIBRES PARA OBSTACULOS: %d, Ej: %d, %d\n", *tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col); 
+    printf("TOPE ESPACIOS LIBRES PARA OBSTACULOS: %d, Ej: %d, %d\n", *tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
 
     int cantidad_fuegos = FUEGOS_POR_NIVEL[numero_nivel-1];
     // int cantidad_medias = MEDIAS_POR_NIVEL[numero_nivel-1];
@@ -195,9 +206,10 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 
     printf("TOPE ESPACIOS LIBRES PARA OBJETOS: %d, Ej: %d, %d\n", tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
 
-    for(int i = 0; i < tope_espacios_libres; i++){
-        printf("ESPACIO LIBRE POST PROCESS: %d, %d; %d\n", espacios_libres[i].fil, espacios_libres[i].col, espacios_libres[i].es_adyacente);
-    }
+    // ACA NO ESTA EL ERROR DE ADYACENTES A PAREDES AIUDA
+    // for(int i = 0; i < tope_espacios_libres; i++){
+    //     printf("ESPACIO LIBRE POST PROCESS: %d, %d; %d\n", espacios_libres[i].fil, espacios_libres[i].col, espacios_libres[i].es_adyacente);
+    // }
 
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, cantidad_botellas, cantidad_interruptores, personaje_tp1);

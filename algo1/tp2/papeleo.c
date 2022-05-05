@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "papeleo.h"
 #include "utiles.h"
 #include "dia_en_la_uni.h"
@@ -11,50 +14,27 @@ const char BOTELLAS = 'G';
 const char INTERRUPTORES = 'I';
 const char MIKE = 'M';
 
-const int DIM_NIVEL_1 = 12;
-const int DIM_NIVEL_2 = 17;
-const int DIM_NIVEL_3 = 22;
+const int NIVELES_TOTALES[MAX_NIVELES] = {1, 2, 3};
+const int DIM_POR_NIVEL[MAX_NIVELES] = {12, 17, 22};
+const int PAPELEOS_POR_NIVEL[MAX_NIVELES] = {2, 3, 4};
+const int MOVIMIENTOS_POR_NIVEL[MAX_NIVELES] = {40, 30, 20};
+const int FUEGOS_POR_NIVEL[MAX_NIVELES] = {10, 5, 3};
+const int MEDIAS_POR_NIVEL[MAX_NIVELES] = {5, 4, 3};
+const int BOTELLAS_POR_NIVEL[MAX_NIVELES] = {4, 3, 3};
+const int INTERRUPTORES_POR_NIVEL[MAX_NIVELES] = {1, 1, 0};
+const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
+const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
 
-const int PAPELEOS_NIVEL_1 = 2;
-const int MOVIMIENTOS_NIVEL_1 = 40;
-const int FUEGOS_NIVEL_1 = 10;
-const int MEDIAS_NIVEL_1 = 5;
-const int BOTELLAS_NIVEL_1 = 4;
-const int INTERRUPTORES_NIVEL_1 = 1;
-const int MARTILLOS_NIVEL_1 = 4;
-const int EXTINTORES_NIVEL_1 = 4;
 
-const int PAPELEOS_NIVEL_2 = 3;
-const int MOVIMIENTOS_NIVEL_2 = 30;
-const int FUEGOS_NIVEL_2 = 5;
-const int MEDIAS_NIVEL_2 = 4;
-const int BOTELLAS_NIVEL_2 = 3;
-const int INTERRUPTORES_NIVEL_2 = 1;
-const int MARTILLOS_NIVEL_2 = 5;
-const int EXTINTORES_NIVEL_2 = 2;
-
-const int PAPELEOS_NIVEL_3 = 4;
-const int MOVIMIENTOS_NIVEL_3 = 20;
-const int FUEGOS_NIVEL_3 = 3;
-const int MEDIAS_NIVEL_3 = 3;
-const int BOTELLAS_NIVEL_3 = 2;
-const int INTERRUPTORES_NIVEL_3 = 0;
-const int MARTILLOS_NIVEL_3 = 6;
-const int EXTINTORES_NIVEL_3 = 2;
+typedef struct coordenada_pared {
+	int fil;
+	int col;
+    bool es_adyacente;
+} coordenada_pared_t;
 
 
 void imprimir_terreno(juego_t juego){
-    int dim_nivel;
-
-    if(juego.nivel_actual == 1){
-        dim_nivel = DIM_NIVEL_1;
-    }
-    else if (juego.nivel_actual == 2){
-        dim_nivel = DIM_NIVEL_2;
-    }
-    else if (juego.nivel_actual == 3){
-        dim_nivel = DIM_NIVEL_3;
-    }
+    int dim_nivel = DIM_POR_NIVEL[juego.nivel_actual - 1];
 
     printf("DIM_NIVEL: %d\n", dim_nivel);
 
@@ -94,19 +74,9 @@ void imprimir_terreno(juego_t juego){
 }
 
 
-void get_espacios_libres(nivel_t* nivel, coordenada_t* espacios_libres, int numero_nivel, int* tope_espacios_libres){
-    int dim_nivel;
+void get_espacios_libres(nivel_t* nivel, coordenada_pared_t* espacios_libres, int numero_nivel, int* tope_espacios_libres){
+    int dim_nivel = DIM_POR_NIVEL[numero_nivel - 1];
     bool espacio_invalido = false;
-
-    if(numero_nivel == 1){
-        dim_nivel = DIM_NIVEL_1;
-    }
-    else if (numero_nivel == 2){
-        dim_nivel = DIM_NIVEL_2;
-    }
-    else if (numero_nivel == 3){
-        dim_nivel = DIM_NIVEL_3;
-    }
 
     // printf("DIM_NIVEL: %d\n", dim_nivel);
     // printf("TOPE PAREDES: %d\n", nivel->tope_paredes);
@@ -131,30 +101,37 @@ void get_espacios_libres(nivel_t* nivel, coordenada_t* espacios_libres, int nume
             }
         }
     }
+}
 
+
+void posicionar_fuegos(nivel_t* nivel, coordenada_pared_t* espacios_libres, int* tope_espacios_libres, int cantidad_fuegos){
+    // int posicion_fuego;
+    int index_espacio_libre;
+
+    srand ((unsigned)time(NULL));
     printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
+
+    for(int fuegos_colocados = 0; fuegos_colocados < cantidad_fuegos; fuegos_colocados++){
+        index_espacio_libre = rand() % *tope_espacios_libres;
+        printf("INDEX ESPACIO LIBRE: %d\n", index_espacio_libre);
+    }
 }
 
 
-void posicionar_fuegos(nivel_t* nivel, coordenada_t* espacios_libres, int tope_espacios_libres, int cantidad_fuegos){
-    printf("PONGO FUEGOS\n");
-}
-
-
-void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, int cantidad_fuegos, int cantidad_medias, char personaje_tp1){
-    coordenada_t espacios_libres[MAX_PAREDES];
-    int tope_espacios_libres = 0;
+void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_pared_t* espacios_libres, int* tope_espacios_libres){
 
     printf("INICIALIZANDO OBSTACULOS EN MAPA\n");
-    //nivel->tope_obstaculos = cantidad_fuegos+cantidad_medias;
-    if(personaje_tp1 == OLAF_ID && numero_nivel == 1){
+    printf("TOPE ESPACIOS LIBRES PARA OBSTACULOS: %d, Ej: %d, %d\n", *tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col); 
+
+    int cantidad_fuegos = FUEGOS_POR_NIVEL[numero_nivel-1];
+    // int cantidad_medias = MEDIAS_POR_NIVEL[numero_nivel-1];
+
+    if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
         cantidad_fuegos =- 2;
     }
-    else if(personaje_tp1 == OLAF_ID && numero_nivel == 2){
+    else if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[1]){
         cantidad_fuegos =- 1;
     }
-
-    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
 
     posicionar_fuegos(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos);
 }
@@ -163,37 +140,20 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, int cantidad_fuego
 void inicializar_herramientas(nivel_t* nivel, int numero_nivel, int cantidad_botellas, int cantidad_interruptores, char personaje_tp1){
     printf("INICIALIZANDO HERRAMIENTAS EN MAPA\n");
     //nivel->tope_herramientas =  cantidad_botellas + cantidad_interruptores;
-
 }
 
 
 void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 
-    int cantidad_fuegos = 0;
-    int cantidad_medias = 0;
-    int cantidad_botellas = 0;
-    int cantidad_interruptores = 0;
+    int cantidad_botellas = BOTELLAS_POR_NIVEL[numero_nivel-1];
+    int cantidad_interruptores = INTERRUPTORES_POR_NIVEL[numero_nivel-1];
+    
+    int tope_espacios_libres = 0;
+    coordenada_t espacios_libres[MAX_PAREDES];
 
-    if(numero_nivel == 1){
-        cantidad_fuegos = FUEGOS_NIVEL_1;
-        cantidad_medias = MEDIAS_NIVEL_1;
-        cantidad_botellas = BOTELLAS_NIVEL_1;
-        cantidad_interruptores = INTERRUPTORES_NIVEL_1;
-    }
-    else if(numero_nivel == 2){
-        cantidad_fuegos = FUEGOS_NIVEL_2;
-        cantidad_medias = MEDIAS_NIVEL_2;
-        cantidad_botellas = BOTELLAS_NIVEL_2;
-        cantidad_interruptores = INTERRUPTORES_NIVEL_2;
-    }
-    else if(numero_nivel == 3){
-        cantidad_fuegos = FUEGOS_NIVEL_3;
-        cantidad_medias = MEDIAS_NIVEL_3;
-        cantidad_botellas = BOTELLAS_NIVEL_3;
-        cantidad_interruptores = INTERRUPTORES_NIVEL_3;
-    }
+    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
 
-    inicializar_obstaculos(nivel, numero_nivel, cantidad_fuegos, cantidad_medias, personaje_tp1);
+    inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, cantidad_botellas, cantidad_interruptores, personaje_tp1);
 }
 
@@ -217,27 +177,15 @@ void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, int numero_nivel, char personaje_tp1){
     printf("INICIALIZANDO POSICION JUGADOR: %d,%d\n", pos_inicial_jugador->fil, pos_inicial_jugador->col);
     jugador->posicion = *pos_inicial_jugador;
-    
-    if(numero_nivel == 1){
-        jugador->movimientos += MOVIMIENTOS_NIVEL_1;
-        jugador->martillos = MARTILLOS_NIVEL_1;
-        jugador->extintores = EXTINTORES_NIVEL_1;
-    }
-    else if(numero_nivel == 2){
-        jugador->movimientos += MOVIMIENTOS_NIVEL_2;
-        jugador->martillos = MARTILLOS_NIVEL_2;
-        jugador->extintores = EXTINTORES_NIVEL_2;
-    }
-    else if(numero_nivel == 3){
-        jugador->movimientos += MOVIMIENTOS_NIVEL_3;
-        jugador->martillos = MARTILLOS_NIVEL_3;
-        jugador->extintores = EXTINTORES_NIVEL_3;
-    }
+
+    jugador->movimientos += MOVIMIENTOS_POR_NIVEL[numero_nivel-1];
+    jugador->martillos = MARTILLOS_POR_NIVEL[numero_nivel-1];
+    jugador->extintores = EXTINTORES_POR_NIVEL[numero_nivel-1];
 
     if(personaje_tp1 == JASMIN_ID){
         jugador->martillos += 1;
     }
-    else if (personaje_tp1 == RAYO_ID && numero_nivel == 1){
+    else if (personaje_tp1 == RAYO_ID && numero_nivel == NIVELES_TOTALES[0]){
         jugador->movimientos += 10;
     }
 }
@@ -251,24 +199,24 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
     juego->personaje_tp1 = personaje_tp1;
     (juego->jugador).movimientos = 0;
 
-    /*
-    for(int i=0; i<MAX_NIVELES; i++){
-        juego->nivel_actual = i+1;
-        if(i+1 == 1){
-            inicializar_nivel(&nivel_1, juego->nivel_actual, juego->personaje_tp1);
-            juego->niveles[i] = nivel_1;
-        }
-        else if(i+1 == 2){
-            inicializar_nivel(&nivel_2, juego->nivel_actual, juego->personaje_tp1);
-            juego->niveles[i] = nivel_2;
-        }
-        else if(i+1 == 3){
-            inicializar_nivel(&nivel_3, juego->nivel_actual, juego->personaje_tp1);
-            juego->niveles[i] = nivel_3;
-        }
-        inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
-        imprimir_terreno(*juego);
-    }*/
+    
+    // for(int i=0; i<MAX_NIVELES; i++){
+    //     juego->nivel_actual = i+1;
+    //     if(i+1 == 1){
+    //         inicializar_nivel(&nivel_1, juego->nivel_actual, juego->personaje_tp1);
+    //         juego->niveles[i] = nivel_1;
+    //     }
+    //     else if(i+1 == 2){
+    //         inicializar_nivel(&nivel_2, juego->nivel_actual, juego->personaje_tp1);
+    //         juego->niveles[i] = nivel_2;
+    //     }
+    //     else if(i+1 == 3){
+    //         inicializar_nivel(&nivel_3, juego->nivel_actual, juego->personaje_tp1);
+    //         juego->niveles[i] = nivel_3;
+    //     }
+    //     inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+    //     imprimir_terreno(*juego);
+    // }
 
 
 

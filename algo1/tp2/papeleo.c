@@ -8,10 +8,10 @@
 #include "dia_en_la_uni.h"
 
 const char PARED = '#';
-const char FUEGOS = 'F';
-const char MEDIAS = 'M';
-const char BOTELLAS = 'G';
-const char INTERRUPTORES = 'I';
+const char FUEGO_TIPO = 'F';
+const char MEDIA_TIPO = 'M';
+const char BOTELLA_TIPO = 'G';
+const char INTERRUPTOR_TIPO = 'I';
 const char MIKE = 'M';
 
 const int NIVELES_TOTALES[MAX_NIVELES] = {1, 2, 3};
@@ -26,11 +26,11 @@ const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
 const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
 
 
-typedef struct coordenada_pared {
+typedef struct coordenada_libre_pared {
 	int fil;
 	int col;
     bool es_adyacente;
-} coordenada_pared_t;
+} coordenada_libre_t;
 
 
 void imprimir_terreno(juego_t juego){
@@ -62,6 +62,10 @@ void imprimir_terreno(juego_t juego){
         terreno[juego.niveles[juego.nivel_actual-1].paredes[i].fil][juego.niveles[juego.nivel_actual-1].paredes[i].col] = PARED;
     }
 
+    for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_obstaculos; i++){
+        terreno[juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col] = juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo;
+    }
+
     terreno[juego.jugador.posicion.fil][juego.jugador.posicion.col] = MIKE;
 
     for(int i=0; i<dim_nivel; i++){
@@ -74,7 +78,29 @@ void imprimir_terreno(juego_t juego){
 }
 
 
-void get_espacios_libres(nivel_t* nivel, coordenada_pared_t* espacios_libres, int numero_nivel, int* tope_espacios_libres){
+void es_pared_adyacente(nivel_t* nivel, int fila, int columna, coordenada_libre_t* espacios_libres, int* tope_espacios_libres){
+    for(int i = 0; i < nivel->tope_paredes; i++){
+        if(nivel->paredes[i].fil == fila-1 && nivel->paredes[i].col == columna && espacios_libres[*tope_espacios_libres].es_adyacente == false){
+            espacios_libres[*tope_espacios_libres].es_adyacente = true;
+            //printf("ES ADYACENTE CON FILA ANTERIOR: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        }
+        else if(nivel->paredes[i].fil == fila+1 && nivel->paredes[i].col == columna && espacios_libres[*tope_espacios_libres].es_adyacente == false){
+            espacios_libres[*tope_espacios_libres].es_adyacente = true;
+            //printf("ES ADYACENTE CON FILA SIGUIENTE: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        }
+        else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna-1 && espacios_libres[*tope_espacios_libres].es_adyacente == false){
+            espacios_libres[*tope_espacios_libres].es_adyacente = true;
+            //printf("ES ADYACENTE CON COLUMNA ANTERIOR: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        }
+        else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna+1 && espacios_libres[*tope_espacios_libres].es_adyacente == false){
+            espacios_libres[*tope_espacios_libres].es_adyacente = true;
+            //printf("ES ADYACENTE CON COLUMNA SIGUIENTE: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
+        }
+    }
+}
+
+
+void get_espacios_libres(nivel_t* nivel, coordenada_libre_t* espacios_libres, int numero_nivel, int* tope_espacios_libres){
     int dim_nivel = DIM_POR_NIVEL[numero_nivel - 1];
     bool espacio_invalido = false;
 
@@ -85,10 +111,10 @@ void get_espacios_libres(nivel_t* nivel, coordenada_pared_t* espacios_libres, in
     for(int fila = 0; fila < dim_nivel; fila++){
         for(int columna = 0; columna < dim_nivel; columna++){
             for(int coords_pared = 0; coords_pared<nivel->tope_paredes; coords_pared++){
-                if((nivel->pos_inicial_jugador.fil == fila && nivel->pos_inicial_jugador.col == columna) && espacio_invalido == false){
+                if((nivel->pos_inicial_jugador.fil == fila && nivel->pos_inicial_jugador.col == columna) && espacio_invalido == false){ //si es el mismo espacio que el jugador
                     espacio_invalido = true;
                 }
-                else if(nivel->paredes[coords_pared].fil == fila && nivel->paredes[coords_pared].col == columna && espacio_invalido == false){
+                else if(nivel->paredes[coords_pared].fil == fila && nivel->paredes[coords_pared].col == columna && espacio_invalido == false){  //si es una pared
                     coords_pared = nivel->tope_paredes;
                     espacio_invalido = true;
                 }
@@ -96,6 +122,9 @@ void get_espacios_libres(nivel_t* nivel, coordenada_pared_t* espacios_libres, in
                     espacios_libres[*tope_espacios_libres].fil = fila;
                     espacios_libres[*tope_espacios_libres].col = columna;
                     *tope_espacios_libres = *tope_espacios_libres + 1;
+
+                    es_pared_adyacente(nivel, fila, columna, espacios_libres, tope_espacios_libres);
+                    printf("ESPACIO LIBRE: %d, %d; %d\n", fila, columna, espacios_libres[*tope_espacios_libres].es_adyacente);
                 }
                 espacio_invalido = false;
             }
@@ -104,21 +133,32 @@ void get_espacios_libres(nivel_t* nivel, coordenada_pared_t* espacios_libres, in
 }
 
 
-void posicionar_fuegos(nivel_t* nivel, coordenada_pared_t* espacios_libres, int* tope_espacios_libres, int cantidad_fuegos){
+void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t* espacios_libres, int* tope_espacios_libres, int cantidad_fuegos){
     // int posicion_fuego;
-    int index_espacio_libre;
+    //int index_espacio_libre;
 
     srand ((unsigned)time(NULL));
     printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
 
-    for(int fuegos_colocados = 0; fuegos_colocados < cantidad_fuegos; fuegos_colocados++){
-        index_espacio_libre = rand() % *tope_espacios_libres;
-        printf("INDEX ESPACIO LIBRE: %d\n", index_espacio_libre);
+    for(int fuegos_colocados = 0; fuegos_colocados < *tope_espacios_libres; fuegos_colocados++){
+        // do{
+        //     index_espacio_libre = rand() % *tope_espacios_libres;
+        // } while(espacios_libres[index_espacio_libre].es_adyacente == false);
+        if(espacios_libres[fuegos_colocados].es_adyacente == true){
+            // printf("Espacio adyacente en: %d, %d; %d\n", espacios_libres[fuegos_colocados].fil, espacios_libres[fuegos_colocados].col, espacios_libres[fuegos_colocados].es_adyacente);
+            (nivel->obstaculos[fuegos_colocados]).posicion.fil = espacios_libres[fuegos_colocados].fil;
+            (nivel->obstaculos[fuegos_colocados]).posicion.col = espacios_libres[fuegos_colocados].col;
+            nivel->obstaculos[fuegos_colocados].tipo = '.';
+            nivel->tope_obstaculos ++;
+        }
+        // else{
+        //     printf("No es adyacente en: %d, %d; %d\n", espacios_libres[fuegos_colocados].fil, espacios_libres[fuegos_colocados].col, espacios_libres[fuegos_colocados].es_adyacente);
+        // }
     }
 }
 
 
-void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_pared_t* espacios_libres, int* tope_espacios_libres){
+void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t* espacios_libres, int* tope_espacios_libres){
 
     printf("INICIALIZANDO OBSTACULOS EN MAPA\n");
     printf("TOPE ESPACIOS LIBRES PARA OBSTACULOS: %d, Ej: %d, %d\n", *tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col); 
@@ -149,9 +189,15 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     int cantidad_interruptores = INTERRUPTORES_POR_NIVEL[numero_nivel-1];
     
     int tope_espacios_libres = 0;
-    coordenada_t espacios_libres[MAX_PAREDES];
+    coordenada_libre_t espacios_libres[MAX_PAREDES];
 
     get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
+
+    printf("TOPE ESPACIOS LIBRES PARA OBJETOS: %d, Ej: %d, %d\n", tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
+
+    for(int i = 0; i < tope_espacios_libres; i++){
+        printf("ESPACIO LIBRE POST PROCESS: %d, %d; %d\n", espacios_libres[i].fil, espacios_libres[i].col, espacios_libres[i].es_adyacente);
+    }
 
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, cantidad_botellas, cantidad_interruptores, personaje_tp1);

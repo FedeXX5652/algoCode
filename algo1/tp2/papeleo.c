@@ -84,19 +84,19 @@ bool es_pared_adyacente(nivel_t* nivel, int fila, int columna, coordenada_libre_
     for(int i = 0; i < nivel->tope_paredes; i++){
         if(nivel->paredes[i].fil == fila-1 && nivel->paredes[i].col == columna && es_adyacente == false){
             es_adyacente = true;
-            printf("ES ADYACENTE CON FILA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
+            //printf("ES ADYACENTE CON FILA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
         }
         else if(nivel->paredes[i].fil == fila+1 && nivel->paredes[i].col == columna && es_adyacente == false){
             es_adyacente = true;
-            printf("ES ADYACENTE CON FILA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
+            //printf("ES ADYACENTE CON FILA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
         }
         else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna-1 && es_adyacente == false){
             es_adyacente = true;
-            printf("ES ADYACENTE CON COLUMNA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
+            //printf("ES ADYACENTE CON COLUMNA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
         }
         else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna+1 && es_adyacente == false){
             es_adyacente = true;
-            printf("ES ADYACENTE CON COLUMNA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
+            //printf("ES ADYACENTE CON COLUMNA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
         }
     }
     return es_adyacente;
@@ -126,20 +126,12 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
                     espacios_libres[index_esp_libre].fil = fila;
                     espacios_libres[index_esp_libre].col = columna;
                     index_esp_libre = index_esp_libre+1;
-                    *tope_espacios_libres += 1;
-                    printf("Es adyacente?? %d\n", es_pared_adyacente(nivel, fila, columna, espacios_libres));
-
                     espacios_libres[*tope_espacios_libres].es_adyacente = es_pared_adyacente(nivel, fila, columna, espacios_libres);
+                    *tope_espacios_libres += 1;
                 }
                 espacio_invalido = false;
             }
         }
-    }
-
-    printf("tope: %d\n", *tope_espacios_libres);
-
-    for(int i = 0; i<*tope_espacios_libres; i++){
-        printf("ESPACIO LIBRE: %d, %d; %d\n", espacios_libres[i].fil, espacios_libres[i].col, espacios_libres[i].es_adyacente);
     }
 }
 

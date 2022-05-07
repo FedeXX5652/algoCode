@@ -12,7 +12,7 @@ const char FUEGO_TIPO = 'F';
 const char MEDIA_TIPO = 'M';
 const char BOTELLA_TIPO = 'G';
 const char INTERRUPTOR_TIPO = 'I';
-const char MIKE = 'M';
+const char MIKE = 'W';
 
 const int NIVELES_TOTALES[MAX_NIVELES] = {1, 2, 3};
 const int DIM_POR_NIVEL[MAX_NIVELES] = {12, 17, 22};
@@ -30,6 +30,7 @@ typedef struct coordenada_libre_pared {
 	int fil;
 	int col;
     bool es_adyacente;
+    bool usado;
 } coordenada_libre_t;
 
 
@@ -62,9 +63,23 @@ void imprimir_terreno(juego_t juego){
         terreno[juego.niveles[juego.nivel_actual-1].paredes[i].fil][juego.niveles[juego.nivel_actual-1].paredes[i].col] = PARED;
     }
 
+    int fuegos_colocados = 0;
+    int medias_colocadas = 0;
+    printf("Obstaculos por colocar: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_obstaculos; i++){
         terreno[juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col] = juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo;
+        if(juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo == FUEGO_TIPO){
+            printf("Fuego impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
+            fuegos_colocados++;
+        }
+        if(juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo == MEDIA_TIPO){
+            printf("Media impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
+            medias_colocadas++;
+        }
     }
+
+    printf("Fuegos colodados: %i\n", fuegos_colocados);
+    printf("Medias colocadas: %i\n", medias_colocadas);
 
     terreno[juego.jugador.posicion.fil][juego.jugador.posicion.col] = MIKE;
 
@@ -125,8 +140,9 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
                 else if(coords_pared == nivel->tope_paredes-1 && espacio_invalido == false){
                     espacios_libres[index_esp_libre].fil = fila;
                     espacios_libres[index_esp_libre].col = columna;
-                    index_esp_libre = index_esp_libre+1;
                     espacios_libres[*tope_espacios_libres].es_adyacente = es_pared_adyacente(nivel, fila, columna, espacios_libres);
+                    espacios_libres[*tope_espacios_libres].usado = false;
+                    index_esp_libre = index_esp_libre+1;
                     *tope_espacios_libres += 1;
                 }
                 espacio_invalido = false;
@@ -137,26 +153,43 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
 
 
 void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_fuegos){
-    // int posicion_fuego;
-    //int index_espacio_libre;
+    int index_espacio_libre;
 
     srand ((unsigned)time(NULL));
-    printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
+    //printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
 
-    for(int fuegos_colocados = 0; fuegos_colocados < *tope_espacios_libres; fuegos_colocados++){
-        // do{
-        //     index_espacio_libre = rand() % *tope_espacios_libres;
-        // } while(espacios_libres[index_espacio_libre].es_adyacente == false);
-        if(espacios_libres[fuegos_colocados].es_adyacente == true){
-            // printf("Espacio adyacente en: %d, %d; %d\n", espacios_libres[fuegos_colocados].fil, espacios_libres[fuegos_colocados].col, espacios_libres[fuegos_colocados].es_adyacente);
-            (nivel->obstaculos[fuegos_colocados]).posicion.fil = espacios_libres[fuegos_colocados].fil;
-            (nivel->obstaculos[fuegos_colocados]).posicion.col = espacios_libres[fuegos_colocados].col;
-            nivel->obstaculos[fuegos_colocados].tipo = '.';
-            nivel->tope_obstaculos ++;
-        }
-        // else{
-        //     printf("No es adyacente en: %d, %d; %d\n", espacios_libres[fuegos_colocados].fil, espacios_libres[fuegos_colocados].col, espacios_libres[fuegos_colocados].es_adyacente);
-        // }
+    for(int fuegos_colocados = 0; fuegos_colocados < cantidad_fuegos; fuegos_colocados++){
+        do{
+            index_espacio_libre = rand() % *tope_espacios_libres;
+        } while(espacios_libres[index_espacio_libre].es_adyacente == false || espacios_libres[index_espacio_libre].usado == true);
+        
+        (nivel->obstaculos[nivel->tope_obstaculos]).posicion.fil = espacios_libres[index_espacio_libre].fil;
+        (nivel->obstaculos[nivel->tope_obstaculos]).posicion.col = espacios_libres[index_espacio_libre].col;
+        nivel->obstaculos[nivel->tope_obstaculos].tipo = FUEGO_TIPO;
+        nivel->tope_obstaculos ++;
+        espacios_libres[index_espacio_libre].usado = true;
+        //printf("FUEGO COLOCADO %d: %d, %d; %d\n", fuegos_colocados, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);  
+    }
+    //printf("----------------\n");
+}
+
+
+void posicionar_medias(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_medias){
+    int index_espacio_libre;
+
+    srand ((unsigned)time(NULL));
+
+    for(int medias_colocadas = 0; medias_colocadas < cantidad_medias; medias_colocadas++){
+        do{
+            index_espacio_libre = rand() % *tope_espacios_libres;
+        } while(espacios_libres[index_espacio_libre].usado != false);
+
+        (nivel->obstaculos[nivel->tope_obstaculos]).posicion.fil = espacios_libres[index_espacio_libre].fil;
+        (nivel->obstaculos[nivel->tope_obstaculos]).posicion.col = espacios_libres[index_espacio_libre].col;
+        nivel->obstaculos[nivel->tope_obstaculos].tipo = MEDIA_TIPO;
+        nivel->tope_obstaculos ++;
+        espacios_libres[index_espacio_libre].usado = true;
+        //printf("MEDIA COLOCADA %d: %d, %d; %d\n", medias_colocadas, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);
     }
 }
 
@@ -167,7 +200,9 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
     printf("TOPE ESPACIOS LIBRES PARA OBSTACULOS: %d, Ej: %d, %d\n", *tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
 
     int cantidad_fuegos = FUEGOS_POR_NIVEL[numero_nivel-1];
-    // int cantidad_medias = MEDIAS_POR_NIVEL[numero_nivel-1];
+    int cantidad_medias = MEDIAS_POR_NIVEL[numero_nivel-1];
+
+    nivel->tope_obstaculos = 0;
 
     if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
         cantidad_fuegos =- 2;
@@ -177,6 +212,7 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
     }
 
     posicionar_fuegos(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos);
+    posicionar_medias(nivel, espacios_libres, tope_espacios_libres, cantidad_medias);
 }
 
 
@@ -197,11 +233,6 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
 
     printf("TOPE ESPACIOS LIBRES PARA OBJETOS: %d, Ej: %d, %d\n", tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
-
-    // ACA NO ESTA EL ERROR DE ADYACENTES A PAREDES AIUDA
-    // for(int i = 0; i < tope_espacios_libres; i++){
-    //     printf("ESPACIO LIBRE POST PROCESS: %d, %d; %d\n", espacios_libres[i].fil, espacios_libres[i].col, espacios_libres[i].es_adyacente);
-    // }
 
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, cantidad_botellas, cantidad_interruptores, personaje_tp1);

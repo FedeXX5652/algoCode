@@ -69,17 +69,36 @@ void imprimir_terreno(juego_t juego){
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_obstaculos; i++){
         terreno[juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col] = juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo;
         if(juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo == FUEGO_TIPO){
-            printf("Fuego impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
+            //printf("Fuego impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
             fuegos_colocados++;
         }
         if(juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo == MEDIA_TIPO){
-            printf("Media impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
+            //printf("Media impresa: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
             medias_colocadas++;
+        }
+    }
+
+    int botellas_colocadas = 0;
+    int interruptores_colocados = 0;
+    printf("Herramientas por colocar: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
+
+    for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_herramientas; i++){
+        terreno[juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.fil][juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.col] = juego.niveles[juego.nivel_actual-1].herramientas[i].tipo;
+        if(juego.niveles[juego.nivel_actual-1].herramientas[i].tipo == BOTELLA_TIPO){
+            //printf("Botella impresa: %d, %d\n", juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.fil, juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.col);
+            botellas_colocadas++;
+        }
+        if(juego.niveles[juego.nivel_actual-1].herramientas[i].tipo == INTERRUPTOR_TIPO){
+            //printf("Interruptor impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.fil, juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.col);
+            interruptores_colocados++;
         }
     }
 
     printf("Fuegos colodados: %i\n", fuegos_colocados);
     printf("Medias colocadas: %i\n", medias_colocadas);
+    printf("Botellas colocadas: %i\n", botellas_colocadas);
+    printf("Interruptores colocados: %i\n", interruptores_colocados);
+
 
     terreno[juego.jugador.posicion.fil][juego.jugador.posicion.col] = MIKE;
 
@@ -206,9 +225,11 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
 
     if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
         cantidad_fuegos =- 2;
+        printf("OLAF APAGA DOS FUEGOS\n");
     }
     else if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[1]){
         cantidad_fuegos =- 1;
+        printf("OLAF APAGA UN FUEGO\n");
     }
 
     posicionar_fuegos(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos);
@@ -216,16 +237,60 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
 }
 
 
-void inicializar_herramientas(nivel_t* nivel, int numero_nivel, int cantidad_botellas, int cantidad_interruptores, char personaje_tp1){
+void posicionar_botellas(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_botellas){
+    int index_espacio_libre;
+
+    srand ((unsigned)time(NULL));
+
+    for(int botellas_colocadas = 0; botellas_colocadas < cantidad_botellas; botellas_colocadas++){
+        do{
+            index_espacio_libre = rand() % *tope_espacios_libres;
+        } while(espacios_libres[index_espacio_libre].usado != false);
+
+        (nivel->herramientas[nivel->tope_herramientas]).posicion.fil = espacios_libres[index_espacio_libre].fil;
+        (nivel->herramientas[nivel->tope_herramientas]).posicion.col = espacios_libres[index_espacio_libre].col;
+        nivel->herramientas[nivel->tope_herramientas].tipo = BOTELLA_TIPO;
+        nivel->tope_herramientas ++;
+        espacios_libres[index_espacio_libre].usado = true;
+        //printf("BOTELLA COLOCADA %d: %d, %d; %d\n", botellas_colocadas, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);
+    }
+}
+
+
+void posicionar_interruptores(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_interruptores){
+    int index_espacio_libre;
+
+    srand ((unsigned)time(NULL));
+
+    for(int interruptores_colocados = 0; interruptores_colocados < cantidad_interruptores; interruptores_colocados++){
+        do{
+            index_espacio_libre = rand() % *tope_espacios_libres;
+        } while(espacios_libres[index_espacio_libre].usado != false);
+
+        (nivel->herramientas[nivel->tope_herramientas]).posicion.fil = espacios_libres[index_espacio_libre].fil;
+        (nivel->herramientas[nivel->tope_herramientas]).posicion.col = espacios_libres[index_espacio_libre].col;
+        nivel->herramientas[nivel->tope_herramientas].tipo = INTERRUPTOR_TIPO;
+        nivel->tope_herramientas ++;
+        espacios_libres[index_espacio_libre].usado = true;
+        //printf("BOTELLA COLOCADA %d: %d, %d; %d\n", botellas_colocadas, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);
+    }
+}
+
+
+void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
+
     printf("INICIALIZANDO HERRAMIENTAS EN MAPA\n");
-    //nivel->tope_herramientas =  cantidad_botellas + cantidad_interruptores;
+    int cantidad_botellas = BOTELLAS_POR_NIVEL[numero_nivel-1];
+    int cantidad_interruptores = INTERRUPTORES_POR_NIVEL[numero_nivel-1];
+
+    nivel->tope_herramientas = 0;
+
+    posicionar_botellas(nivel, espacios_libres, tope_espacios_libres, cantidad_botellas);
+    posicionar_interruptores(nivel, espacios_libres, tope_espacios_libres, cantidad_interruptores);
 }
 
 
 void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
-
-    int cantidad_botellas = BOTELLAS_POR_NIVEL[numero_nivel-1];
-    int cantidad_interruptores = INTERRUPTORES_POR_NIVEL[numero_nivel-1];
     
     int tope_espacios_libres = 0;
     coordenada_libre_t espacios_libres[MAX_PAREDES];
@@ -235,7 +300,7 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     printf("TOPE ESPACIOS LIBRES PARA OBJETOS: %d, Ej: %d, %d\n", tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
 
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
-    inicializar_herramientas(nivel, numero_nivel, cantidad_botellas, cantidad_interruptores, personaje_tp1);
+    inicializar_herramientas(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
 }
 
 
@@ -274,47 +339,47 @@ void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, 
 
 void inicializar_juego(juego_t* juego, char personaje_tp1){
     nivel_t nivel_1;
-    // nivel_t nivel_2;
-    // nivel_t nivel_3;
+    nivel_t nivel_2;
+    nivel_t nivel_3;
 
     juego->personaje_tp1 = personaje_tp1;
     (juego->jugador).movimientos = 0;
 
     
-    // for(int i=0; i<MAX_NIVELES; i++){
-    //     juego->nivel_actual = i+1;
-    //     if(i+1 == 1){
-    //         inicializar_nivel(&nivel_1, juego->nivel_actual, juego->personaje_tp1);
-    //         juego->niveles[i] = nivel_1;
-    //     }
-    //     else if(i+1 == 2){
-    //         inicializar_nivel(&nivel_2, juego->nivel_actual, juego->personaje_tp1);
-    //         juego->niveles[i] = nivel_2;
-    //     }
-    //     else if(i+1 == 3){
-    //         inicializar_nivel(&nivel_3, juego->nivel_actual, juego->personaje_tp1);
-    //         juego->niveles[i] = nivel_3;
-    //     }
-    //     inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
-    //     imprimir_terreno(*juego);
-    // }
+    for(int i=0; i<MAX_NIVELES; i++){
+        juego->nivel_actual = i+1;
+        if(i+1 == 1){
+            inicializar_nivel(&nivel_1, juego->nivel_actual, juego->personaje_tp1);
+            juego->niveles[i] = nivel_1;
+        }
+        else if(i+1 == 2){
+            inicializar_nivel(&nivel_2, juego->nivel_actual, juego->personaje_tp1);
+            juego->niveles[i] = nivel_2;
+        }
+        else if(i+1 == 3){
+            inicializar_nivel(&nivel_3, juego->nivel_actual, juego->personaje_tp1);
+            juego->niveles[i] = nivel_3;
+        }
+        inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+        imprimir_terreno(*juego);
+    }
 
 
 
-    inicializar_nivel(&nivel_1, 1, personaje_tp1);
-    // inicializar_nivel(&nivel_3, 3, personaje_tp1);
-    // inicializar_nivel(&nivel_2, 2, personaje_tp1);
+    // inicializar_nivel(&nivel_1, 1, personaje_tp1);
+    // // inicializar_nivel(&nivel_3, 3, personaje_tp1);
+    // // inicializar_nivel(&nivel_2, 2, personaje_tp1);
 
-    juego->niveles[0] = nivel_1;
-    // juego->niveles[1] = nivel_2;
-    // juego->niveles[2] = nivel_3;
+    // juego->niveles[0] = nivel_1;
+    // // juego->niveles[1] = nivel_2;
+    // // juego->niveles[2] = nivel_3;
 
 
-    juego->nivel_actual = 1;
-    inicializar_jugador(&juego->jugador, &juego->niveles[0].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
-    imprimir_terreno(*juego);
-    // juego->nivel_actual = 2;
+    // juego->nivel_actual = 1;
+    // inicializar_jugador(&juego->jugador, &juego->niveles[0].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
     // imprimir_terreno(*juego);
-    // juego->nivel_actual = 3;
-    // imprimir_terreno(*juego);
+    // // juego->nivel_actual = 2;
+    // // imprimir_terreno(*juego);
+    // // juego->nivel_actual = 3;
+    // // imprimir_terreno(*juego);
 }

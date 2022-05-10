@@ -426,23 +426,23 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
 
     juego->personaje_tp1 = personaje_tp1;
     (juego->jugador).movimientos = 0;
-
     
+    juego->nivel_actual = 1;
+
     for(int i=0; i<MAX_NIVELES; i++){
-        juego->nivel_actual = i+1;
         if(i+1 == 1){
-            inicializar_nivel(&nivel_1, juego->nivel_actual, juego->personaje_tp1);
+            inicializar_nivel(&nivel_1, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_1;
         }
         else if(i+1 == 2){
-            inicializar_nivel(&nivel_2, juego->nivel_actual, juego->personaje_tp1);
+            inicializar_nivel(&nivel_2, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_2;
         }
         else if(i+1 == 3){
-            inicializar_nivel(&nivel_3, juego->nivel_actual, juego->personaje_tp1);
+            inicializar_nivel(&nivel_3, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_3;
         }
-        inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
         imprimir_terreno(*juego);
     }
+    inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
 }

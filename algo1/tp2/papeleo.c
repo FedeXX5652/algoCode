@@ -43,8 +43,8 @@ void imprimir_terreno(juego_t juego){
 
     printf("--------------DATA NIVEL--------------\n");
     printf("NIVEL: %d\n", juego.nivel_actual);
-    printf("PERSONAJE: %c\n", juego.personaje_tp1);
-    printf("POSICION JUGADOR: %d, %d\n", juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil, juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col);
+    printf("PERSONAJE TP1: %c\n", juego.personaje_tp1);
+    printf("POSICION JUGADOR: %d, %d\n\n", juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil, juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col);
     printf("--------------INVENTARIO--------------\n");
     printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
     printf("MARTILLOS: %i\n", juego.jugador.martillos);
@@ -52,6 +52,9 @@ void imprimir_terreno(juego_t juego){
     printf("\n");
     printf("--------------OBSTACULOS Y OBJETOS--------------\n");
     printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
+    printf("TOPE OBSTACULOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
+    printf("TOPE HERRAMIENTAS: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
+    printf("\n");
 
     for(int i = 0; i < dim_nivel; i++){
         for(int j = 0; j < dim_nivel; j++){
@@ -63,41 +66,18 @@ void imprimir_terreno(juego_t juego){
         terreno[juego.niveles[juego.nivel_actual-1].paredes[i].fil][juego.niveles[juego.nivel_actual-1].paredes[i].col] = PARED;
     }
 
-    int fuegos_colocados = 0;
-    int medias_colocadas = 0;
-    printf("Obstaculos por colocar: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_obstaculos; i++){
         terreno[juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col] = juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo;
-        if(juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo == FUEGO_TIPO){
-            //printf("Fuego impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
-            fuegos_colocados++;
-        }
-        if(juego.niveles[juego.nivel_actual-1].obstaculos[i].tipo == MEDIA_TIPO){
-            //printf("Media impresa: %d, %d\n", juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.fil, juego.niveles[juego.nivel_actual-1].obstaculos[i].posicion.col);
-            medias_colocadas++;
-        }
     }
-
-    int botellas_colocadas = 0;
-    int interruptores_colocados = 0;
-    printf("Herramientas por colocar: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
 
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_herramientas; i++){
         terreno[juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.fil][juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.col] = juego.niveles[juego.nivel_actual-1].herramientas[i].tipo;
-        if(juego.niveles[juego.nivel_actual-1].herramientas[i].tipo == BOTELLA_TIPO){
-            //printf("Botella impresa: %d, %d\n", juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.fil, juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.col);
-            botellas_colocadas++;
-        }
-        if(juego.niveles[juego.nivel_actual-1].herramientas[i].tipo == INTERRUPTOR_TIPO){
-            //printf("Interruptor impreso: %d, %d\n", juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.fil, juego.niveles[juego.nivel_actual-1].herramientas[i].posicion.col);
-            interruptores_colocados++;
-        }
     }
 
-    printf("Fuegos colodados: %i\n", fuegos_colocados);
-    printf("Medias colocadas: %i\n", medias_colocadas);
-    printf("Botellas colocadas: %i\n", botellas_colocadas);
-    printf("Interruptores colocados: %i\n", interruptores_colocados);
+    for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_papeleos; i++){
+        terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = 'P';
+        printf("Id papeleo: %d\n", juego.niveles[juego.nivel_actual-1].papeleos[i].id_papeleo);
+    }
 
 
     terreno[juego.jugador.posicion.fil][juego.jugador.posicion.col] = MIKE;
@@ -141,10 +121,6 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
     int dim_nivel = DIM_POR_NIVEL[numero_nivel - 1];
     bool espacio_invalido = false;
     int index_esp_libre = 0;
-
-    // printf("DIM_NIVEL: %d\n", dim_nivel);
-    // printf("TOPE PAREDES: %d\n", nivel->tope_paredes);
-    printf("POS INICIAL JUGADOR: %d, %d\n", nivel->pos_inicial_jugador.fil, nivel->pos_inicial_jugador.col);
 
     for(int fila = 0; fila < dim_nivel; fila++){
         for(int columna = 0; columna < dim_nivel; columna++){
@@ -211,9 +187,6 @@ void posicionar_medias(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PA
 
 void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
 
-    printf("INICIALIZANDO OBSTACULOS EN MAPA\n");
-    printf("TOPE ESPACIOS LIBRES PARA OBSTACULOS: %d, Ej: %d, %d\n", *tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
-
     int cantidad_fuegos = FUEGOS_POR_NIVEL[numero_nivel-1];
     int cantidad_medias = MEDIAS_POR_NIVEL[numero_nivel-1];
 
@@ -221,11 +194,11 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
 
     if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
         cantidad_fuegos =- 2;
-        printf("OLAF APAGA DOS FUEGOS\n");
+        printf("Olaf apaga 2 fuegos\n");
     }
     else if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[1]){
         cantidad_fuegos =- 1;
-        printf("OLAF APAGA UN FUEGO\n");
+        printf("Olaf apaga un fuego\n");
     }
 
     posicionar_fuegos(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos);
@@ -273,7 +246,6 @@ void posicionar_interruptores(nivel_t* nivel, coordenada_libre_t espacios_libres
 
 void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
 
-    printf("INICIALIZANDO HERRAMIENTAS EN MAPA\n");
     int cantidad_botellas = BOTELLAS_POR_NIVEL[numero_nivel-1];
     int cantidad_interruptores = INTERRUPTORES_POR_NIVEL[numero_nivel-1];
 
@@ -281,6 +253,40 @@ void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_t
 
     posicionar_botellas(nivel, espacios_libres, tope_espacios_libres, cantidad_botellas);
     posicionar_interruptores(nivel, espacios_libres, tope_espacios_libres, cantidad_interruptores);
+}
+
+
+void posicionar_papeleos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
+    int index_espacio_libre;
+
+    srand ((unsigned)time(NULL));
+
+    for(int papeleos_colocados = 0; papeleos_colocados < nivel->tope_papeleos; papeleos_colocados++){
+        do{
+            index_espacio_libre = rand() % *tope_espacios_libres;
+        } while(espacios_libres[index_espacio_libre].usado != false);
+
+        (nivel->papeleos[papeleos_colocados]).posicion.fil = espacios_libres[index_espacio_libre].fil;
+        (nivel->papeleos[papeleos_colocados]).posicion.col = espacios_libres[index_espacio_libre].col;
+        nivel->papeleos[papeleos_colocados].recolectado = false;
+        nivel->papeleos[papeleos_colocados].id_papeleo = papeleos_colocados;
+        espacios_libres[index_espacio_libre].usado = true;
+    }
+}
+
+
+void inicializar_papeleos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
+
+    int cantidad_papeleos = PAPELEOS_POR_NIVEL[numero_nivel-1];
+
+    if(personaje_tp1 == STITCH_ID && numero_nivel == NIVELES_TOTALES[-1]){
+        cantidad_papeleos =- 1;
+        printf("Stitch quema un papeleo\n");
+    }
+
+    nivel->tope_papeleos = cantidad_papeleos;
+
+    posicionar_papeleos(nivel, espacios_libres, tope_espacios_libres);
 }
 
 
@@ -295,6 +301,7 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
+    inicializar_papeleos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
 }
 
 
@@ -323,9 +330,11 @@ void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, 
     jugador->extintores = EXTINTORES_POR_NIVEL[numero_nivel-1];
 
     if(personaje_tp1 == JASMIN_ID){
+        printf("Jasmin da martillo\n");
         jugador->martillos += 1;
     }
     else if (personaje_tp1 == RAYO_ID && numero_nivel == NIVELES_TOTALES[0]){
+        printf("Rayo da movimientos extra\n");
         jugador->movimientos += 10;
     }
 }

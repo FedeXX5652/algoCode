@@ -444,5 +444,5 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
         }
         imprimir_terreno(*juego);
     }
-    inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+    inicializar_jugador(&juego->jugador, &juego->niveles[juego->nivel_actual].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
 }

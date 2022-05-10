@@ -16,7 +16,7 @@ const char MIKE = 'W';
 
 const int NIVELES_TOTALES[MAX_NIVELES] = {1, 2, 3};
 const int TOPE_NIVELES = 3;
-const int DIM_POR_NIVEL[MAX_NIVELES] = {12, 17, 22};
+const int DIM_POR_NIVEL[MAX_NIVELES] = {22, 17, 12};
 const int PAPELEOS_POR_NIVEL[MAX_NIVELES] = {2, 3, 4};
 const int MOVIMIENTOS_POR_NIVEL[MAX_NIVELES] = {40, 30, 20};
 const int FUEGOS_POR_NIVEL[MAX_NIVELES] = {10, 5, 3};
@@ -384,15 +384,7 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 */
 void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     
-    if(numero_nivel == 1){
-        obtener_paredes(3, nivel->paredes, &nivel->tope_paredes, &nivel->pos_inicial_jugador);
-    }
-    else if(numero_nivel == 2){
-        obtener_paredes(2, nivel->paredes, &nivel->tope_paredes, &nivel->pos_inicial_jugador);
-    }
-    else if(numero_nivel == 3){
-        obtener_paredes(1, nivel->paredes, &nivel->tope_paredes, &nivel->pos_inicial_jugador);
-    }
+    obtener_paredes(numero_nivel, nivel->paredes, &nivel->tope_paredes, &nivel->pos_inicial_jugador);
     
     inicializar_objetos(nivel, numero_nivel, personaje_tp1);
 }

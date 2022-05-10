@@ -6,10 +6,7 @@
 
 int main(){
 
-    // char personaje_elegido = elegir_personaje();
-    char personaje_elegido = 'R';
-
-    // printf("PERSONAJE ELEJIDO: %c\n", personaje_elegido);
+    char personaje_elegido = elegir_personaje();
     
     juego_t juego;
     

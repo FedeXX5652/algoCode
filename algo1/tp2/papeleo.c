@@ -15,12 +15,13 @@ const char INTERRUPTOR_TIPO = 'I';
 const char MIKE = 'W';
 
 const int NIVELES_TOTALES[MAX_NIVELES] = {1, 2, 3};
+const int TOPE_NIVELES = 3;
 const int DIM_POR_NIVEL[MAX_NIVELES] = {12, 17, 22};
 const int PAPELEOS_POR_NIVEL[MAX_NIVELES] = {2, 3, 4};
 const int MOVIMIENTOS_POR_NIVEL[MAX_NIVELES] = {40, 30, 20};
 const int FUEGOS_POR_NIVEL[MAX_NIVELES] = {10, 5, 3};
 const int MEDIAS_POR_NIVEL[MAX_NIVELES] = {5, 4, 3};
-const int BOTELLAS_POR_NIVEL[MAX_NIVELES] = {4, 3, 3};
+const int BOTELLAS_POR_NIVEL[MAX_NIVELES] = {4, 3, 2};
 const int INTERRUPTORES_POR_NIVEL[MAX_NIVELES] = {1, 1, 0};
 const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
 const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
@@ -34,18 +35,25 @@ typedef struct coordenada_libre_pared {
 } coordenada_libre_t;
 
 
+/* 
+    precondicion:
+        - juego inicializado
+        - nivel asociado a nivel_actual inicializado
+
+    postcondicion:
+        - imprime por pantalla el nivel actual
+*/
 void imprimir_terreno(juego_t juego){
     int dim_nivel = DIM_POR_NIVEL[juego.nivel_actual - 1];
-
-    printf("DIM_NIVEL: %d\n", dim_nivel);
 
     char terreno[dim_nivel][dim_nivel];
 
     printf("--------------DATA NIVEL--------------\n");
     printf("NIVEL: %d\n", juego.nivel_actual);
+    printf("DIMENSION DEL NIVEL: %d\n", dim_nivel);
     printf("PERSONAJE TP1: %c\n", juego.personaje_tp1);
     printf("POSICION JUGADOR: %d, %d\n\n", juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil, juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col);
-    printf("--------------INVENTARIO--------------\n");
+    printf("--------------MIKE--------------\n");
     printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
     printf("MARTILLOS: %i\n", juego.jugador.martillos);
     printf("EXTINTORES: %i\n", juego.jugador.extintores);
@@ -54,6 +62,7 @@ void imprimir_terreno(juego_t juego){
     printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
     printf("TOPE OBSTACULOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
     printf("TOPE HERRAMIENTAS: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
+    printf("TOPE PAPELEOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_papeleos);
     printf("\n");
 
     for(int i = 0; i < dim_nivel; i++){
@@ -76,7 +85,6 @@ void imprimir_terreno(juego_t juego){
 
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_papeleos; i++){
         terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = 'P';
-        printf("Id papeleo: %d\n", juego.niveles[juego.nivel_actual-1].papeleos[i].id_papeleo);
     }
 
 
@@ -88,35 +96,48 @@ void imprimir_terreno(juego_t juego){
         }
         printf("\n");
     }
-    printf("----------------------------------------------------\n");
+    printf("----------------------------------------------------\n\n");
 }
 
 
+/*
+    precondiciones: 
+        - el nivel debe tener las paredes y su tope inicializados
+        - fila y columna deben estar dentro de la dimension del nivel y corresponder al valor a verificar
+
+    postcondiciones:
+        - devuelve true si la posicion es adyacente a una pared
+        - devuelve false si la posicion no es adyacente a una pared
+*/
 bool es_pared_adyacente(nivel_t* nivel, int fila, int columna, coordenada_libre_t espacios_libres[MAX_PAREDES]){
     bool es_adyacente = false;
 
     for(int i = 0; i < nivel->tope_paredes; i++){
         if(nivel->paredes[i].fil == fila-1 && nivel->paredes[i].col == columna && es_adyacente == false){
             es_adyacente = true;
-            //printf("ES ADYACENTE CON FILA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
         }
         else if(nivel->paredes[i].fil == fila+1 && nivel->paredes[i].col == columna && es_adyacente == false){
             es_adyacente = true;
-            //printf("ES ADYACENTE CON FILA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
         }
         else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna-1 && es_adyacente == false){
             es_adyacente = true;
-            //printf("ES ADYACENTE CON COLUMNA ANTERIOR: %d, %d; %d\n", fila, columna, es_adyacente);
         }
         else if(nivel->paredes[i].fil == fila && nivel->paredes[i].col == columna+1 && es_adyacente == false){
             es_adyacente = true;
-            //printf("ES ADYACENTE CON COLUMNA SIGUIENTE: %d, %d; %d\n", fila, columna, es_adyacente);
         }
     }
     return es_adyacente;
 }
 
 
+/*
+    precondiciones:
+        - nivel_actual debe ser un nivel valido (entre 1 y 3)
+        - el nivel debe tener las paredes inicializadas al igual que su tope
+    
+    postcondiciones:
+        - se devuelve una lista de coordenadas libres indicando si son o no adyacentes a una pared e indicando que no estan siendo usadas
+*/
 void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int numero_nivel, int* tope_espacios_libres){
     int dim_nivel = DIM_POR_NIVEL[numero_nivel - 1];
     bool espacio_invalido = false;
@@ -147,38 +168,58 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
 }
 
 
-void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_fuegos){
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y tener tantos espacios disponibles como obstaculos adyacentes a colocar
+        - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
+    
+    postcondiciones:
+        - se inicializan los datos de posicion y tipo cada obstaculo adyacente del nivel
+
+*/
+void posicionar_obstaculo_adyacente(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_obstaculos, char tipo_obstaculo){
     int index_espacio_libre;
 
     srand ((unsigned)time(NULL));
 
-    for(int fuegos_colocados = 0; fuegos_colocados < cantidad_fuegos; fuegos_colocados++){
+    for(int obstaculos_colocados = 0; obstaculos_colocados < cantidad_obstaculos; obstaculos_colocados++){
         do{
             index_espacio_libre = rand() % *tope_espacios_libres;
         } while(espacios_libres[index_espacio_libre].es_adyacente == false || espacios_libres[index_espacio_libre].usado == true);
         
         (nivel->obstaculos[nivel->tope_obstaculos]).posicion.fil = espacios_libres[index_espacio_libre].fil;
         (nivel->obstaculos[nivel->tope_obstaculos]).posicion.col = espacios_libres[index_espacio_libre].col;
-        nivel->obstaculos[nivel->tope_obstaculos].tipo = FUEGO_TIPO;
+        nivel->obstaculos[nivel->tope_obstaculos].tipo = tipo_obstaculo;
         nivel->tope_obstaculos ++;
         espacios_libres[index_espacio_libre].usado = true;
     }
 }
 
 
-void posicionar_medias(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_medias){
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y tener tantos espacios disponibles como obstaculos a colocar
+        - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
+    
+    postcondiciones:
+        - se inicializan los datos de posicion y tipo cada obstaculo del nivel
+
+*/
+void posicionar_obstaculo(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_obstaculos, char tipo_obstaculo){
     int index_espacio_libre;
 
     srand ((unsigned)time(NULL));
 
-    for(int medias_colocadas = 0; medias_colocadas < cantidad_medias; medias_colocadas++){
+    for(int obstaculos_colocados = 0; obstaculos_colocados < cantidad_obstaculos; obstaculos_colocados++){
         do{
             index_espacio_libre = rand() % *tope_espacios_libres;
         } while(espacios_libres[index_espacio_libre].usado != false);
 
         (nivel->obstaculos[nivel->tope_obstaculos]).posicion.fil = espacios_libres[index_espacio_libre].fil;
         (nivel->obstaculos[nivel->tope_obstaculos]).posicion.col = espacios_libres[index_espacio_libre].col;
-        nivel->obstaculos[nivel->tope_obstaculos].tipo = MEDIA_TIPO;
+        nivel->obstaculos[nivel->tope_obstaculos].tipo = tipo_obstaculo;
         nivel->tope_obstaculos ++;
         espacios_libres[index_espacio_libre].usado = true;
     }
@@ -194,56 +235,57 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
 
     if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
         cantidad_fuegos =- 2;
-        printf("Olaf apaga 2 fuegos\n");
     }
     else if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[1]){
         cantidad_fuegos =- 1;
-        printf("Olaf apaga un fuego\n");
     }
 
-    posicionar_fuegos(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos);
-    posicionar_medias(nivel, espacios_libres, tope_espacios_libres, cantidad_medias);
+    posicionar_obstaculo_adyacente(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos, FUEGO_TIPO);
+    posicionar_obstaculo(nivel, espacios_libres, tope_espacios_libres, cantidad_medias, MEDIA_TIPO);
 }
 
 
-void posicionar_botellas(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_botellas){
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y tener tantos espacios disponibles como herramientas a colocar
+        - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
+    
+    postcondiciones:
+        - se inicializan los datos de posicion y tipo cada herramienta del nivel
+
+*/
+void posicionar_herramienta(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_herramienta, char tipo_herramienta){
     int index_espacio_libre;
 
     srand ((unsigned)time(NULL));
 
-    for(int botellas_colocadas = 0; botellas_colocadas < cantidad_botellas; botellas_colocadas++){
+    for(int herramientas_colocadas = 0; herramientas_colocadas < cantidad_herramienta; herramientas_colocadas++){
         do{
             index_espacio_libre = rand() % *tope_espacios_libres;
         } while(espacios_libres[index_espacio_libre].usado != false);
 
         (nivel->herramientas[nivel->tope_herramientas]).posicion.fil = espacios_libres[index_espacio_libre].fil;
         (nivel->herramientas[nivel->tope_herramientas]).posicion.col = espacios_libres[index_espacio_libre].col;
-        nivel->herramientas[nivel->tope_herramientas].tipo = BOTELLA_TIPO;
+        nivel->herramientas[nivel->tope_herramientas].tipo = tipo_herramienta;
         nivel->tope_herramientas ++;
         espacios_libres[index_espacio_libre].usado = true;
     }
 }
 
 
-void posicionar_interruptores(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_interruptores){
-    int index_espacio_libre;
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
+        - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamaño mayor a la cantidad de objetos a colocar
+        - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
+    
+    postcondiciones:
+        - se inicializan los datos de cada herramienta del nivel (botellas, interruptores con su posicion y tipo)
 
-    srand ((unsigned)time(NULL));
-
-    for(int interruptores_colocados = 0; interruptores_colocados < cantidad_interruptores; interruptores_colocados++){
-        do{
-            index_espacio_libre = rand() % *tope_espacios_libres;
-        } while(espacios_libres[index_espacio_libre].usado != false);
-
-        (nivel->herramientas[nivel->tope_herramientas]).posicion.fil = espacios_libres[index_espacio_libre].fil;
-        (nivel->herramientas[nivel->tope_herramientas]).posicion.col = espacios_libres[index_espacio_libre].col;
-        nivel->herramientas[nivel->tope_herramientas].tipo = INTERRUPTOR_TIPO;
-        nivel->tope_herramientas ++;
-        espacios_libres[index_espacio_libre].usado = true;
-    }
-}
-
-
+*/
 void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
 
     int cantidad_botellas = BOTELLAS_POR_NIVEL[numero_nivel-1];
@@ -251,11 +293,21 @@ void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_t
 
     nivel->tope_herramientas = 0;
 
-    posicionar_botellas(nivel, espacios_libres, tope_espacios_libres, cantidad_botellas);
-    posicionar_interruptores(nivel, espacios_libres, tope_espacios_libres, cantidad_interruptores);
+    posicionar_herramienta(nivel, espacios_libres, tope_espacios_libres, cantidad_botellas, BOTELLA_TIPO);
+    posicionar_herramienta(nivel, espacios_libres, tope_espacios_libres, cantidad_interruptores, INTERRUPTOR_TIPO);
 }
 
 
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamaño mayor a la cantidad de objetos a colocar
+        - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
+    
+    postcondiciones:
+        - se inicializan los datos de posicion y id cada papeleo del nivel
+
+*/
 void posicionar_papeleos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
     int index_espacio_libre;
 
@@ -274,14 +326,24 @@ void posicionar_papeleos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
     }
 }
 
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
+        - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamaño mayor a la cantidad de objetos a colocar
+        - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
+    
+    postcondiciones:
+        - se inicializan los datos de cada papeleo del nivel (posicion, recolectado, id)
 
+*/
 void inicializar_papeleos(nivel_t* nivel, int numero_nivel, char personaje_tp1, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
 
     int cantidad_papeleos = PAPELEOS_POR_NIVEL[numero_nivel-1];
 
-    if(personaje_tp1 == STITCH_ID && numero_nivel == NIVELES_TOTALES[-1]){
-        cantidad_papeleos =- 1;
-        printf("Stitch quema un papeleo\n");
+    if(personaje_tp1 == STITCH_ID && numero_nivel == NIVELES_TOTALES[TOPE_NIVELES]){
+        cantidad_papeleos--;
     }
 
     nivel->tope_papeleos = cantidad_papeleos;
@@ -290,6 +352,15 @@ void inicializar_papeleos(nivel_t* nivel, int numero_nivel, char personaje_tp1, 
 }
 
 
+/*
+    precondiciones:
+        - paredes del nivel inicializadas
+        - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
+        - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
+
+    postcondiciones:
+        - agrega los objetos con sus respectivos datos al nivel
+*/
 void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     
     int tope_espacios_libres = 0;
@@ -297,14 +368,20 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 
     get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
 
-    printf("TOPE ESPACIOS LIBRES PARA OBJETOS: %d, Ej: %d, %d\n", tope_espacios_libres, espacios_libres[0].fil, espacios_libres[0].col);
-
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_papeleos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
 }
 
 
+/*
+    precondiciones:
+        - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
+        - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
+
+    postcondiciones:
+        - Se inicializa el nivel con los datos correspondientes (paredes y objetos)
+*/
 void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     
     if(numero_nivel == 1){
@@ -321,8 +398,15 @@ void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 }
 
 
+/*
+    precondiciones:
+        - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
+        - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
+        - pos_inicial_jugador tiene que tener la posicion inicial del jugador
+
+    postcondiciones: inicializa los datos del inventario (martillos, movimientos y extintores) y posicion inicial del jugador
+*/
 void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, int numero_nivel, char personaje_tp1){
-    printf("INICIALIZANDO POSICION JUGADOR: %d,%d\n", pos_inicial_jugador->fil, pos_inicial_jugador->col);
     jugador->posicion = *pos_inicial_jugador;
 
     jugador->movimientos += MOVIMIENTOS_POR_NIVEL[numero_nivel-1];
@@ -330,16 +414,19 @@ void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, 
     jugador->extintores = EXTINTORES_POR_NIVEL[numero_nivel-1];
 
     if(personaje_tp1 == JASMIN_ID){
-        printf("Jasmin da martillo\n");
         jugador->martillos += 1;
     }
     else if (personaje_tp1 == RAYO_ID && numero_nivel == NIVELES_TOTALES[0]){
-        printf("Rayo da movimientos extra\n");
         jugador->movimientos += 10;
     }
 }
 
 
+/*
+    precondiones: personaje_tp1 debe ser una de las constantes definidas en el archivo dia_en_la_uni.h
+
+    postcondiciones: inicializa el juego con 3 niveles
+*/
 void inicializar_juego(juego_t* juego, char personaje_tp1){
     nivel_t nivel_1;
     nivel_t nivel_2;
@@ -366,23 +453,4 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
         inicializar_jugador(&juego->jugador, &juego->niveles[i].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
         imprimir_terreno(*juego);
     }
-
-
-
-    // inicializar_nivel(&nivel_1, 1, personaje_tp1);
-    // // inicializar_nivel(&nivel_3, 3, personaje_tp1);
-    // // inicializar_nivel(&nivel_2, 2, personaje_tp1);
-
-    // juego->niveles[0] = nivel_1;
-    // // juego->niveles[1] = nivel_2;
-    // // juego->niveles[2] = nivel_3;
-
-
-    // juego->nivel_actual = 1;
-    // inicializar_jugador(&juego->jugador, &juego->niveles[0].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
-    // imprimir_terreno(*juego);
-    // // juego->nivel_actual = 2;
-    // // imprimir_terreno(*juego);
-    // // juego->nivel_actual = 3;
-    // // imprimir_terreno(*juego);
 }

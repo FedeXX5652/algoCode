@@ -1,0 +1,8 @@
+Supongamos que tenemos un array A[] sin ordenar que contiene n elementos.
+
+- Seleccionamos el índice del primer elemento del subarray sin ordenar como índice mínimo del elemento min.
+- Compara el valor en min con el resto de los elementos y lo restablece a este elemento si se encuentra un elemento más pequeño.
+- Intercambiar el elemento en min con el elemento en el último índice del subarray ordenado.
+- Repetir el paso anterior n-2 veces para el resto de los elementos de la submatriz sin ordenar.
+
+https://www.delftstack.com/es/tutorial/algorithm/selection-sort/#seleccionamos-el-índice-del-primer-elemento-del-subarray-sin-ordenar-como-índice-mínimo-del-elemento-min

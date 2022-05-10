@@ -175,7 +175,6 @@ void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PA
     int index_espacio_libre;
 
     srand ((unsigned)time(NULL));
-    //printf("TOPE ESPACIOS LIBRES: %d\n", *tope_espacios_libres);
 
     for(int fuegos_colocados = 0; fuegos_colocados < cantidad_fuegos; fuegos_colocados++){
         do{
@@ -187,9 +186,7 @@ void posicionar_fuegos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PA
         nivel->obstaculos[nivel->tope_obstaculos].tipo = FUEGO_TIPO;
         nivel->tope_obstaculos ++;
         espacios_libres[index_espacio_libre].usado = true;
-        //printf("FUEGO COLOCADO %d: %d, %d; %d\n", fuegos_colocados, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);  
     }
-    //printf("----------------\n");
 }
 
 
@@ -208,7 +205,6 @@ void posicionar_medias(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PA
         nivel->obstaculos[nivel->tope_obstaculos].tipo = MEDIA_TIPO;
         nivel->tope_obstaculos ++;
         espacios_libres[index_espacio_libre].usado = true;
-        //printf("MEDIA COLOCADA %d: %d, %d; %d\n", medias_colocadas, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);
     }
 }
 
@@ -252,7 +248,6 @@ void posicionar_botellas(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
         nivel->herramientas[nivel->tope_herramientas].tipo = BOTELLA_TIPO;
         nivel->tope_herramientas ++;
         espacios_libres[index_espacio_libre].usado = true;
-        //printf("BOTELLA COLOCADA %d: %d, %d; %d\n", botellas_colocadas, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);
     }
 }
 
@@ -272,7 +267,6 @@ void posicionar_interruptores(nivel_t* nivel, coordenada_libre_t espacios_libres
         nivel->herramientas[nivel->tope_herramientas].tipo = INTERRUPTOR_TIPO;
         nivel->tope_herramientas ++;
         espacios_libres[index_espacio_libre].usado = true;
-        //printf("BOTELLA COLOCADA %d: %d, %d; %d\n", botellas_colocadas, espacios_libres[index_espacio_libre].fil, espacios_libres[index_espacio_libre].col, espacios_libres[index_espacio_libre].es_adyacente);
     }
 }
 

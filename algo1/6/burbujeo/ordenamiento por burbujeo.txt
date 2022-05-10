@@ -1,0 +1,12 @@
+- va desde el primer valor del vector
+- compara con el segundo valor del vector
+- si el primero es mayor, se cambia el valor del vector
+- si el segundo es menor, se utiliza el segundo valor del vector
+- se repite el proceso con el resto de valores del vector
+- al final del primer recorrido vamos a tener el mayor ordenado en el final del vector, por lo que en la siguiente iteracion no hace falta comprar contra el ultimo valor y así por cada iteracion
+
+- Ej: para 6 valores, 5 iteraciones
+- General: para n valores, n-1 iteraciones
+
+
+https://juncotic.com/ordenamiento-de-burbuja-algoritmos-de-ordenamiento/#c

@@ -1,0 +1,9 @@
+- Se usan vectores reducidos y se van ordenando de a poco
+- En cada iteración se va aumentando el tamaño del vector
+- Se inicia con un vector con un elemento
+- Se le agrega un elemento y se lo ordena
+- Se le agrega un elemento y se lo ordena con los 2 anteriores, se pregunta primero si es mayor o menor (eso depende de que orden quiera) al ultimo
+
+- Para n elementos, n-1 iteraciones
+
+https://juncotic.com/ordenamiento-por-insercion-algoritmos-de-ordenamiento/#c

@@ -181,8 +181,6 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
 void posicionar_obstaculo_adyacente(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_obstaculos, char tipo_obstaculo){
     int index_espacio_libre;
 
-    srand ((unsigned)time(NULL));
-
     for(int obstaculos_colocados = 0; obstaculos_colocados < cantidad_obstaculos; obstaculos_colocados++){
         do{
             index_espacio_libre = rand() % *tope_espacios_libres;
@@ -209,8 +207,6 @@ void posicionar_obstaculo_adyacente(nivel_t* nivel, coordenada_libre_t espacios_
 */
 void posicionar_obstaculo(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_obstaculos, char tipo_obstaculo){
     int index_espacio_libre;
-
-    srand ((unsigned)time(NULL));
 
     for(int obstaculos_colocados = 0; obstaculos_colocados < cantidad_obstaculos; obstaculos_colocados++){
         do{
@@ -259,8 +255,6 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
 */
 void posicionar_herramienta(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres, int cantidad_herramienta, char tipo_herramienta){
     int index_espacio_libre;
-
-    srand ((unsigned)time(NULL));
 
     for(int herramientas_colocadas = 0; herramientas_colocadas < cantidad_herramienta; herramientas_colocadas++){
         do{
@@ -312,8 +306,6 @@ void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_t
 */
 void posicionar_papeleos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int* tope_espacios_libres){
     int index_espacio_libre;
-
-    srand ((unsigned)time(NULL));
 
     for(int papeleos_colocados = 0; papeleos_colocados < nivel->tope_papeleos; papeleos_colocados++){
         do{
@@ -400,7 +392,8 @@ void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     postcondiciones: inicializa los datos del inventario (martillos, movimientos y extintores) y posicion inicial del jugador
 */
 void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, int numero_nivel, char personaje_tp1){
-    jugador->posicion = *pos_inicial_jugador;
+    jugador->posicion.fil = pos_inicial_jugador->fil;
+    jugador->posicion.col = pos_inicial_jugador->col;
 
     jugador->movimientos += MOVIMIENTOS_POR_NIVEL[numero_nivel-1];
     jugador->martillos = MARTILLOS_POR_NIVEL[numero_nivel-1];
@@ -433,7 +426,7 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
         if(i+1 == 1){
             inicializar_nivel(&nivel_1, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_1;
-            inicializar_jugador(&juego->jugador, &juego->niveles[juego->nivel_actual].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+            inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual)-1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
             imprimir_terreno(*juego);
         }
         else if(i+1 == 2){

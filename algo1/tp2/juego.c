@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include "papeleo.h"
 #include "dia_en_la_uni.h"
-
+#include <stdlib.h>
+#include <time.h>
 
 int main(){
 
@@ -10,6 +10,8 @@ int main(){
     char personaje_elegido = 'O';
 
     juego_t juego;
+
+    srand ((unsigned)time(NULL));
     
     inicializar_juego(&juego, personaje_elegido);
 

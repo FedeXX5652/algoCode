@@ -6,8 +6,9 @@
 
 int main(){
 
-    char personaje_elegido = elegir_personaje();
-    
+    //char personaje_elegido = elegir_personaje();
+    char personaje_elegido = 'O';
+
     juego_t juego;
     
     inicializar_juego(&juego, personaje_elegido);

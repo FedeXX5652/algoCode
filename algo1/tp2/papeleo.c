@@ -88,7 +88,7 @@ void imprimir_terreno(juego_t juego){
     }
 
 
-    terreno[juego.jugador.posicion.fil][juego.jugador.posicion.col] = MIKE;
+    terreno[juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil][juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col] = MIKE;
 
     for(int i=0; i<dim_nivel; i++){
         for(int j=0; j<dim_nivel; j++){
@@ -234,10 +234,12 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
     nivel->tope_obstaculos = 0;
 
     if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
-        cantidad_fuegos =- 2;
+        printf("Olaf saca 2 fuegos\n");
+        cantidad_fuegos = cantidad_fuegos - 2;
     }
     else if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[1]){
-        cantidad_fuegos =- 1;
+        printf("Olaf saca 1 fuego\n");
+        cantidad_fuegos = cantidad_fuegos - 1;
     }
 
     posicionar_obstaculo_adyacente(nivel, espacios_libres, tope_espacios_libres, cantidad_fuegos, FUEGO_TIPO);
@@ -385,7 +387,6 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
 void inicializar_nivel(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     
     obtener_paredes(numero_nivel, nivel->paredes, &nivel->tope_paredes, &nivel->pos_inicial_jugador);
-    
     inicializar_objetos(nivel, numero_nivel, personaje_tp1);
 }
 
@@ -426,7 +427,6 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
 
     juego->personaje_tp1 = personaje_tp1;
     (juego->jugador).movimientos = 0;
-    
     juego->nivel_actual = 1;
 
     for(int i=0; i<MAX_NIVELES; i++){
@@ -434,15 +434,19 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
             inicializar_nivel(&nivel_1, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_1;
             inicializar_jugador(&juego->jugador, &juego->niveles[juego->nivel_actual].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+            imprimir_terreno(*juego);
         }
         else if(i+1 == 2){
             inicializar_nivel(&nivel_2, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_2;
+            // juego->nivel_actual = 2;
+            // imprimir_terreno(*juego);
         }
         else if(i+1 == 3){
             inicializar_nivel(&nivel_3, i+1, juego->personaje_tp1);
             juego->niveles[i] = nivel_3;
+            // juego->nivel_actual = 3;
+            // imprimir_terreno(*juego);
         }
-        imprimir_terreno(*juego);
     }
 }

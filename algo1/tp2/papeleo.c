@@ -414,32 +414,14 @@ void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, 
     postcondiciones: inicializa el juego con 3 niveles
 */
 void inicializar_juego(juego_t* juego, char personaje_tp1){
-    nivel_t nivel_1;
-    nivel_t nivel_2;
-    nivel_t nivel_3;
 
     juego->personaje_tp1 = personaje_tp1;
     (juego->jugador).movimientos = 0;
     juego->nivel_actual = 1;
 
     for(int i=0; i<MAX_NIVELES; i++){
-        if(i+1 == 1){
-            inicializar_nivel(&nivel_1, i+1, juego->personaje_tp1);
-            juego->niveles[i] = nivel_1;
-            inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual)-1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
-            imprimir_terreno(*juego);
-        }
-        else if(i+1 == 2){
-            inicializar_nivel(&nivel_2, i+1, juego->personaje_tp1);
-            juego->niveles[i] = nivel_2;
-            // juego->nivel_actual = 2;
-            // imprimir_terreno(*juego);
-        }
-        else if(i+1 == 3){
-            inicializar_nivel(&nivel_3, i+1, juego->personaje_tp1);
-            juego->niveles[i] = nivel_3;
-            // juego->nivel_actual = 3;
-            // imprimir_terreno(*juego);
-        }
+        inicializar_nivel(&juego->niveles[i], i+1, juego->personaje_tp1);
     }
+    inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual)-1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+    imprimir_terreno(*juego);
 }

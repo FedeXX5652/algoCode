@@ -1,0 +1,13 @@
+Eliminacion logica:
+- el valor a eliminar sigue ocupando un espacio en el array
+- se le agrega un booleano a la estructura indicando que dicho valor fue eliminado
+
+Eliminacion fisica:
+- se elimina el valor del array sobreescribiendolo con el ultimo valor del array
+- solo permitido para vectores NO ordenados
+
+Eliminacion ordenada:
+- se elimina el valor del array sobreescribiendolo con el siguiente valor del array
+- una vez sobreescrito el valor a eliminar se hace un for para desplazar un espacio a todos los otros valores
+- se reduce en uno el valor del tope del array (1 o mas dependiendo de cuantos valores se hayan eliminado)
+- util para vectores ordenados

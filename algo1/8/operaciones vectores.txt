@@ -1,0 +1,9 @@
+vectores ordenados, quiero mantener el orden
+
+mezcla:
+-se repiten los valores de los vectores (1,2,2,3,4,5,5,5,6)
+-puede tener el doble de elementos que el tope de ambos vectores
+
+union:
+-no se repiten los valores de los vectores (1,2,3,4,5,6)
+-puede tener el doble de elementos que el tope de ambos vectores

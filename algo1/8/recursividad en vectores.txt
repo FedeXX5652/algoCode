@@ -1,0 +1,6 @@
+recursividad:
+-separar un problema en problemas mas pequeños, hasta poder resolverlo de manera trivial
+-todos los subpbemas se resuelven de igual manera
+-Técnica para resolver problemas en la que se pueden resolver subproblemas mas pequeños, tan pequeños hasta que se pueda resolver de manera trivial
+-puede haber mas de un caso base
+-puede haber mas de una llamada recursiva a la misma funcion, pero con diferentes parametros

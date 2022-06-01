@@ -10,27 +10,29 @@ typedef struct botellita {
     char color_tapita[MAX_COLOR];
 } botellita_t;
 
-int botellas_hasta_litro_rec(botellita_t botellas[MAX_BOTELLAS], int litros_buscados, int tope_botellas, int posicion){
-    if(litros_buscados > 0){
-        if(posicion < tope_botellas){
-            if(botellas[posicion].contenido >= litros_buscados){
-                return posicion+1;
-            }else{
-                return botellas_hasta_litro_rec(botellas, litros_buscados - botellas[posicion].contenido, tope_botellas, posicion + 1);
-            }
-        }else{
-            return ERROR;
-        }
+int botellas_hasta_litro_rec(botellita_t botellas[MAX_BOTELLAS], int litros_buscados, int tope_botellas, int posicion, int suma){
+    
+    // printf("pos: %d, ml: %d, total actual: %d\n", posicion, botellas[posicion].contenido, suma+botellas[posicion].contenido);
+    if((suma+botellas[posicion].contenido) >= litros_buscados){
+        return posicion+1;
+    }
+    if((posicion+1) == tope_botellas){
+        return ERROR;
+    }
+    else{
+        return botellas_hasta_litro_rec(botellas, litros_buscados, tope_botellas, posicion + 1, suma+botellas[posicion].contenido);
+    }
 }
 
 int botellas_hasta_litro(botellita_t botellas[MAX_BOTELLAS], int tope_botellas, int litros_buscados){
-    return botellas_hasta_litro_rec(botellas, litros_buscados, tope_botellas, 0);
+    // printf("Tope: %d\n", tope_botellas);
+    return botellas_hasta_litro_rec(botellas, litros_buscados, tope_botellas, 0, 0);
 }
 
 int main(){
     botellita_t botellas[MAX_BOTELLAS];
-    int tope_botellas = 2;
-    int litros_buscados = 5;
+    int tope_botellas = 1;
+    int litros_buscados = 30;
     int resultado;
 
     botellas[0].contenido = 10;
@@ -38,6 +40,9 @@ int main(){
 
     botellas[1].contenido = 20;
     botellas[1].color_tapita[MAX_COLOR] = "azul";
+
+    botellas[2].contenido = 30;
+    botellas[2].color_tapita[MAX_COLOR] = "verde";
 
 
     resultado = botellas_hasta_litro(botellas, tope_botellas, litros_buscados);

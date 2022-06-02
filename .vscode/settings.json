@@ -2,7 +2,8 @@
     "workbench.colorTheme": "Default Dark+",
     "workbench.preferredDarkColorTheme": "Default Dark+",
     "files.associations": {
-        "papeleo.h": "c"
+        "papeleo.h": "c",
+        "stdbool.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

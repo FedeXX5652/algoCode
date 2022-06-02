@@ -48,22 +48,22 @@ void imprimir_terreno(juego_t juego){
 
     char terreno[dim_nivel][dim_nivel];
 
-    printf("--------------DATA NIVEL--------------\n");
-    printf("NIVEL: %d\n", juego.nivel_actual);
-    printf("DIMENSION DEL NIVEL: %d\n", dim_nivel);
-    printf("PERSONAJE TP1: %c\n", juego.personaje_tp1);
-    printf("POSICION JUGADOR: %d, %d\n\n", juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil, juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col);
-    printf("--------------MIKE--------------\n");
-    printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
-    printf("MARTILLOS: %i\n", juego.jugador.martillos);
-    printf("EXTINTORES: %i\n", juego.jugador.extintores);
-    printf("\n");
-    printf("--------------OBSTACULOS Y OBJETOS--------------\n");
-    printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
-    printf("TOPE OBSTACULOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
-    printf("TOPE HERRAMIENTAS: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
-    printf("TOPE PAPELEOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_papeleos);
-    printf("\n");
+    // printf("--------------DATA NIVEL--------------\n");
+    // printf("NIVEL: %d\n", juego.nivel_actual);
+    // printf("DIMENSION DEL NIVEL: %d\n", dim_nivel);
+    // printf("PERSONAJE TP1: %c\n", juego.personaje_tp1);
+    // printf("POSICION JUGADOR: %d, %d\n\n", juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil, juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col);
+    // printf("--------------MIKE--------------\n");
+    // printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
+    // printf("MARTILLOS: %i\n", juego.jugador.martillos);
+    // printf("EXTINTORES: %i\n", juego.jugador.extintores);
+    // printf("\n");
+    // printf("--------------OBSTACULOS Y OBJETOS--------------\n");
+    // printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
+    // printf("TOPE OBSTACULOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
+    // printf("TOPE HERRAMIENTAS: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
+    // printf("TOPE PAPELEOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_papeleos);
+    // printf("\n");
 
     for(int i = 0; i < dim_nivel; i++){
         for(int j = 0; j < dim_nivel; j++){
@@ -96,7 +96,7 @@ void imprimir_terreno(juego_t juego){
         }
         printf("\n");
     }
-    printf("----------------------------------------------------\n\n");
+    // printf("----------------------------------------------------\n\n");
 }
 
 
@@ -395,6 +395,8 @@ void inicializar_jugador(jugador_t* jugador, coordenada_t* pos_inicial_jugador, 
     jugador->posicion.fil = pos_inicial_jugador->fil;
     jugador->posicion.col = pos_inicial_jugador->col;
 
+    jugador->movimientos_realizados = 0;
+
     jugador->movimientos += MOVIMIENTOS_POR_NIVEL[numero_nivel-1];
     jugador->martillos = MARTILLOS_POR_NIVEL[numero_nivel-1];
     jugador->extintores = EXTINTORES_POR_NIVEL[numero_nivel-1];
@@ -423,5 +425,4 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
         inicializar_nivel(&juego->niveles[i], i+1, juego->personaje_tp1);
     }
     inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual)-1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
-    imprimir_terreno(*juego);
 }

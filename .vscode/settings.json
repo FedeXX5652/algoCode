@@ -4,7 +4,8 @@
     "files.associations": {
         "papeleo.h": "c",
         "stdbool.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "time.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

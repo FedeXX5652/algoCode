@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "papeleo.h"
 #include "utiles.h"
@@ -25,6 +26,15 @@ const int BOTELLAS_POR_NIVEL[MAX_NIVELES] = {4, 3, 2};
 const int INTERRUPTORES_POR_NIVEL[MAX_NIVELES] = {1, 1, 0};
 const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
 const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
+
+const char USAR_MARTILLO = 'Z';
+const char USAR_EXTINTOR = 'C';
+const char ACCION_DERECHA = 'D';
+const char ACCION_IZQUIERDA = 'A';
+const char ACCION_ARRIBA = 'W';
+const char ACCION_ABAJO = 'S';
+const char ROTAR_HORARIO = 'E';
+const char ROTAR_ANTIHORARIO = 'Q';
 
 
 typedef struct coordenada_libre_pared {
@@ -84,15 +94,15 @@ void imprimir_terreno(juego_t juego){
     }
 
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_papeleos; i++){
-        terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = 'P';
+        terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = 'P';  //AIUDA pasar ID de int a char
     }
 
 
-    terreno[juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil][juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col] = MIKE;
+    terreno[juego.jugador.posicion.fil][juego.jugador.posicion.col] = MIKE;
 
     for(int i=0; i<dim_nivel; i++){
         for(int j=0; j<dim_nivel; j++){
-            printf("%c", terreno[i][j]);
+            printf("%c ", terreno[i][j]);
         }
         printf("\n");
     }
@@ -425,4 +435,115 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
         inicializar_nivel(&juego->niveles[i], i+1, juego->personaje_tp1);
     }
     inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual)-1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
+}
+
+
+char pedir_movimiento(){
+    char movimiento;
+    printf("Ingrese un movimiento:\nUtilizar martillo: Z.\nUtilizar extintor: C.\nMover o martillar/extinguir a izquierda: A.\nMover o martillar/extinguir a derecha: D.\nMartillar/extinguir hacia arriba: W.\nMartillar hacia abajo: S.\nMov. rotacional horario: E.\nMov. rotacional antihorario: Q.\n\n");
+    scanf(" %c", &movimiento);
+    movimiento = (char)toupper(movimiento);
+
+    while(movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ACCION_ARRIBA && movimiento != ACCION_ABAJO && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO){
+        printf("Ingrese un movimiento valido: ");
+        scanf(" %c", &movimiento);
+        movimiento = (char)toupper(movimiento);
+    }
+    return movimiento;
+}
+
+
+void rotar_antihorario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+    int dimension = DIM_POR_NIVEL[numero_nivel-1]-1;
+
+    int col_jugador = jugador->posicion.col;
+    jugador->posicion.col = jugador->posicion.fil;
+    jugador->posicion.fil = abs(col_jugador-dimension);
+
+    for(int i=0; i<nivel->tope_paredes; i++){
+        int col_aux = nivel->paredes[i].col;
+        nivel->paredes[i].col = nivel->paredes[i].fil;
+        nivel->paredes[i].fil = abs(col_aux-dimension);
+    }
+
+    for(int i=0; i<nivel->tope_obstaculos; i++){
+        int col_aux = nivel->obstaculos[i].posicion.col;
+        nivel->obstaculos[i].posicion.col = nivel->obstaculos[i].posicion.fil;
+        nivel->obstaculos[i].posicion.fil = abs(col_aux-dimension);
+    }
+
+    for(int i=0; i<nivel->tope_herramientas; i++){
+        int col_aux = nivel->herramientas[i].posicion.col;
+        nivel->herramientas[i].posicion.col = nivel->herramientas[i].posicion.fil;
+        nivel->herramientas[i].posicion.fil = abs(col_aux-dimension);
+    }
+
+    for(int i=0; i<nivel->tope_papeleos; i++){
+        int col_aux = nivel->papeleos[i].posicion.col;
+        nivel->papeleos[i].posicion.col = nivel->papeleos[i].posicion.fil;
+        nivel->papeleos[i].posicion.fil = abs(col_aux-dimension);
+    }
+}
+
+
+void rotar_horario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+    int dimension = DIM_POR_NIVEL[numero_nivel-1]-1;
+
+    int fila_jugador = jugador->posicion.fil;
+    jugador->posicion.col = abs(fila_jugador-dimension);
+    jugador->posicion.fil = jugador->posicion.col;
+
+    for(int i=0; i<nivel->tope_paredes; i++){
+        int fila_aux = nivel->paredes[i].fil;
+        nivel->paredes[i].fil = nivel->paredes[i].col;
+        nivel->paredes[i].col = abs(fila_aux-dimension);
+    }
+
+    for(int i=0; i<nivel->tope_obstaculos; i++){
+        int fila_aux = nivel->obstaculos[i].posicion.fil;
+        nivel->obstaculos[i].posicion.fil = nivel->obstaculos[i].posicion.col;
+        nivel->obstaculos[i].posicion.col = abs(fila_aux-dimension);
+    }
+
+    for(int i=0; i<nivel->tope_herramientas; i++){
+        int fila_aux = nivel->herramientas[i].posicion.fil;
+        nivel->herramientas[i].posicion.fil = nivel->herramientas[i].posicion.col;
+        nivel->herramientas[i].posicion.col = abs(fila_aux-dimension);
+    }
+
+    for(int i=0; i<nivel->tope_papeleos; i++){
+        int fila_aux = nivel->papeleos[i].posicion.fil;
+        nivel->papeleos[i].posicion.fil = nivel->papeleos[i].posicion.col;
+        nivel->papeleos[i].posicion.col = abs(fila_aux-dimension);
+    }
+}
+
+
+void realizar_jugada(juego_t* juego){
+    char accion = pedir_movimiento();
+    
+    if(accion == ROTAR_HORARIO){
+        rotar_horario(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
+    }
+    else if(accion == ROTAR_ANTIHORARIO){
+        rotar_antihorario(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
+    }
+    // if(accion == USAR_MARTILLO){
+    //     usar_martillo(&juego);
+    // }
+    // else if(accion == USAR_EXTINTOR){
+    //     usar_extintor(&juego);
+    // }
+    // else if(accion == ACCION_DERECHA){
+    //     accion_derecha(&juego);
+    // }
+    // else if(accion == ACCION_IZQUIERDA){
+    //     accion_izquierda(&juego);
+    // }
+    // else if(accion == ACCION_ARRIBA){
+    //     accion_arriba(&juego);
+    // }
+    // else if(accion == ACCION_ABAJO){
+    //     accion_abajo(&juego);
+    // }
 }

@@ -58,22 +58,13 @@ void imprimir_terreno(juego_t juego){
 
     char terreno[dim_nivel][dim_nivel];
 
-    // printf("--------------DATA NIVEL--------------\n");
-    // printf("NIVEL: %d\n", juego.nivel_actual);
-    // printf("DIMENSION DEL NIVEL: %d\n", dim_nivel);
-    // printf("PERSONAJE TP1: %c\n", juego.personaje_tp1);
-    // printf("POSICION JUGADOR: %d, %d\n\n", juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.fil, juego.niveles[juego.nivel_actual-1].pos_inicial_jugador.col);
-    // printf("--------------MIKE--------------\n");
-    // printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
-    // printf("MARTILLOS: %i\n", juego.jugador.martillos);
-    // printf("EXTINTORES: %i\n", juego.jugador.extintores);
-    // printf("\n");
-    // printf("--------------OBSTACULOS Y OBJETOS--------------\n");
-    // printf("TOPE PAREDES: %d\n", juego.niveles[juego.nivel_actual-1].tope_paredes);
-    // printf("TOPE OBSTACULOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_obstaculos);
-    // printf("TOPE HERRAMIENTAS: %d\n", juego.niveles[juego.nivel_actual-1].tope_herramientas);
-    // printf("TOPE PAPELEOS: %d\n", juego.niveles[juego.nivel_actual-1].tope_papeleos);
-    // printf("\n");
+    printf("--------------MIKE--------------\n");
+    printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
+    printf("MARTILLOS: %i\n", juego.jugador.martillos);
+    printf("EXTINTORES: %i\n", juego.jugador.extintores);
+    printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "SI" : "NO");
+    printf("MOVIMIENTOS REALIZADOS: %i\n", juego.jugador.movimientos_realizados);
+    printf("--------------------------------\n\n");
 
     for(int i = 0; i < dim_nivel; i++){
         for(int j = 0; j < dim_nivel; j++){
@@ -240,11 +231,9 @@ void inicializar_obstaculos(nivel_t* nivel, int numero_nivel, char personaje_tp1
     nivel->tope_obstaculos = 0;
 
     if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[0]){
-        printf("Olaf saca 2 fuegos\n");
         cantidad_fuegos = cantidad_fuegos - 2;
     }
     else if(personaje_tp1 == OLAF_ID && numero_nivel == NIVELES_TOTALES[1]){
-        printf("Olaf saca 1 fuego\n");
         cantidad_fuegos = cantidad_fuegos - 1;
     }
 
@@ -440,7 +429,7 @@ void inicializar_juego(juego_t* juego, char personaje_tp1){
 
 char pedir_movimiento(){
     char movimiento;
-    printf("Ingrese un movimiento:\nUtilizar martillo: Z.\nUtilizar extintor: C.\nMover o martillar/extinguir a izquierda: A.\nMover o martillar/extinguir a derecha: D.\nMartillar/extinguir hacia arriba: W.\nMartillar hacia abajo: S.\nMov. rotacional horario: E.\nMov. rotacional antihorario: Q.\n\n");
+    printf("\nIngrese un movimiento:\nUtilizar martillo: Z.\nUtilizar extintor: C.\nMover o martillar/extinguir a izquierda: A.\nMover o martillar/extinguir a derecha: D.\nMartillar/extinguir hacia arriba: W.\nMartillar hacia abajo: S.\nMov. rotacional horario: E.\nMov. rotacional antihorario: Q.\n\n");
     scanf(" %c", &movimiento);
     movimiento = (char)toupper(movimiento);
 
@@ -450,6 +439,11 @@ char pedir_movimiento(){
         movimiento = (char)toupper(movimiento);
     }
     return movimiento;
+}
+
+
+void restar_movimientos(jugador_t* jugador, int cantidad_movimientos){
+    jugador->movimientos -= cantidad_movimientos;
 }
 
 
@@ -483,15 +477,18 @@ void rotar_antihorario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
         nivel->papeleos[i].posicion.col = nivel->papeleos[i].posicion.fil;
         nivel->papeleos[i].posicion.fil = abs(col_aux-dimension);
     }
+
+    jugador->movimientos_realizados++;
+    restar_movimientos(jugador, 1);
 }
 
 
 void rotar_horario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
     int dimension = DIM_POR_NIVEL[numero_nivel-1]-1;
 
-    int fila_jugador = jugador->posicion.fil;
-    jugador->posicion.col = abs(fila_jugador-dimension);
+    int fil_jugador = jugador->posicion.fil;
     jugador->posicion.fil = jugador->posicion.col;
+    jugador->posicion.col = abs(fil_jugador-dimension);
 
     for(int i=0; i<nivel->tope_paredes; i++){
         int fila_aux = nivel->paredes[i].fil;
@@ -516,29 +513,61 @@ void rotar_horario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
         nivel->papeleos[i].posicion.fil = nivel->papeleos[i].posicion.col;
         nivel->papeleos[i].posicion.col = abs(fila_aux-dimension);
     }
+
+    jugador->movimientos_realizados++;
+    restar_movimientos(jugador, 1);
+}
+
+
+void accion_derecha(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+    int dimension = DIM_POR_NIVEL[numero_nivel-1]-1;
+
+    if(jugador->posicion.col < dimension){
+        jugador->posicion.col++;
+        jugador->movimientos_realizados++;
+        restar_movimientos(jugador, 1);
+    }
+    else{
+        printf("No se puede mover a la derecha.\n");
+    }
+}
+
+void accion_izquierda(nivel_t* nivel, jugador_t* jugador){
+
+    if(jugador->posicion.col > 0){
+        jugador->posicion.col--;
+        jugador->movimientos_realizados++;
+        restar_movimientos(jugador, 1);
+    }
+    else{
+        printf("No se puede mover a la izquierda.\n");
+    }
 }
 
 
 void realizar_jugada(juego_t* juego){
     char accion = pedir_movimiento();
-    
+    bool movimiento_rotacion = false;
+
     if(accion == ROTAR_HORARIO){
+        movimiento_rotacion = true;
         rotar_horario(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
     }
     else if(accion == ROTAR_ANTIHORARIO){
+        movimiento_rotacion = true;
         rotar_antihorario(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
     }
-    // if(accion == USAR_MARTILLO){
+    else if(accion == ACCION_DERECHA){
+        accion_derecha(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
+    }
+    else if(accion == ACCION_IZQUIERDA){
+        accion_izquierda(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
+    }
+    // else if(accion == USAR_MARTILLO){
     //     usar_martillo(&juego);
     // }
     // else if(accion == USAR_EXTINTOR){
     //     usar_extintor(&juego);
-    // }
-    // else if(accion == ACCION_DERECHA){
-    //     accion_derecha(&juego);
-    // }
-    // else if(accion == ACCION_IZQUIERDA){
-    //     accion_izquierda(&juego);
     // }
     // else if(accion == ACCION_ARRIBA){
     //     accion_arriba(&juego);
@@ -546,4 +575,5 @@ void realizar_jugada(juego_t* juego){
     // else if(accion == ACCION_ABAJO){
     //     accion_abajo(&juego);
     // }
+    printf("rota o mueve: %d\n", movimiento_rotacion);
 }

@@ -67,6 +67,15 @@ void imprimir_terreno(juego_t juego){
     printf("EXTINTORES: %i\n", juego.jugador.extintores);
     printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "SI" : "NO");
     printf("MOVIMIENTOS REALIZADOS: %i\n", juego.jugador.movimientos_realizados);
+    int papeleos_recolectados=0;
+    int i=0;
+    while(i<juego.niveles[juego.nivel_actual - 1].tope_papeleos){
+        if(juego.niveles[juego.nivel_actual - 1].papeleos[papeleos_recolectados].recolectado){
+            papeleos_recolectados++;
+        }
+        i++;
+    }
+    printf("PAPELEOS RECOLECTADOS: %i\n", papeleos_recolectados);
     printf("--------------------------------\n\n");
 
     for(int i = 0; i < dim_nivel; i++){
@@ -88,7 +97,12 @@ void imprimir_terreno(juego_t juego){
     }
 
     for(int i=0; i<juego.niveles[juego.nivel_actual-1].tope_papeleos; i++){
-        terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = 'P';  //AIUDA pasar ID de int a char
+        if(juego.niveles[juego.nivel_actual-1].papeleos[i].recolectado == false){
+            terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = 'P';  //AIUDA pasar ID de int a char
+        }
+        else{
+            terreno[juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual-1].papeleos[i].posicion.col] = ' ';
+        }
     }
 
 
@@ -450,6 +464,11 @@ void restar_movimientos(jugador_t* jugador, int cantidad_movimientos){
 }
 
 
+void sumar_movimientos(jugador_t* jugador, int cantidad_movimientos){
+    jugador->movimientos += cantidad_movimientos;
+}
+
+
 void rotar_antihorario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
     int dimension = DIM_POR_NIVEL[numero_nivel-1]-1;
 
@@ -541,33 +560,46 @@ bool chequear_movimiento(nivel_t* nivel, jugador_t* jugador, bool movimiento){
 }
 
 
-void chequear_elemento(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+void confirmar_movimiento(nivel_t* nivel, jugador_t* jugador){
     bool choque_confirmado = false;
     int i=0;
-    while(i<nivel->tope_obstaculos && !choque_confirmado){
+    while(!choque_confirmado &&i<nivel->tope_obstaculos){
         if(nivel->obstaculos[i].posicion.col == jugador->posicion.col && nivel->obstaculos[i].posicion.fil == jugador->posicion.fil){
             choque_confirmado = true;
             if(nivel->obstaculos[i].tipo == MEDIA_TIPO){
                 restar_movimientos(jugador, 10);
             }
         }
-        i++
+        i++;
     }
 
     i=0;
-    while(i<nivel->tope_herramientas && !choque_confirmado){
+    while(!choque_confirmado && i<nivel->tope_herramientas){
         if(nivel->herramientas[i].posicion.col == jugador->posicion.col && nivel->herramientas[i].posicion.fil == jugador->posicion.fil){
             choque_confirmado = true;
             if(nivel->herramientas[i].tipo == BOTELLA_TIPO){
-                jugador->herramienta_actual = nivel->herramientas[i].tipo;
-                restar_movimientos(jugador, 1);
+                nivel->herramientas[i].tipo = nivel->herramientas[-1].tipo;
+                sumar_movimientos(jugador, 7);
             }
             else if(nivel->herramientas[i].tipo == INTERRUPTOR_TIPO){
-                jugador->papeleo_actual = nivel->herramientas[i].tipo;
-                restar_movimientos(jugador, 1);
+                if(jugador->ahuyenta_randall){
+                    jugador->ahuyenta_randall = false;
+                }
+                else{
+                    jugador->ahuyenta_randall = true;
+                }
             }
         }
-        i++
+        i++;
+    }
+
+    i=0;
+    while(!choque_confirmado && i<nivel->tope_papeleos){
+        if(nivel->papeleos[i].posicion.col == jugador->posicion.col && nivel->papeleos[i].posicion.fil == jugador->posicion.fil){
+            choque_confirmado = true;
+            nivel->papeleos[i].recolectado = true;
+        }
+        i++;
     }
 }
 
@@ -578,7 +610,7 @@ void mover_derecha(nivel_t* nivel, jugador_t* jugador){
         jugador->posicion.col++;
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
-        chequear_choca_elemento(nivel, jugador);
+        confirmar_movimiento(nivel, jugador);
     }
     else{
         int rand_num = rand()%3;
@@ -600,7 +632,7 @@ void mover_izquierda(nivel_t* nivel, jugador_t* jugador){
         jugador->posicion.col--;
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
-        chequear_choca_elemento(nivel, jugador);
+        confirmar_movimiento(nivel, jugador);
     }
     else{
         int rand_num = rand()%3;
@@ -648,6 +680,6 @@ void realizar_jugada(juego_t* juego){
     // else if(accion == USAR_EXTINTOR){
     //     usar_extintor(&juego);
     if(movimiento_rotacion){
-        chequear_gravedad(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
+        //chequear_gravedad(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
 }

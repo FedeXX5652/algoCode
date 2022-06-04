@@ -36,6 +36,9 @@ const char ACCION_ABAJO = 'S';
 const char ROTAR_HORARIO = 'E';
 const char ROTAR_ANTIHORARIO = 'Q';
 
+const bool IZQUIERDA = false;
+const bool DERECHA = true;
+
 
 typedef struct coordenada_libre_pared {
 	int fil;
@@ -519,28 +522,97 @@ void rotar_horario(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
 }
 
 
-void accion_derecha(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
-    int dimension = DIM_POR_NIVEL[numero_nivel-1]-1;
+bool chequear_movimiento(nivel_t* nivel, jugador_t* jugador, bool movimiento){
+    int delta_movimiento = 0;
 
-    if(jugador->posicion.col < dimension){
-        jugador->posicion.col++;
-        jugador->movimientos_realizados++;
-        restar_movimientos(jugador, 1);
+    if(movimiento == DERECHA){
+        delta_movimiento = 1;
     }
-    else{
-        printf("No se puede mover a la derecha.\n");
+    else if(movimiento == IZQUIERDA){
+        delta_movimiento = -1;
+    }
+
+    for(int i=0; i<nivel->tope_paredes; i++){
+        if(nivel->paredes[i].col == jugador->posicion.col+delta_movimiento && nivel->paredes[i].fil == jugador->posicion.fil){
+            return false;    // Si hay una pared en la posicion del jugador, no se puede mover
+        }
+    }
+    return true;    // Si no hay paredes en la posicion del jugador, se puede mover
+}
+
+
+void chequear_elemento(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+    bool choque_confirmado = false;
+    int i=0;
+    while(i<nivel->tope_obstaculos && !choque_confirmado){
+        if(nivel->obstaculos[i].posicion.col == jugador->posicion.col && nivel->obstaculos[i].posicion.fil == jugador->posicion.fil){
+            choque_confirmado = true;
+            if(nivel->obstaculos[i].tipo == MEDIA_TIPO){
+                restar_movimientos(jugador, 10);
+            }
+        }
+        i++
+    }
+
+    i=0;
+    while(i<nivel->tope_herramientas && !choque_confirmado){
+        if(nivel->herramientas[i].posicion.col == jugador->posicion.col && nivel->herramientas[i].posicion.fil == jugador->posicion.fil){
+            choque_confirmado = true;
+            if(nivel->herramientas[i].tipo == BOTELLA_TIPO){
+                jugador->herramienta_actual = nivel->herramientas[i].tipo;
+                restar_movimientos(jugador, 1);
+            }
+            else if(nivel->herramientas[i].tipo == INTERRUPTOR_TIPO){
+                jugador->papeleo_actual = nivel->herramientas[i].tipo;
+                restar_movimientos(jugador, 1);
+            }
+        }
+        i++
     }
 }
 
-void accion_izquierda(nivel_t* nivel, jugador_t* jugador){
 
-    if(jugador->posicion.col > 0){
+void mover_derecha(nivel_t* nivel, jugador_t* jugador){
+    bool check_movimiento = chequear_movimiento(nivel, jugador, DERECHA);
+    if(check_movimiento){
+        jugador->posicion.col++;
+        jugador->movimientos_realizados++;
+        restar_movimientos(jugador, 1);
+        chequear_choca_elemento(nivel, jugador);
+    }
+    else{
+        int rand_num = rand()%3;
+        if(rand_num == 0){
+            printf("\nLinda pared, pero no podes pasar 0(\n");
+        }
+        else if(rand_num == 1){
+            printf("\nHay una pared, no podes pasar 0(\n");
+        }
+        else{
+            printf("\nYOU SHALL NOT PASS!!! 0(\n");
+        }
+    }
+}
+
+void mover_izquierda(nivel_t* nivel, jugador_t* jugador){
+    bool check_movimiento = chequear_movimiento(nivel, jugador, IZQUIERDA);
+    if(check_movimiento){
         jugador->posicion.col--;
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
+        chequear_choca_elemento(nivel, jugador);
     }
     else{
-        printf("No se puede mover a la izquierda.\n");
+        int rand_num = rand()%3;
+        if(rand_num == 0){
+            printf("\nLinda pared, pero no podes pasar 0(\n");
+        }
+        else if(rand_num == 1){
+            printf("\nHay una pared, no podes pasar 0(\n");
+        }
+        else{
+            printf("\nYOU SHALL NOT PASS!!! 0(\n");
+        }
     }
 }
 
@@ -558,16 +630,11 @@ void realizar_jugada(juego_t* juego){
         rotar_antihorario(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
     }
     else if(accion == ACCION_DERECHA){
-        accion_derecha(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
+        mover_derecha(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
     else if(accion == ACCION_IZQUIERDA){
-        accion_izquierda(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
+        mover_izquierda(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
-    // else if(accion == USAR_MARTILLO){
-    //     usar_martillo(&juego);
-    // }
-    // else if(accion == USAR_EXTINTOR){
-    //     usar_extintor(&juego);
     // }
     // else if(accion == ACCION_ARRIBA){
     //     accion_arriba(&juego);
@@ -575,5 +642,12 @@ void realizar_jugada(juego_t* juego){
     // else if(accion == ACCION_ABAJO){
     //     accion_abajo(&juego);
     // }
-    printf("rota o mueve: %d\n", movimiento_rotacion);
+    // else if(accion == USAR_MARTILLO){
+    //     usar_martillo(&juego);
+    // }
+    // else if(accion == USAR_EXTINTOR){
+    //     usar_extintor(&juego);
+    if(movimiento_rotacion){
+        chequear_gravedad(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
+    }
 }

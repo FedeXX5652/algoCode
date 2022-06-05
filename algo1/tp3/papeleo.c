@@ -681,9 +681,11 @@ void realizar_jugada(juego_t* juego){
         rotar_antihorario(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
     }
     else if(accion == ACCION_DERECHA){
+        movimiento_rotacion = true;
         mover_derecha(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
     else if(accion == ACCION_IZQUIERDA){
+        movimiento_rotacion = true;
         mover_izquierda(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
     // }

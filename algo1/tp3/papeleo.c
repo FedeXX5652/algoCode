@@ -27,6 +27,7 @@ const int BOTELLAS_POR_NIVEL[MAX_NIVELES] = {4, 3, 2};
 const int INTERRUPTORES_POR_NIVEL[MAX_NIVELES] = {1, 1, 0};
 const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
 const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
+const int INTERVALOS_RANDALL_POR_NIVEL[MAX_NIVELES] = {7, 5, 3};
 
 const char USAR_MARTILLO = 'Z';
 const char USAR_EXTINTOR = 'C';
@@ -292,7 +293,7 @@ void posicionar_herramienta(nivel_t* nivel, coordenada_libre_t espacios_libres[M
         - paredes del nivel inicializadas
         - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
         - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
-        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamaño mayor a la cantidad de objetos a colocar
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamanio mayor a la cantidad de objetos a colocar
         - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
     
     postcondiciones:
@@ -314,7 +315,7 @@ void inicializar_herramientas(nivel_t* nivel, int numero_nivel, char personaje_t
 /*
     precondiciones:
         - paredes del nivel inicializadas
-        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamaño mayor a la cantidad de objetos a colocar
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamanio mayor a la cantidad de objetos a colocar
         - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
     
     postcondiciones:
@@ -342,7 +343,7 @@ void posicionar_papeleos(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
         - paredes del nivel inicializadas
         - numero_nivel tiene que ser un valor dentro de los niveles disponibles en el array NIVELES_TOTALES y corresponder al nivel a inicializar
         - personaje_tp1 es una de las constantes definidas en el archivo de dia_en_la_uni.h
-        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamaño mayor a la cantidad de objetos a colocar
+        - espacios_libres tiene que tener la posicion de todos los espacios libres del nivel y un tamanio mayor a la cantidad de objetos a colocar
         - tope_espacios_libres tiene que tener la cantidad de espacios libres del nivel
     
     postcondiciones:
@@ -684,6 +685,35 @@ void chequear_gravedad(juego_t* juego){
 }
 
 
+bool viene_randall(int movimientos, int numero_nivel){
+    if(movimientos%(INTERVALOS_RANDALL_POR_NIVEL[numero_nivel-1]) == 0){
+        return true;
+    }
+    return false;
+}
+
+
+void mover_papeleo(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+    int tope_espacios_libres = 0;
+    coordenada_libre_t espacios_libres[MAX_PAREDES];
+
+    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
+
+    bool papeleo_movido = false;
+    if(tope_espacios_libres > 0 && !jugador->ahuyenta_randall){
+        int rand_num = rand()%tope_espacios_libres;
+        while(!papeleo_movido){
+            int rand_num_papeleo = rand()%nivel->tope_papeleos;
+            if(nivel->papeleos[rand_num_papeleo].recolectado == false){
+                nivel->papeleos[rand_num_papeleo].posicion.col = espacios_libres[rand_num].col;
+                nivel->papeleos[rand_num_papeleo].posicion.fil = espacios_libres[rand_num].fil;
+                papeleo_movido = true;
+            }
+        }
+    }
+}
+
+
 void realizar_jugada(juego_t* juego){
     char accion = pedir_movimiento();
     bool movimiento_rotacion = false;
@@ -719,4 +749,12 @@ void realizar_jugada(juego_t* juego){
     if(movimiento_rotacion){
         chequear_gravedad(juego);
     }
+
+    if(viene_randall(juego->jugador.movimientos_realizados, juego->nivel_actual)){
+        mover_papeleo(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
+    }
+
+    // if(hay_que_aniadir_pared(juego->niveles[juego->nivel_actual-1], juego->jugador)){
+    //     aniadir_pared(juego->niveles[juego->nivel_actual-1], juego->jugador);
+    // }
 }

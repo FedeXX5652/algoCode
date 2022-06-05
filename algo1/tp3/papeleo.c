@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include "papeleo.h"
 #include "utiles.h"
@@ -594,10 +595,22 @@ void confirmar_colision(nivel_t* nivel, jugador_t* jugador){
     }
 
     i=0;
-    while(!choque_confirmado && i<nivel->tope_papeleos){
+    bool falta_papeleo_anterior = false;
+    while(!choque_confirmado && i<nivel->tope_papeleos && !falta_papeleo_anterior){
         if(nivel->papeleos[i].posicion.col == jugador->posicion.col && nivel->papeleos[i].posicion.fil == jugador->posicion.fil){
-            choque_confirmado = true;
-            nivel->papeleos[i].recolectado = true;
+            if((i-1)>=0){
+                if(nivel->papeleos[i-1].recolectado == true){
+                    choque_confirmado = true;
+                    nivel->papeleos[i].recolectado = true;
+                }
+                else{
+                    falta_papeleo_anterior = true;
+                }
+            }
+            else{
+                choque_confirmado = true;
+                nivel->papeleos[i].recolectado = true;
+            }
         }
         i++;
     }
@@ -623,6 +636,7 @@ void mover_derecha(nivel_t* nivel, jugador_t* jugador){
         else{
             printf("\nYOU SHALL NOT PASS!!! 0(\n");
         }
+        sleep(1);
     }
 }
 
@@ -659,11 +673,13 @@ bool sin_piso(nivel_t* nivel, jugador_t* jugador){
 }
 
 
-void chequear_gravedad(nivel_t* nivel, jugador_t* jugador){
-    while(sin_piso(nivel, jugador)){
-        printf("cayendo\n");
-        jugador->posicion.fil++;
-        confirmar_colision(nivel, jugador);
+void chequear_gravedad(juego_t* juego){
+    while(sin_piso(&juego->niveles[juego->nivel_actual-1], &juego->jugador)){
+        system("clear");
+        juego->jugador.posicion.fil++;
+        confirmar_colision(&juego->niveles[juego->nivel_actual-1], &juego->jugador);
+        imprimir_terreno(*juego);
+        sleep(1);
     }
 }
 
@@ -701,6 +717,6 @@ void realizar_jugada(juego_t* juego){
     // else if(accion == USAR_EXTINTOR){
     //     usar_extintor(&juego);
     if(movimiento_rotacion){
-        chequear_gravedad(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
+        chequear_gravedad(juego);
     }
 }

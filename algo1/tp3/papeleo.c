@@ -28,6 +28,7 @@ const int INTERRUPTORES_POR_NIVEL[MAX_NIVELES] = {1, 1, 0};
 const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
 const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
 const int INTERVALOS_RANDALL_POR_NIVEL[MAX_NIVELES] = {7, 5, 3};
+const int MOVIMIENTOS_PAREDES_NUEVAS_POR_NIVEL[MAX_NIVELES] = {40, 30, 20};
 
 const char USAR_MARTILLO = 'Z';
 const char USAR_EXTINTOR = 'C';
@@ -158,7 +159,7 @@ bool es_pared_adyacente(nivel_t* nivel, int fila, int columna, coordenada_libre_
     postcondiciones:
         - se devuelve una lista de coordenadas libres indicando si son o no adyacentes a una pared e indicando que no estan siendo usadas
 */
-void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int numero_nivel, int* tope_espacios_libres){
+void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_PAREDES], int numero_nivel, int* tope_espacios_libres, int jugador_fil, int jugador_col){
     int dim_nivel = DIM_POR_NIVEL[numero_nivel - 1];
     bool espacio_invalido = false;
     int index_esp_libre = 0;
@@ -166,7 +167,7 @@ void get_espacios_libres(nivel_t* nivel, coordenada_libre_t espacios_libres[MAX_
     for(int fila = 0; fila < dim_nivel; fila++){
         for(int columna = 0; columna < dim_nivel; columna++){
             for(int coords_pared = 0; coords_pared<nivel->tope_paredes; coords_pared++){
-                if((nivel->pos_inicial_jugador.fil == fila && nivel->pos_inicial_jugador.col == columna) && espacio_invalido == false){ //si es el mismo espacio que el jugador
+                if((jugador_fil == fila && jugador_col == columna) && espacio_invalido == false){ //si es el mismo espacio que el jugador
                     espacio_invalido = true;
                 }
                 else if(nivel->paredes[coords_pared].fil == fila && nivel->paredes[coords_pared].col == columna && espacio_invalido == false){  //si es una pared
@@ -378,7 +379,7 @@ void inicializar_objetos(nivel_t* nivel, int numero_nivel, char personaje_tp1){
     int tope_espacios_libres = 0;
     coordenada_libre_t espacios_libres[MAX_PAREDES];
 
-    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
+    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres, nivel->pos_inicial_jugador.fil, nivel->pos_inicial_jugador.col);
 
     inicializar_obstaculos(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
     inicializar_herramientas(nivel, numero_nivel, personaje_tp1, espacios_libres, &tope_espacios_libres);
@@ -697,7 +698,7 @@ void mover_papeleo(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
     int tope_espacios_libres = 0;
     coordenada_libre_t espacios_libres[MAX_PAREDES];
 
-    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres);
+    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres, jugador->posicion.fil, jugador->posicion.col);
 
     bool papeleo_movido = false;
     if(tope_espacios_libres > 0 && !jugador->ahuyenta_randall){
@@ -710,6 +711,29 @@ void mover_papeleo(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
                 papeleo_movido = true;
             }
         }
+    }
+}
+
+
+bool hay_que_aniadir_pared(int movimientos, int numero_nivel){
+    if(movimientos <= MOVIMIENTOS_PAREDES_NUEVAS_POR_NIVEL[numero_nivel-1]){
+        return true;
+    }
+    return false;
+}
+
+
+void aniadir_pared(nivel_t* nivel, jugador_t* jugador, int numero_nivel){
+    int tope_espacios_libres = 0;
+    coordenada_libre_t espacios_libres[MAX_PAREDES];
+
+    get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres, jugador->posicion.fil, jugador->posicion.col);
+
+    if(tope_espacios_libres > 0){
+        int rand_num = rand()%tope_espacios_libres;
+        nivel->paredes[nivel->tope_paredes].col = espacios_libres[rand_num].col;
+        nivel->paredes[nivel->tope_paredes].fil = espacios_libres[rand_num].fil;
+        nivel->tope_paredes++;
     }
 }
 
@@ -754,7 +778,7 @@ void realizar_jugada(juego_t* juego){
         mover_papeleo(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador, juego->nivel_actual);
     }
 
-    // if(hay_que_aniadir_pared(juego->niveles[juego->nivel_actual-1], juego->jugador)){
-    //     aniadir_pared(juego->niveles[juego->nivel_actual-1], juego->jugador);
-    // }
+    if(hay_que_aniadir_pared(juego->jugador.movimientos_realizados, juego->nivel_actual)){
+        aniadir_pared(&juego->niveles[juego->nivel_actual-1], &juego->jugador, juego->nivel_actual);
+    }
 }

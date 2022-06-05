@@ -758,13 +758,6 @@ void realizar_jugada(juego_t* juego){
         movimiento_rotacion = true;
         mover_izquierda(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
-    // }
-    // else if(accion == ACCION_ARRIBA){
-    //     accion_arriba(&juego);
-    // }
-    // else if(accion == ACCION_ABAJO){
-    //     accion_abajo(&juego);
-    // }
     // else if(accion == USAR_MARTILLO){
     //     usar_martillo(&juego);
     // }

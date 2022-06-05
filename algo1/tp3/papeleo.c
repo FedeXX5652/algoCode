@@ -560,7 +560,7 @@ bool chequear_movimiento(nivel_t* nivel, jugador_t* jugador, bool movimiento){
 }
 
 
-void confirmar_movimiento(nivel_t* nivel, jugador_t* jugador){
+void confirmar_colision(nivel_t* nivel, jugador_t* jugador){
     bool choque_confirmado = false;
     int i=0;
     while(!choque_confirmado &&i<nivel->tope_obstaculos){
@@ -610,7 +610,7 @@ void mover_derecha(nivel_t* nivel, jugador_t* jugador){
         jugador->posicion.col++;
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
-        confirmar_movimiento(nivel, jugador);
+        confirmar_colision(nivel, jugador);
     }
     else{
         int rand_num = rand()%3;
@@ -632,7 +632,7 @@ void mover_izquierda(nivel_t* nivel, jugador_t* jugador){
         jugador->posicion.col--;
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
-        confirmar_movimiento(nivel, jugador);
+        confirmar_colision(nivel, jugador);
     }
     else{
         int rand_num = rand()%3;
@@ -645,6 +645,25 @@ void mover_izquierda(nivel_t* nivel, jugador_t* jugador){
         else{
             printf("\nYOU SHALL NOT PASS!!! 0(\n");
         }
+    }
+}
+
+
+bool sin_piso(nivel_t* nivel, jugador_t* jugador){
+    for(int i=0; i<nivel->tope_paredes; i++){
+        if(nivel->paredes[i].col == jugador->posicion.col && nivel->paredes[i].fil == (jugador->posicion.fil+1)){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+void chequear_gravedad(nivel_t* nivel, jugador_t* jugador){
+    while(sin_piso(nivel, jugador)){
+        printf("cayendo\n");
+        jugador->posicion.fil++;
+        confirmar_colision(nivel, jugador);
     }
 }
 
@@ -680,6 +699,6 @@ void realizar_jugada(juego_t* juego){
     // else if(accion == USAR_EXTINTOR){
     //     usar_extintor(&juego);
     if(movimiento_rotacion){
-        //chequear_gravedad(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
+        chequear_gravedad(&juego->niveles[(juego->nivel_actual)-1], &juego->jugador);
     }
 }

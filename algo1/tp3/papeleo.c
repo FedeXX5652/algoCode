@@ -495,7 +495,8 @@ char pedir_movimiento()
     scanf(" %c", &movimiento);
     movimiento = (char)toupper(movimiento);
 
-    while(movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ACCION_ARRIBA && movimiento != ACCION_ABAJO && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO){
+    while (movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ACCION_ARRIBA && movimiento != ACCION_ABAJO && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO)
+    {
         printf("Ingrese un movimiento valido: ");
         scanf(" %c", &movimiento);
         movimiento = (char)toupper(movimiento);
@@ -773,14 +774,11 @@ bool sin_piso(nivel_t *nivel, jugador_t *jugador)
 
 void chequear_gravedad(juego_t *juego)
 {
-    while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
-    {
-        system("clear");
-        juego->jugador.posicion.fil++;
-        confirmar_colision(&juego->niveles[juego->nivel_actual - 1], &juego->jugador);
-        imprimir_terreno(*juego);
-        sleep(1);
-    }
+    system("clear");
+    juego->jugador.posicion.fil++;
+    confirmar_colision(&juego->niveles[juego->nivel_actual - 1], &juego->jugador);
+    imprimir_terreno(*juego);
+    sleep(1);
 }
 
 bool viene_randall(int movimientos, int numero_nivel)
@@ -841,13 +839,15 @@ void aniadir_pared(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     }
 }
 
-char pedir_accion_martillo(){
+char pedir_accion_martillo()
+{
     char accion;
-    printf("\nIngrese la dirreción a martillar:\nArriba: %c.\nAbajo: %c.\nDerecha: %c.\nIzquierda: %c.\n\n",ACCION_ARRIBA, ACCION_ABAJO, ACCION_DERECHA, ACCION_IZQUIERDA);
+    printf("\nIngrese la dirreción a martillar:\nArriba: %c.\nAbajo: %c.\nDerecha: %c.\nIzquierda: %c.\n\n", ACCION_ARRIBA, ACCION_ABAJO, ACCION_DERECHA, ACCION_IZQUIERDA);
     scanf(" %c", &accion);
     accion = (char)toupper(accion);
 
-    while(accion != ACCION_ARRIBA && accion != ACCION_ABAJO && accion != ACCION_DERECHA && accion != ACCION_IZQUIERDA){
+    while (accion != ACCION_ARRIBA && accion != ACCION_ABAJO && accion != ACCION_DERECHA && accion != ACCION_IZQUIERDA)
+    {
         printf("Ingrese una direccion valida: ");
         scanf(" %c", &accion);
         accion = (char)toupper(accion);
@@ -855,38 +855,47 @@ char pedir_accion_martillo(){
     return accion;
 }
 
-void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numero_nivel){
-    int dimension_nivel = DIM_POR_NIVEL[numero_nivel - 1]-1;
+void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numero_nivel)
+{
+    int dimension_nivel = DIM_POR_NIVEL[numero_nivel - 1] - 1;
 
     int pared_a_martillar_fil = jugador->posicion.fil;
     int pared_a_martillar_col = jugador->posicion.col;
 
-    if(direccion == ACCION_ARRIBA){
+    if (direccion == ACCION_ARRIBA)
+    {
         pared_a_martillar_fil = jugador->posicion.fil - 1;
         pared_a_martillar_col = jugador->posicion.col;
     }
-    else if(direccion == ACCION_ABAJO){
+    else if (direccion == ACCION_ABAJO)
+    {
         pared_a_martillar_fil = jugador->posicion.fil + 1;
         pared_a_martillar_col = jugador->posicion.col;
     }
-    else if(direccion == ACCION_DERECHA){
+    else if (direccion == ACCION_DERECHA)
+    {
         pared_a_martillar_fil = jugador->posicion.fil;
         pared_a_martillar_col = jugador->posicion.col + 1;
     }
-    else if(direccion == ACCION_IZQUIERDA){
+    else if (direccion == ACCION_IZQUIERDA)
+    {
         pared_a_martillar_fil = jugador->posicion.fil;
         pared_a_martillar_col = jugador->posicion.col - 1;
     }
 
     int i = 0;
     bool pared_encontrada = false;
-    while(i < nivel->tope_paredes && !pared_encontrada){
-        if(nivel->paredes[i].fil == pared_a_martillar_fil && nivel->paredes[i].col == pared_a_martillar_col){
+    while (i < nivel->tope_paredes && !pared_encontrada)
+    {
+        if (nivel->paredes[i].fil == pared_a_martillar_fil && nivel->paredes[i].col == pared_a_martillar_col)
+        {
             pared_encontrada = true;
-            if(nivel->paredes[i].col == 0 || nivel->paredes[i].col == dimension_nivel || nivel->paredes[i].fil == 0 || nivel->paredes[i].fil == dimension_nivel){
+            if (nivel->paredes[i].col == 0 || nivel->paredes[i].col == dimension_nivel || nivel->paredes[i].fil == 0 || nivel->paredes[i].fil == dimension_nivel)
+            {
                 printf("\nNo se puede martillar la pared de la pared. 0(\n");
             }
-            else{
+            else
+            {
                 nivel->paredes[i] = nivel->paredes[nivel->tope_paredes - 1];
                 nivel->tope_paredes--;
                 jugador->martillos--;
@@ -894,6 +903,82 @@ void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numer
             }
         }
         i++;
+    }
+}
+
+char pedir_accion_extintor()
+{
+    char accion;
+    printf("\nIngrese la dirreción en la que quiere apagar el fuego:\nArriba: %c.\\nDerecha: %c.\nIzquierda: %c.\n\n", ACCION_ARRIBA, ACCION_DERECHA, ACCION_IZQUIERDA);
+    scanf(" %c", &accion);
+    accion = (char)toupper(accion);
+
+    while (accion != ACCION_ARRIBA && accion != ACCION_DERECHA && accion != ACCION_IZQUIERDA)
+    {
+        printf("Ingrese una direccion valida: ");
+        scanf(" %c", &accion);
+        accion = (char)toupper(accion);
+    }
+    return accion;
+}
+
+void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
+{
+
+    int pared_a_apagar_fil = jugador->posicion.fil;
+    int pared_a_apagar_col = jugador->posicion.col;
+
+    if (direccion == ACCION_ARRIBA)
+    {
+        pared_a_apagar_fil = jugador->posicion.fil - 1;
+        pared_a_apagar_col = jugador->posicion.col;
+    }
+    else if (direccion == ACCION_DERECHA)
+    {
+        pared_a_apagar_fil = jugador->posicion.fil;
+        pared_a_apagar_col = jugador->posicion.col + 1;
+    }
+    else if (direccion == ACCION_IZQUIERDA)
+    {
+        pared_a_apagar_fil = jugador->posicion.fil;
+        pared_a_apagar_col = jugador->posicion.col - 1;
+    }
+
+    int i = 0;
+    bool fuego_encontrado = false;
+    while (i < nivel->tope_obstaculos && !fuego_encontrado)
+    {
+        if (nivel->obstaculos[i].tipo == FUEGO_TIPO && nivel->obstaculos[i].posicion.fil == pared_a_apagar_fil && nivel->obstaculos[i].posicion.col == pared_a_apagar_col)
+        {
+            fuego_encontrado = true;
+            if (jugador->extintores > 0)
+            {
+                nivel->obstaculos[i] = nivel->obstaculos[nivel->tope_obstaculos - 1];
+                jugador->extintores--;
+                printf("\nFuego apagado con exito. 0)\n");
+            }
+            else
+            {
+                printf("\nNo hay mas extintores. 0(\n");
+            }
+        }
+        i++;
+    }
+    if (!fuego_encontrado)
+    {
+        int rand_num = rand() % 2;
+        if (rand_num == 0)
+        {
+            printf("\nMantenlo prendido, fuego\nNo lo dejes apagar\nY grita, fuego. (no hay fuegos asi) 0(\n");
+        }
+        else if (rand_num == 1)
+        {
+            printf("\nNo veo ningun fuego para apagar. 0(\n");
+        }
+        else
+        {
+            printf("\nNo hay fuego ahi. 0(\n");
+        }
     }
 }
 
@@ -922,19 +1007,25 @@ void realizar_jugada(juego_t *juego)
         movimiento_rotacion = true;
         mover_izquierda(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador);
     }
-    else if(accion == USAR_MARTILLO){
+    else if (accion == USAR_MARTILLO)
+    {
         char direccion_martillo = pedir_accion_martillo();
         usar_martillo(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, direccion_martillo, juego->nivel_actual);
     }
-    // else if(accion == USAR_EXTINTOR){
-    //     usar_extintor(&juego);
-    // }
-    if (movimiento_rotacion)
+    else if (accion == USAR_EXTINTOR)
+    {
+        char direccion_extintor = pedir_accion_extintor();
+        usar_extintor(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, direccion_extintor);
+    }
+
+    while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
     {
         chequear_gravedad(juego);
-        if(hay_que_aniadir_pared(juego->jugador.movimientos_realizados, juego->nivel_actual)){
-            aniadir_pared(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
-        }
+    }
+
+    if (movimiento_rotacion && hay_que_aniadir_pared(juego->jugador.movimientos_realizados, juego->nivel_actual))
+    {
+        aniadir_pared(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
     }
 
     if (viene_randall(juego->jugador.movimientos_realizados, juego->nivel_actual))

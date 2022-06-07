@@ -1044,6 +1044,7 @@ void realizar_jugada(juego_t *juego)
             printf("Cambiando papeleo %d\n", i);
             juego->niveles[(juego->nivel_actual)-1].papeleos[i].recolectado = true;
         }
+        printf("termine de cambiar los papeleos\n");
     }
 
     while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
@@ -1072,11 +1073,9 @@ int estado_nivel(papeleo_t* papeleos, int tope_papeleos){
         i++;
     }
     if(falta_papeleo){
-        printf("\nFalta papeleo, sigue jugando\n");
         return JUGANDO;
     }
     else{
-        printf("\nGanaste, siguiente nivel\n");
         return GANADO;
     }
 }
@@ -1089,24 +1088,27 @@ int estado_juego(juego_t juego)
     bool estado_establecido = false;
     while(i>=0 && !estado_establecido)
     {
-        printf("\nChequeando nivel %d\n", i+1);
+        printf("\nChequeando nivel %d con papeleos %d\n", i+1, juego.niveles[i].tope_papeleos);
         if(juego.jugador.movimientos<=0)
         {
             estado = PERDIDO;
             estado_establecido = true;
+            printf("TOCASTE UN FUEGO\n");
         }
         else if(estado_nivel(juego.niveles[i].papeleos, juego.niveles[i].tope_papeleos)==GANADO)
         {
             niveles_ganados++;
+            printf("\nNivel %d ganado\n", i+1);
         }
         i--;
     }
-    if(niveles_ganados == MAX_NIVELES-1 && !estado_establecido){
+    if(niveles_ganados == MAX_NIVELES && !estado_establecido){
+        printf("GANASTE EL JUEGO\n");
         estado = GANADO;
     }
     else if(!estado_establecido){
+        printf("SIGUES JUGANDO\n");
         estado = JUGANDO;
     }
-    printf("\nEstado del juego: %d\n", estado);
     return estado;
 }

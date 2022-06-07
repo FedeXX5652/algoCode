@@ -4,6 +4,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "papeleo.h"
 #include "utiles.h"
@@ -29,6 +30,10 @@ const int MARTILLOS_POR_NIVEL[MAX_NIVELES] = {4, 5, 6};
 const int EXTINTORES_POR_NIVEL[MAX_NIVELES] = {4, 2, 2};
 const int INTERVALOS_RANDALL_POR_NIVEL[MAX_NIVELES] = {7, 5, 3};
 const int MOVIMIENTOS_PAREDES_NUEVAS_POR_NIVEL[MAX_NIVELES] = {40, 30, 20};
+
+const int MEDIA_SACA_MOVIMIENTOS = 10;
+const int MOVIMIENTOS_TOCA_FUEGO = -1;
+const int BOTELLA_DA_MOVIMIENTOS = 7;
 
 const char USAR_MARTILLO = 'Z';
 const char USAR_EXTINTOR = 'C';
@@ -65,11 +70,6 @@ void imprimir_terreno(juego_t juego){
     char terreno[dim_nivel][dim_nivel];
 
     printf("--------------MIKE--------------\n");
-    printf("MOVIMIENTOS: %i\n", juego.jugador.movimientos);
-    printf("MARTILLOS: %i\n", juego.jugador.martillos);
-    printf("EXTINTORES: %i\n", juego.jugador.extintores);
-    printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "SI" : "NO");
-    printf("MOVIMIENTOS REALIZADOS: %i\n", juego.jugador.movimientos_realizados);
     int papeleos_recolectados=0;
     int i=0;
     while(i<juego.niveles[juego.nivel_actual - 1].tope_papeleos){
@@ -78,7 +78,12 @@ void imprimir_terreno(juego_t juego){
         }
         i++;
     }
+    printf("MOVIMIENTOS: %i || ", juego.jugador.movimientos);
+    printf("MOVIMIENTOS REALIZADOS: %i || ", juego.jugador.movimientos_realizados);
     printf("PAPELEOS RECOLECTADOS: %i\n", papeleos_recolectados);
+    printf("MARTILLOS: %i || ", juego.jugador.martillos);
+    printf("EXTINTORES: %i || ", juego.jugador.extintores);
+    printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "ACTIVADO" : "DESACTIVADO");
     printf("--------------------------------\n\n");
 
     for(int i = 0; i < dim_nivel; i++){
@@ -463,7 +468,15 @@ char pedir_movimiento(){
 
 
 void restar_movimientos(jugador_t* jugador, int cantidad_movimientos){
-    jugador->movimientos -= cantidad_movimientos;
+    if(cantidad_movimientos == MOVIMIENTOS_TOCA_FUEGO){
+        jugador->movimientos = MOVIMIENTOS_TOCA_FUEGO;
+    }
+    else if(jugador->movimientos-cantidad_movimientos >= 0){
+        jugador->movimientos -= cantidad_movimientos;
+    }
+    else{
+        jugador->movimientos = 0;
+    }
 }
 
 
@@ -570,7 +583,10 @@ void confirmar_colision(nivel_t* nivel, jugador_t* jugador){
         if(nivel->obstaculos[i].posicion.col == jugador->posicion.col && nivel->obstaculos[i].posicion.fil == jugador->posicion.fil){
             choque_confirmado = true;
             if(nivel->obstaculos[i].tipo == MEDIA_TIPO){
-                restar_movimientos(jugador, 10);
+                restar_movimientos(jugador, MEDIA_SACA_MOVIMIENTOS);
+            }
+            else if(nivel->obstaculos[i].tipo == FUEGO_TIPO){
+                restar_movimientos(jugador, MOVIMIENTOS_TOCA_FUEGO);
             }
         }
         i++;
@@ -582,7 +598,7 @@ void confirmar_colision(nivel_t* nivel, jugador_t* jugador){
             choque_confirmado = true;
             if(nivel->herramientas[i].tipo == BOTELLA_TIPO){
                 nivel->herramientas[i].tipo = nivel->herramientas[-1].tipo;
-                sumar_movimientos(jugador, 7);
+                sumar_movimientos(jugador, BOTELLA_DA_MOVIMIENTOS);
             }
             else if(nivel->herramientas[i].tipo == INTERRUPTOR_TIPO){
                 if(jugador->ahuyenta_randall){

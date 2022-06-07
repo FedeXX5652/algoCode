@@ -492,14 +492,14 @@ void inicializar_juego(juego_t *juego, char personaje_tp1)
     inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual) - 1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
 }
 
-char pedir_movimiento()
+char pedir_movimiento()     // BORRAR DEBUG TOOL
 {
     char movimiento;
-    printf("\nIngrese un movimiento:\nUtilizar martillo: %c.\nUtilizar extintor: %c.\nMover a izquierda: %c.\nMover a derecha: %c.\nMov. rotacional horario: %c.\nMov. rotacional antihorario: %c.\n\n", USAR_MARTILLO, USAR_EXTINTOR, ACCION_DERECHA, ACCION_IZQUIERDA, ROTAR_HORARIO, ROTAR_ANTIHORARIO);
+    printf("\nIngrese un movimiento:\nUtilizar martillo: %c.\nUtilizar extintor: %c.\nMover a izquierda: %c.\nMover a derecha: %c.\nMov. rotacional horario: %c.\nMov. rotacional antihorario: %c.\nDEGUB TOOL: G\n\n", USAR_MARTILLO, USAR_EXTINTOR, ACCION_DERECHA, ACCION_IZQUIERDA, ROTAR_HORARIO, ROTAR_ANTIHORARIO);
     scanf(" %c", &movimiento);
     movimiento = (char)toupper(movimiento);
 
-    while (movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ACCION_ARRIBA && movimiento != ACCION_ABAJO && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO)
+    while (movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ACCION_ARRIBA && movimiento != ACCION_ABAJO && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO && movimiento != 'G')
     {
         printf("Ingrese un movimiento valido: ");
         scanf(" %c", &movimiento);
@@ -661,7 +661,6 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
             choque_confirmado = true;
             if (nivel->herramientas[i].tipo == BOTELLA_TIPO)
             {
-                nivel->herramientas[i].tipo = nivel->herramientas[-1].tipo;
                 sumar_movimientos(jugador, BOTELLA_DA_MOVIMIENTOS);
             }
             else if (nivel->herramientas[i].tipo == INTERRUPTOR_TIPO)
@@ -1040,6 +1039,12 @@ void realizar_jugada(juego_t *juego)
         char direccion_extintor = pedir_accion_extintor();
         usar_extintor(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, direccion_extintor);
     }
+    else if (accion == 'G'){
+        for(int i=0; i<juego->niveles[(juego->nivel_actual)-1].tope_papeleos; i++){
+            printf("Cambiando papeleo %d\n", i);
+            juego->niveles[(juego->nivel_actual)-1].papeleos[i].recolectado = true;
+        }
+    }
 
     while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
     {
@@ -1067,37 +1072,41 @@ int estado_nivel(papeleo_t* papeleos, int tope_papeleos){
         i++;
     }
     if(falta_papeleo){
+        printf("\nFalta papeleo, sigue jugando\n");
         return JUGANDO;
     }
     else{
+        printf("\nGanaste, siguiente nivel\n");
         return GANADO;
     }
 }
 
-int estado_juego(juego_t *juego)
+int estado_juego(juego_t juego)
 {
-    int i=juego->nivel_actual-1;
+    int i=juego.nivel_actual-1;
     int estado = 0;
+    int niveles_ganados = 0;
     bool estado_establecido = false;
     while(i>=0 && !estado_establecido)
     {
-        if(estado_nivel(juego->niveles[i].papeleos, juego->niveles[i].tope_papeleos)==JUGANDO)
+        printf("\nChequeando nivel %d\n", i+1);
+        if(juego.jugador.movimientos<=0)
         {
-            if(juego->jugador.movimientos > 0)
-            {
-                estado = JUGANDO;
-            }
-            else
-            {
-                estado = PERDIDO;
-            }
+            estado = PERDIDO;
             estado_establecido = true;
+        }
+        else if(estado_nivel(juego.niveles[i].papeleos, juego.niveles[i].tope_papeleos)==GANADO)
+        {
+            niveles_ganados++;
         }
         i--;
     }
-    if(!estado_establecido)
-    {
+    if(niveles_ganados == MAX_NIVELES-1 && !estado_establecido){
         estado = GANADO;
     }
+    else if(!estado_establecido){
+        estado = JUGANDO;
+    }
+    printf("\nEstado del juego: %d\n", estado);
     return estado;
 }

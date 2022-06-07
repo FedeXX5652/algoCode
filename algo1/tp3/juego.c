@@ -4,16 +4,16 @@
 #include <stdlib.h>
 #include <time.h>
 
-const int JUGANDO = 0;
-const int GANADO = 1;
-const int PERDIDO = -1;
+const int JUGANDO_MAIN = 0;
+const int GANADO_MAIN = 1;
+const int PERDIDO_MAIN = -1;
 
 int main(){
 
     //char personaje_elegido = elegir_personaje();
     char personaje_elegido = 'O';
 
-    int status_juego = JUGANDO;
+    int status_juego = JUGANDO_MAIN;
 
     juego_t juego;
 
@@ -21,7 +21,7 @@ int main(){
     
     inicializar_juego(&juego, personaje_elegido);
 
-    while(status_juego == JUGANDO){
+    while(status_juego == JUGANDO_MAIN){
         imprimir_terreno(juego);
         realizar_jugada(&juego);
         system("clear");

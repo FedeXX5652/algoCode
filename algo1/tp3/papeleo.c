@@ -35,6 +35,10 @@ const int MEDIA_SACA_MOVIMIENTOS = 10;
 const int MOVIMIENTOS_TOCA_FUEGO = -1;
 const int BOTELLA_DA_MOVIMIENTOS = 7;
 
+const int JUGANDO = 0;
+const int GANADO = 1;
+const int PERDIDO = -1;
+
 const char USAR_MARTILLO = 'Z';
 const char USAR_EXTINTOR = 'C';
 const char ACCION_DERECHA = 'D';
@@ -703,7 +707,7 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
     }
 }
 
-void mover_derecha(nivel_t *nivel, jugador_t *jugador)
+void mover_derecha(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realizado)
 {
     bool check_movimiento = chequear_movimiento(nivel, jugador, DERECHA);
     if (check_movimiento)
@@ -712,6 +716,7 @@ void mover_derecha(nivel_t *nivel, jugador_t *jugador)
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
         confirmar_colision(nivel, jugador);
+        *movimiento_realizado = true;
     }
     else
     {
@@ -732,7 +737,7 @@ void mover_derecha(nivel_t *nivel, jugador_t *jugador)
     }
 }
 
-void mover_izquierda(nivel_t *nivel, jugador_t *jugador)
+void mover_izquierda(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realizado)
 {
     bool check_movimiento = chequear_movimiento(nivel, jugador, IZQUIERDA);
     if (check_movimiento)
@@ -741,6 +746,7 @@ void mover_izquierda(nivel_t *nivel, jugador_t *jugador)
         jugador->movimientos_realizados++;
         restar_movimientos(jugador, 1);
         confirmar_colision(nivel, jugador);
+        *movimiento_realizado = true;
     }
     else
     {
@@ -757,6 +763,7 @@ void mover_izquierda(nivel_t *nivel, jugador_t *jugador)
         {
             printf("\nYOU SHALL NOT PASS!!! 0(\n");
         }
+        sleep(1);
     }
 }
 
@@ -774,11 +781,11 @@ bool sin_piso(nivel_t *nivel, jugador_t *jugador)
 
 void chequear_gravedad(juego_t *juego)
 {
+    sleep(1);
     system("clear");
     juego->jugador.posicion.fil++;
     confirmar_colision(&juego->niveles[juego->nivel_actual - 1], &juego->jugador);
     imprimir_terreno(*juego);
-    sleep(1);
 }
 
 bool viene_randall(int movimientos, int numero_nivel)
@@ -904,6 +911,23 @@ void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numer
         }
         i++;
     }
+    if(!pared_encontrada)
+    {
+        int rand_num = rand() % 2;
+        if (rand_num == 0)
+        {
+            printf("\nSwoooshh, no había pared ahi, 0(\n");
+        }
+        else if (rand_num == 1)
+        {
+            printf("\nNo paredes para destruir. 0(\n");
+        }
+        else
+        {
+            printf("\nNo hay una pared ahi. 0(\n");
+        };
+    }
+    sleep(1);
 }
 
 char pedir_accion_extintor()
@@ -980,6 +1004,7 @@ void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
             printf("\nNo hay fuego ahi. 0(\n");
         }
     }
+    sleep(1);
 }
 
 void realizar_jugada(juego_t *juego)
@@ -999,13 +1024,11 @@ void realizar_jugada(juego_t *juego)
     }
     else if (accion == ACCION_DERECHA)
     {
-        movimiento_rotacion = true;
-        mover_derecha(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador);
+        mover_derecha(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, &movimiento_rotacion);
     }
     else if (accion == ACCION_IZQUIERDA)
     {
-        movimiento_rotacion = true;
-        mover_izquierda(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador);
+        mover_izquierda(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, &movimiento_rotacion);
     }
     else if (accion == USAR_MARTILLO)
     {
@@ -1032,4 +1055,49 @@ void realizar_jugada(juego_t *juego)
     {
         mover_papeleo(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
     }
+}
+
+int estado_nivel(papeleo_t* papeleos, int tope_papeleos){
+    int i = 0;
+    bool falta_papeleo = false;
+    while(i < tope_papeleos && !falta_papeleo){
+        if(papeleos[i].recolectado == false){
+            falta_papeleo = true;
+        }
+        i++;
+    }
+    if(falta_papeleo){
+        return JUGANDO;
+    }
+    else{
+        return GANADO;
+    }
+}
+
+int estado_juego(juego_t *juego)
+{
+    int i=juego->nivel_actual-1;
+    int estado = 0;
+    bool estado_establecido = false;
+    while(i>=0 && !estado_establecido)
+    {
+        if(estado_nivel(juego->niveles[i].papeleos, juego->niveles[i].tope_papeleos)==JUGANDO)
+        {
+            if(juego->jugador.movimientos > 0)
+            {
+                estado = JUGANDO;
+            }
+            else
+            {
+                estado = PERDIDO;
+            }
+            estado_establecido = true;
+        }
+        i--;
+    }
+    if(!estado_establecido)
+    {
+        estado = GANADO;
+    }
+    return estado;
 }

@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 const int JUGANDO = 0;
 const int GANADO = 1;
 const int PERDIDO = -1;
@@ -14,7 +13,7 @@ int main(){
     //char personaje_elegido = elegir_personaje();
     char personaje_elegido = 'O';
 
-    int estado_juego = JUGANDO;
+    int status_juego = JUGANDO;
 
     juego_t juego;
 
@@ -22,10 +21,11 @@ int main(){
     
     inicializar_juego(&juego, personaje_elegido);
 
-    while(estado_juego == JUGANDO){
+    while(status_juego == JUGANDO){
         imprimir_terreno(juego);
         realizar_jugada(&juego);
         system("clear");
+        status_juego = estado_juego(juego);
     }
 
     return 0;

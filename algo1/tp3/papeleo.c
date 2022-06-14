@@ -732,7 +732,7 @@ void mover_derecha(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realizad
         {
             printf("\nYOU SHALL NOT PASS!!! 0(\n");
         }
-        sleep(1);
+        detener_el_tiempo(1);
     }
 }
 
@@ -762,7 +762,7 @@ void mover_izquierda(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realiz
         {
             printf("\nYOU SHALL NOT PASS!!! 0(\n");
         }
-        sleep(1);
+        detener_el_tiempo(1);
     }
 }
 
@@ -780,7 +780,7 @@ bool sin_piso(nivel_t *nivel, jugador_t *jugador)
 
 void chequear_gravedad(juego_t *juego)
 {
-    sleep(1);
+    detener_el_tiempo(0.5);
     system("clear");
     juego->jugador.posicion.fil++;
     confirmar_colision(&juego->niveles[juego->nivel_actual - 1], &juego->jugador);
@@ -926,7 +926,7 @@ void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numer
             printf("\nNo hay una pared ahi. 0(\n");
         };
     }
-    sleep(1);
+    detener_el_tiempo(1);
 }
 
 char pedir_accion_extintor()
@@ -1003,14 +1003,14 @@ void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
             printf("\nNo hay fuego ahi. 0(\n");
         }
     }
-    sleep(1);
+    detener_el_tiempo(1);
 }
 
 void realizar_jugada(juego_t *juego)
 {
     char accion = pedir_movimiento();
     bool movimiento_rotacion = false;
-
+    
     if (accion == ROTAR_HORARIO)
     {
         movimiento_rotacion = true;

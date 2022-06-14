@@ -15,10 +15,4 @@ typedef struct coordenada {
 void obtener_paredes(int nivel, coordenada_t paredes[MAX_PAREDES], int* tope_paredes, coordenada_t* pos_inicial_jugador);
 
 
-/* Pre condiciones: La variable segundos debe contener un valor positivo.
- * Post condiciones: Detendrá el tiempo los segundos indicados como parámetro.
-*/
-void detener_el_tiempo(float segundos);
-
-
 #endif /* __UTILES_H__ */

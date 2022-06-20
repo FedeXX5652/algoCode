@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun 14 09:23:20 2022
+# Make data base, printed on Mon Jun 20 14:53:27 2022
 
 # Variables
 
@@ -79,7 +79,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/fedexx-V:@/tmp/.ICE-unix/938,unix/fedexx-V:/tmp/.ICE-unix/938
+SESSION_MANAGER = local/fedexx-V:@/tmp/.ICE-unix/928,unix/fedexx-V:/tmp/.ICE-unix/928
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -99,7 +99,7 @@ XDG_SESSION_DESKTOP = cinnamon
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 1872
+GIO_LAUNCHED_DESKTOP_FILE_PID = 3246
 # automatic
 %F = $(notdir $%)
 # environment
@@ -115,7 +115,7 @@ QT_QPA_PLATFORMTHEME = qt5ct
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1090
+SSH_AGENT_PID = 1080
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = X-Cinnamon
 # environment
@@ -127,11 +127,11 @@ HOME = /home/fedexx
 # environment
 LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
-VSCODE_CODE_CACHE_PATH = /home/fedexx/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
+VSCODE_CODE_CACHE_PATH = /home/fedexx/.config/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
 # environment
 LOGNAME = fedexx
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # environment
@@ -149,7 +149,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-291681c9-e551-4a30-9c57-cbd75335039f.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-e29089a0-71c6-4d37-a2c0-fb9924067ee7.sock
 # environment
 XDG_SESSION_ID = c1
 # environment
@@ -171,7 +171,7 @@ LANGUAGE = es_AR:es
 # environment
 XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-5690d5c0-1.67.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-5690d5c0-1.68.1-main.sock
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -205,7 +205,7 @@ CHROME_DESKTOP = code-url-handler.desktop
 # environment
 LANG = C
 # environment
-VSCODE_PID = 1872
+VSCODE_PID = 3246
 # variable set hash-table stats:
 # Load=97/1024=9%, Rehash=0, Collisions=7/119=6%
 
@@ -273,6 +273,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=2/20=10%
-# Finished Make data base on Tue Jun 14 09:23:20 2022
+# Finished Make data base on Mon Jun 20 14:53:27 2022
 
  

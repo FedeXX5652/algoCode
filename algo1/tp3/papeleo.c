@@ -93,10 +93,17 @@ void imprimir_terreno(juego_t juego)
     }
     printf("MOVIMIENTOS: %i || ", juego.jugador.movimientos);
     printf("MOVIMIENTOS REALIZADOS: %i || ", juego.jugador.movimientos_realizados);
-    printf("PAPELEOS RECOLECTADOS: %i\n", papeleos_recolectados);
-    printf("MARTILLOS: %i || ", juego.jugador.martillos);
-    printf("EXTINTORES: %i || ", juego.jugador.extintores);
-    printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "ACTIVADO" : "DESACTIVADO");
+    printf("PAPELEOS RECOLECTADOS: %i/%i\n", papeleos_recolectados, juego.niveles[juego.nivel_actual - 1].tope_papeleos);
+    printf("MARTILLOS: ");
+    for(int i=0; i<juego.jugador.martillos; i++){
+        printf("🔨");
+    }
+    printf(" || ");
+    printf("EXTINTORES: ");
+    for(int i=0; i<juego.jugador.extintores; i++){
+        printf("🧯");
+    }
+    printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "✅" : "❌");
     printf("--------------------------------\n\n");
 
     for (int i = 0; i < dim_nivel; i++)
@@ -126,7 +133,9 @@ void imprimir_terreno(juego_t juego)
     {
         if (juego.niveles[juego.nivel_actual - 1].papeleos[i].recolectado == false)
         {
-            terreno[juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.col] = 'P'; // AIUDA pasar ID de int a char
+            int n_id = juego.niveles[juego.nivel_actual - 1].papeleos[i].id_papeleo;
+            char id_papeleo_char = (char) ((n_id+1) + '0');
+            terreno[juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.col] = id_papeleo_char;
         }
         else
         {
@@ -139,8 +148,18 @@ void imprimir_terreno(juego_t juego)
     for (int i = 0; i < dim_nivel; i++)
     {
         for (int j = 0; j < dim_nivel; j++)
-        {
-            printf("%c ", terreno[i][j]);
+        {   
+            if(terreno[i][j] == INTERRUPTOR_TIPO){
+                if(juego.jugador.ahuyenta_randall){
+                    printf("✔ ");
+                }
+                else{
+                    printf("x ");
+                }
+            }
+            else{
+                printf("%c ", terreno[i][j]);
+            }
         }
         printf("\n");
     }
@@ -1147,6 +1166,31 @@ void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
 
 /*
 pre:
+    - el juego debe tener un nivel inicializado
+    - el jugador debe estar inicializado
+post:
+    - resuelve la accion ingresada (cae por gravedad, hay que aniadir pared, Randall mueve un papeleo, etc.)
+*/
+void resolver_jugada(juego_t *juego, bool movimiento_valido)
+{
+    while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
+    {
+        chequear_gravedad(juego);
+    }
+
+    if (movimiento_valido && hay_que_aniadir_pared(juego->jugador.movimientos_realizados, juego->nivel_actual))
+    {
+        aniadir_pared(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
+    }
+
+    if (viene_randall(juego->jugador.movimientos_realizados, juego->nivel_actual))
+    {
+        mover_papeleo(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
+    }
+}
+
+/*
+pre:
     - el juego debe estar inicializado con al menos un nivel
 post:
     - se resuelve la accion del jugador en el nivel actual
@@ -1154,25 +1198,25 @@ post:
 void realizar_jugada(juego_t *juego)
 {
     char accion = pedir_movimiento();
-    bool movimiento_rotacion = false;
+    bool movimiento_valido = false;
 
     if (accion == ROTAR_HORARIO)
     {
-        movimiento_rotacion = true;
+        movimiento_valido = true;
         rotar_horario(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
     }
     else if (accion == ROTAR_ANTIHORARIO)
     {
-        movimiento_rotacion = true;
+        movimiento_valido = true;
         rotar_antihorario(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
     }
     else if (accion == ACCION_DERECHA)
     {
-        mover_derecha(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, &movimiento_rotacion);
+        mover_derecha(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, &movimiento_valido);
     }
     else if (accion == ACCION_IZQUIERDA)
     {
-        mover_izquierda(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, &movimiento_rotacion);
+        mover_izquierda(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, &movimiento_valido);
     }
     else if (accion == USAR_MARTILLO)
     {
@@ -1194,20 +1238,7 @@ void realizar_jugada(juego_t *juego)
         printf("termine de cambiar los papeleos\n");
     }
 
-    while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
-    {
-        chequear_gravedad(juego);
-    }
-
-    if (movimiento_rotacion && hay_que_aniadir_pared(juego->jugador.movimientos_realizados, juego->nivel_actual))
-    {
-        aniadir_pared(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
-    }
-
-    if (viene_randall(juego->jugador.movimientos_realizados, juego->nivel_actual))
-    {
-        mover_papeleo(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, juego->nivel_actual);
-    }
+    resolver_jugada(juego, movimiento_valido);
 }
 
 /*

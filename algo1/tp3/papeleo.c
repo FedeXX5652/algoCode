@@ -60,6 +60,13 @@ typedef struct coordenada_libre_pared
 } coordenada_libre_t;
 
 /*
+pre:
+    - 
+post:
+    - 
+*/
+
+/*
     precondicion:
         - juego inicializado
         - nivel asociado a nivel_actual inicializado
@@ -492,6 +499,14 @@ void inicializar_juego(juego_t *juego, char personaje_tp1)
     inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual) - 1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
 }
 
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*
+pre:
+    - 
+post:
+    - retorna el movimiento ingresado por el usuario
+*/
 char pedir_movimiento()     // BORRAR DEBUG TOOL
 {
     char movimiento;
@@ -508,6 +523,13 @@ char pedir_movimiento()     // BORRAR DEBUG TOOL
     return movimiento;
 }
 
+/*
+pre:
+    - jugador debe estar inicializado
+    - cantidad_movimientos debe ser entero no menor a -1
+post:
+    - resta movimientos al jugador, poniendolo en -1 en caso de que haya tocado un fuego
+*/
 void restar_movimientos(jugador_t *jugador, int cantidad_movimientos)
 {
     if (cantidad_movimientos == MOVIMIENTOS_TOCA_FUEGO)
@@ -524,11 +546,24 @@ void restar_movimientos(jugador_t *jugador, int cantidad_movimientos)
     }
 }
 
+/*
+pre:
+    - jugador debe estar inicializado
+post:
+    - suma al jugador los movimientos indicados
+*/
 void sumar_movimientos(jugador_t *jugador, int cantidad_movimientos)
 {
     jugador->movimientos += cantidad_movimientos;
 }
 
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+    - numero_nivel debe ser un numero de nivel valido
+post:
+    - rota el nivel inidicado en sentido antihorario
+*/
 void rotar_antihorario(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
 {
     int dimension = DIM_POR_NIVEL[numero_nivel - 1] - 1;
@@ -569,6 +604,13 @@ void rotar_antihorario(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     restar_movimientos(jugador, 1);
 }
 
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+    - numero_nivel debe ser un numero de nivel valido
+post:
+    - rota el nivel inidicado en sentido horario
+*/
 void rotar_horario(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
 {
     int dimension = DIM_POR_NIVEL[numero_nivel - 1] - 1;
@@ -609,6 +651,13 @@ void rotar_horario(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     restar_movimientos(jugador, 1);
 }
 
+/*
+pre:
+    - jugador  y nivel deben estar inicializados
+    - movimiento debe ser IZQUIERDA o DERECHA
+post:
+    - retorna si es el jugador puede moverser en la direccion indicada en movimiento
+*/
 bool chequear_movimiento(nivel_t *nivel, jugador_t *jugador, bool movimiento)
 {
     int delta_movimiento = 0;
@@ -632,6 +681,12 @@ bool chequear_movimiento(nivel_t *nivel, jugador_t *jugador, bool movimiento)
     return true; // Si no hay paredes en la posicion del jugador, se puede mover
 }
 
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+post:
+    - verifica si la posicion de un jugador es igual a la posicion de una herramienta, obstaculo o papeleo. Si coincide con alguno realiza la accion correspondiente
+*/
 void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
 {
     bool choque_confirmado = false;
@@ -706,6 +761,14 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
     }
 }
 
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+post:
+    - resuelve el movimiento del jugador hacia la derecha
+    - actualiza el estado del jugador en caso de poder moverse
+    - actualiza el estado de movimiento_realizado en caso de poder resolver correctamente el movimiento
+*/
 void mover_derecha(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realizado)
 {
     bool check_movimiento = chequear_movimiento(nivel, jugador, DERECHA);
@@ -736,6 +799,14 @@ void mover_derecha(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realizad
     }
 }
 
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+post:
+    - resuelve el movimiento del jugador hacia la izquierda
+    - actualiza el estado del jugador en caso de poder moverse
+    - actualiza el estado de movimiento_realizado en caso de poder resolver correctamente el movimiento
+*/
 void mover_izquierda(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realizado)
 {
     bool check_movimiento = chequear_movimiento(nivel, jugador, IZQUIERDA);
@@ -766,6 +837,13 @@ void mover_izquierda(nivel_t *nivel, jugador_t *jugador, bool *movimiento_realiz
     }
 }
 
+/*
+pre:
+    - nivel debe estar inicializado
+    - jugador debe estar inicializado y tener una posicion valida
+post:
+    - retorna TRUE en caso de que el jugador este sobre un piso, FALSE en caso contrario
+*/
 bool sin_piso(nivel_t *nivel, jugador_t *jugador)
 {
     for (int i = 0; i < nivel->tope_paredes; i++)
@@ -778,6 +856,12 @@ bool sin_piso(nivel_t *nivel, jugador_t *jugador)
     return true;
 }
 
+/*
+pre:
+    - juego debe tener un nivel cargado y un jugador cargado
+post:
+    - mueve al jugador una posicion hacia abajo 
+*/
 void chequear_gravedad(juego_t *juego)
 {
     detener_el_tiempo(0.5);
@@ -787,6 +871,13 @@ void chequear_gravedad(juego_t *juego)
     imprimir_terreno(*juego);
 }
 
+/*
+pre:
+    - movimientos > 0
+    - numero_nivel debe ser un numero de nivel valido
+post:
+    - retorna si Randall mueve un papeleo o no
+*/
 bool viene_randall(int movimientos, int numero_nivel)
 {
     if (movimientos % (INTERVALOS_RANDALL_POR_NIVEL[numero_nivel - 1]) == 0)
@@ -796,6 +887,13 @@ bool viene_randall(int movimientos, int numero_nivel)
     return false;
 }
 
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+    - numero_nivel debe ser un numero de nivel valido
+post:
+    - cambia la unibacion de un papeleo aleatorio del nivel
+*/
 void mover_papeleo(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
 {
     int tope_espacios_libres = 0;
@@ -820,6 +918,13 @@ void mover_papeleo(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     }
 }
 
+/*
+pre:
+    - movimientos es un entero positivo
+    - numero_nivel es un numero de nivel valido
+post:
+    - retorna si es necesario aniadir una pared (TRUE si es necesario, FALSE si no)
+*/
 bool hay_que_aniadir_pared(int movimientos, int numero_nivel)
 {
     if (movimientos <= MOVIMIENTOS_PAREDES_NUEVAS_POR_NIVEL[numero_nivel - 1])
@@ -829,6 +934,13 @@ bool hay_que_aniadir_pared(int movimientos, int numero_nivel)
     return false;
 }
 
+/*
+pre:
+    - el nivel y el jugador deben estar inicializados
+    - el numero de nivel debe ser valido
+post:
+    - aniade una pared al nivel correspondiente en un espacio libre
+*/
 void aniadir_pared(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
 {
     int tope_espacios_libres = 0;
@@ -845,6 +957,11 @@ void aniadir_pared(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     }
 }
 
+/*
+pre:
+post:
+    - Retorna la direccion a utilizar el martillo (W, A, S, D)
+*/
 char pedir_accion_martillo()
 {
     char accion;
@@ -861,6 +978,15 @@ char pedir_accion_martillo()
     return accion;
 }
 
+/*
+pre:
+    - el nivel debe estar inicializado
+    - el jugador debe estar inicializado
+    - la direccion debe ser una de las 4 direcciones posibles (W, A, S, D)
+    - el numero de nivel debe ser valido
+post:
+    - si la direccion es valida, se rompe en la direccion indicada en caso de haberlo y se le resta al jugador un martillo      #AIUDA
+*/
 void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numero_nivel)
 {
     int dimension_nivel = DIM_POR_NIVEL[numero_nivel - 1] - 1;
@@ -929,10 +1055,15 @@ void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numer
     detener_el_tiempo(1);
 }
 
+/*
+pre:
+post:
+    - Retorna la direccion a utilizar el extintor (W, A, S, D)
+*/
 char pedir_accion_extintor()
 {
     char accion;
-    printf("\nIngrese la dirreción en la que quiere apagar el fuego:\nArriba: %c.\\nDerecha: %c.\nIzquierda: %c.\n\n", ACCION_ARRIBA, ACCION_DERECHA, ACCION_IZQUIERDA);
+    printf("\nIngrese la dirreción en la que quiere apagar el fuego:\nArriba: %c.\nDerecha: %c.\nIzquierda: %c.\n\n", ACCION_ARRIBA, ACCION_DERECHA, ACCION_IZQUIERDA);
     scanf(" %c", &accion);
     accion = (char)toupper(accion);
 
@@ -945,6 +1076,14 @@ char pedir_accion_extintor()
     return accion;
 }
 
+/*
+pre:
+    - el nivel debe estar inicializado
+    - el jugador debe estar inicializado
+    - la direccion debe ser una de las 4 direcciones posibles (W, A, S, D)
+post:
+    - si la direccion es valida, se apaga el fuego en la direccion indicada en caso de haberlo y se le resta al jugador un extintor
+*/
 void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
 {
 
@@ -1006,6 +1145,12 @@ void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
     detener_el_tiempo(1);
 }
 
+/*
+pre:
+    - el juego debe estar inicializado con al menos un nivel
+post:
+    - se resuelve la accion del jugador en el nivel actual
+*/
 void realizar_jugada(juego_t *juego)
 {
     char accion = pedir_movimiento();
@@ -1063,6 +1208,13 @@ void realizar_jugada(juego_t *juego)
     }
 }
 
+/*
+pre:
+    - papeleos debe tener al menos un elemento
+    - tope papeleos debe coincidir con el numero de papeleos del nivel
+post:
+    - retorna el estado del nivel, sea JUGANDO (si NO recolecto todos los papeleos) o GANADO (si recolecto todos los papeleos)
+*/
 int estado_nivel(papeleo_t* papeleos, int tope_papeleos){
     int i = 0;
     bool falta_papeleo = false;
@@ -1080,6 +1232,14 @@ int estado_nivel(papeleo_t* papeleos, int tope_papeleos){
     }
 }
 
+/*
+pre: 
+    - juego tiene al menos un nivel bien inicializado
+    - juego->nivel_actual es un numero entre 1 y juego->tope_niveles
+    - jugador inicializado
+post:
+    - retorna el estado del juego, ya sea JUGANDO (0), GANADO (1) o PERDIDO (-1)
+*/
 int estado_juego(juego_t juego)
 {
     int i=juego.nivel_actual-1;
@@ -1088,26 +1248,29 @@ int estado_juego(juego_t juego)
     bool estado_establecido = false;
     while(i>=0 && !estado_establecido)
     {
-        printf("\nChequeando nivel %d con papeleos %d\n", i+1, juego.niveles[i].tope_papeleos);
-        if(juego.jugador.movimientos<=0)
+        if(juego.jugador.movimientos < 0)
         {
             estado = PERDIDO;
             estado_establecido = true;
-            printf("TOCASTE UN FUEGO\n");
+            printf("TOCASTE UN FUEGO 0o\n");
+        }
+        else if(juego.jugador.movimientos == 0)
+        {
+            estado = PERDIDO;
+            estado_establecido = true;
+            printf("Te quedaste sin movimientos 0(\n");
         }
         else if(estado_nivel(juego.niveles[i].papeleos, juego.niveles[i].tope_papeleos)==GANADO)
         {
             niveles_ganados++;
-            printf("\nNivel %d ganado\n", i+1);
         }
         i--;
     }
     if(niveles_ganados == MAX_NIVELES && !estado_establecido){
-        printf("GANASTE EL JUEGO\n");
+        printf("GANASTE EL JUEGO 0)\n");
         estado = GANADO;
     }
     else if(!estado_establecido){
-        printf("SIGUES JUGANDO\n");
         estado = JUGANDO;
     }
     return estado;

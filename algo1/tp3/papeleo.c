@@ -61,9 +61,9 @@ typedef struct coordenada_libre_pared
 
 /*
 pre:
-    - 
+    -
 post:
-    - 
+    -
 */
 
 /*
@@ -503,11 +503,11 @@ void inicializar_juego(juego_t *juego, char personaje_tp1)
 
 /*
 pre:
-    - 
+    -
 post:
     - retorna el movimiento ingresado por el usuario
 */
-char pedir_movimiento()     // BORRAR DEBUG TOOL
+char pedir_movimiento() // BORRAR DEBUG TOOL
 {
     char movimiento;
     printf("\nIngrese un movimiento:\nUtilizar martillo: %c.\nUtilizar extintor: %c.\nMover a izquierda: %c.\nMover a derecha: %c.\nMov. rotacional horario: %c.\nMov. rotacional antihorario: %c.\nDEGUB TOOL: G\n\n", USAR_MARTILLO, USAR_EXTINTOR, ACCION_DERECHA, ACCION_IZQUIERDA, ROTAR_HORARIO, ROTAR_ANTIHORARIO);
@@ -860,7 +860,7 @@ bool sin_piso(nivel_t *nivel, jugador_t *jugador)
 pre:
     - juego debe tener un nivel cargado y un jugador cargado
 post:
-    - mueve al jugador una posicion hacia abajo 
+    - mueve al jugador una posicion hacia abajo
 */
 void chequear_gravedad(juego_t *juego)
 {
@@ -1036,7 +1036,7 @@ void usar_martillo(nivel_t *nivel, jugador_t *jugador, char direccion, int numer
         }
         i++;
     }
-    if(!pared_encontrada)
+    if (!pared_encontrada)
     {
         int rand_num = rand() % 2;
         if (rand_num == 0)
@@ -1155,7 +1155,7 @@ void realizar_jugada(juego_t *juego)
 {
     char accion = pedir_movimiento();
     bool movimiento_rotacion = false;
-    
+
     if (accion == ROTAR_HORARIO)
     {
         movimiento_rotacion = true;
@@ -1184,10 +1184,12 @@ void realizar_jugada(juego_t *juego)
         char direccion_extintor = pedir_accion_extintor();
         usar_extintor(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, direccion_extintor);
     }
-    else if (accion == 'G'){
-        for(int i=0; i<juego->niveles[(juego->nivel_actual)-1].tope_papeleos; i++){
+    else if (accion == 'G')
+    {
+        for (int i = 0; i < juego->niveles[(juego->nivel_actual) - 1].tope_papeleos; i++)
+        {
             printf("Cambiando papeleo %d\n", i);
-            juego->niveles[(juego->nivel_actual)-1].papeleos[i].recolectado = true;
+            juego->niveles[(juego->nivel_actual) - 1].papeleos[i].recolectado = true;
         }
         printf("termine de cambiar los papeleos\n");
     }
@@ -1215,25 +1217,30 @@ pre:
 post:
     - retorna el estado del nivel, sea JUGANDO (si NO recolecto todos los papeleos) o GANADO (si recolecto todos los papeleos)
 */
-int estado_nivel(papeleo_t* papeleos, int tope_papeleos){
+int estado_nivel(papeleo_t *papeleos, int tope_papeleos)
+{
     int i = 0;
     bool falta_papeleo = false;
-    while(i < tope_papeleos && !falta_papeleo){
-        if(papeleos[i].recolectado == false){
+    while (i < tope_papeleos && !falta_papeleo)
+    {
+        if (papeleos[i].recolectado == false)
+        {
             falta_papeleo = true;
         }
         i++;
     }
-    if(falta_papeleo){
+    if (falta_papeleo)
+    {
         return JUGANDO;
     }
-    else{
+    else
+    {
         return GANADO;
     }
 }
 
 /*
-pre: 
+pre:
     - juego tiene al menos un nivel bien inicializado
     - juego->nivel_actual es un numero entre 1 y juego->tope_niveles
     - jugador inicializado
@@ -1242,35 +1249,37 @@ post:
 */
 int estado_juego(juego_t juego)
 {
-    int i=juego.nivel_actual-1;
+    int i = juego.nivel_actual - 1;
     int estado = 0;
     int niveles_ganados = 0;
     bool estado_establecido = false;
-    while(i>=0 && !estado_establecido)
+    while (i >= 0 && !estado_establecido)
     {
-        if(juego.jugador.movimientos < 0)
+        if (juego.jugador.movimientos < 0)
         {
             estado = PERDIDO;
             estado_establecido = true;
             printf("TOCASTE UN FUEGO 0o\n");
         }
-        else if(juego.jugador.movimientos == 0)
+        else if (juego.jugador.movimientos == 0)
         {
             estado = PERDIDO;
             estado_establecido = true;
             printf("Te quedaste sin movimientos 0(\n");
         }
-        else if(estado_nivel(juego.niveles[i].papeleos, juego.niveles[i].tope_papeleos)==GANADO)
+        else if (estado_nivel(juego.niveles[i].papeleos, juego.niveles[i].tope_papeleos) == GANADO)
         {
             niveles_ganados++;
         }
         i--;
     }
-    if(niveles_ganados == MAX_NIVELES && !estado_establecido){
+    if (niveles_ganados == MAX_NIVELES && !estado_establecido)
+    {
         printf("GANASTE EL JUEGO 0)\n");
         estado = GANADO;
     }
-    else if(!estado_establecido){
+    else if (!estado_establecido)
+    {
         estado = JUGANDO;
     }
     return estado;

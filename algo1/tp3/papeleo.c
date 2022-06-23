@@ -89,7 +89,6 @@ void imprimir_terreno(juego_t juego)
         {
             papeleos_recolectados++;
         }
-        printf("papeleo en: %d, %d\n", juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.fil, juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.col);
         i++;
     }
     printf("MOVIMIENTOS: %i || ", juego.jugador.movimientos);
@@ -171,7 +170,6 @@ void imprimir_terreno(juego_t juego)
         }
         printf("\n");
     }
-    // printf("----------------------------------------------------\n\n");
 }
 
 /*
@@ -230,11 +228,11 @@ void get_espacios_libres(nivel_t *nivel, coordenada_libre_t espacios_libres[MAX_
             for (int coords_pared = 0; coords_pared < nivel->tope_paredes; coords_pared++)
             {
                 if ((jugador_fil == fila && jugador_col == columna) && espacio_invalido == false)
-                { // si es el mismo espacio que el jugador
+                {
                     espacio_invalido = true;
                 }
                 else if (nivel->paredes[coords_pared].fil == fila && nivel->paredes[coords_pared].col == columna && espacio_invalido == false)
-                { // si es una pared
+                {
                     coords_pared = nivel->tope_paredes;
                     espacio_invalido = true;
                 }
@@ -526,6 +524,10 @@ void inicializar_juego(juego_t *juego, char personaje_tp1)
     inicializar_jugador(&juego->jugador, &juego->niveles[(juego->nivel_actual) - 1].pos_inicial_jugador, juego->nivel_actual, personaje_tp1);
 }
 
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------TP3----------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*
@@ -534,10 +536,10 @@ pre:
 post:
     - retorna el movimiento ingresado por el usuario
 */
-char pedir_movimiento() // BORRAR DEBUG TOOL
+char pedir_movimiento()
 {
     char movimiento;
-    printf("\nIngrese un movimiento:\nUtilizar martillo: %c.\nUtilizar extintor: %c.\nMover a izquierda: %c.\nMover a derecha: %c.\nMov. rotacional horario: %c.\nMov. rotacional antihorario: %c.\nDEGUB TOOL: G\n\n", USAR_MARTILLO, USAR_EXTINTOR, ACCION_DERECHA, ACCION_IZQUIERDA, ROTAR_HORARIO, ROTAR_ANTIHORARIO);
+    printf("\nIngrese un movimiento:\nUtilizar martillo: %c.\nUtilizar extintor: %c.\nMover a izquierda: %c.\nMover a derecha: %c.\nMov. rotacional horario: %c.\nMov. rotacional antihorario: %c.\n\n", USAR_MARTILLO, USAR_EXTINTOR, ACCION_DERECHA, ACCION_IZQUIERDA, ROTAR_HORARIO, ROTAR_ANTIHORARIO);
     scanf(" %c", &movimiento);
     movimiento = (char)toupper(movimiento);
 
@@ -702,10 +704,10 @@ bool chequear_movimiento(nivel_t *nivel, jugador_t *jugador, bool movimiento)
     {
         if (nivel->paredes[i].col == jugador->posicion.col + delta_movimiento && nivel->paredes[i].fil == jugador->posicion.fil)
         {
-            return false; // Si hay una pared en la posicion del jugador, no se puede mover
+            return false;
         }
     }
-    return true; // Si no hay paredes en la posicion del jugador, se puede mover
+    return true;
 }
 
 /*
@@ -726,7 +728,7 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
             if (nivel->obstaculos[i].tipo == MEDIA_TIPO)
             {
                 restar_movimientos(jugador, MEDIA_SACA_MOVIMIENTOS);
-                printf("SE RESTAN MOVIMIENTOS POR MEDIA-------------------------------------------------------------------------------------------------------------");
+                printf("SE RESTAN MOVIMIENTOS POR MEDIA-------------------------------------------------------------------------------------------------------------\n");
             }
             else if (nivel->obstaculos[i].tipo == FUEGO_TIPO)
             {
@@ -1288,15 +1290,6 @@ void realizar_jugada(juego_t *juego)
     {
         char direccion_extintor = pedir_accion_extintor();
         usar_extintor(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, direccion_extintor);
-    }
-    else if (accion == 'G') // AIUDA SACAR DEBUG TOOL
-    {
-        for (int i = 0; i < juego->niveles[(juego->nivel_actual) - 1].tope_papeleos; i++)
-        {
-            printf("Cambiando papeleo %d\n", i);
-            juego->niveles[(juego->nivel_actual) - 1].papeleos[i].recolectado = true;
-        }
-        printf("termine de cambiar los papeleos\n");
     }
 
     resolver_jugada(juego, movimiento_valido);

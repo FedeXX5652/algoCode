@@ -89,20 +89,24 @@ void imprimir_terreno(juego_t juego)
         {
             papeleos_recolectados++;
         }
+        printf("papeleo en: %d, %d\n", juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.fil, juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.col);
         i++;
     }
     printf("MOVIMIENTOS: %i || ", juego.jugador.movimientos);
     printf("MOVIMIENTOS REALIZADOS: %i || ", juego.jugador.movimientos_realizados);
     printf("PAPELEOS RECOLECTADOS: %i/%i\n", papeleos_recolectados, juego.niveles[juego.nivel_actual - 1].tope_papeleos);
     printf("MARTILLOS: ");
-    for(int i=0; i<juego.jugador.martillos; i++){
+    for (int i = 0; i < juego.jugador.martillos; i++)
+    {
         printf("🔨");
     }
     printf(" || ");
     printf("EXTINTORES: ");
-    for(int i=0; i<juego.jugador.extintores; i++){
+    for (int i = 0; i < juego.jugador.extintores; i++)
+    {
         printf("🧯");
     }
+    printf(" || ");
     printf("AHUYENTA RANDALL: %s\n", juego.jugador.ahuyenta_randall ? "✅" : "❌");
     printf("--------------------------------\n\n");
 
@@ -134,7 +138,7 @@ void imprimir_terreno(juego_t juego)
         if (juego.niveles[juego.nivel_actual - 1].papeleos[i].recolectado == false)
         {
             int n_id = juego.niveles[juego.nivel_actual - 1].papeleos[i].id_papeleo;
-            char id_papeleo_char = (char) ((n_id+1) + '0');
+            char id_papeleo_char = (char)((n_id + 1) + '0');
             terreno[juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.fil][juego.niveles[juego.nivel_actual - 1].papeleos[i].posicion.col] = id_papeleo_char;
         }
         else
@@ -148,16 +152,20 @@ void imprimir_terreno(juego_t juego)
     for (int i = 0; i < dim_nivel; i++)
     {
         for (int j = 0; j < dim_nivel; j++)
-        {   
-            if(terreno[i][j] == INTERRUPTOR_TIPO){
-                if(juego.jugador.ahuyenta_randall){
+        {
+            if (terreno[i][j] == INTERRUPTOR_TIPO)
+            {
+                if (juego.jugador.ahuyenta_randall)
+                {
                     printf("✔ ");
                 }
-                else{
+                else
+                {
                     printf("x ");
                 }
             }
-            else{
+            else
+            {
                 printf("%c ", terreno[i][j]);
             }
         }
@@ -533,7 +541,7 @@ char pedir_movimiento() // BORRAR DEBUG TOOL
     scanf(" %c", &movimiento);
     movimiento = (char)toupper(movimiento);
 
-    while (movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ACCION_ARRIBA && movimiento != ACCION_ABAJO && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO && movimiento != 'G')
+    while (movimiento != USAR_MARTILLO && movimiento != USAR_EXTINTOR && movimiento != ACCION_DERECHA && movimiento != ACCION_IZQUIERDA && movimiento != ROTAR_HORARIO && movimiento != ROTAR_ANTIHORARIO)
     {
         printf("Ingrese un movimiento valido: ");
         scanf(" %c", &movimiento);
@@ -718,6 +726,7 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
             if (nivel->obstaculos[i].tipo == MEDIA_TIPO)
             {
                 restar_movimientos(jugador, MEDIA_SACA_MOVIMIENTOS);
+                printf("SE RESTAN MOVIMIENTOS POR MEDIA-------------------------------------------------------------------------------------------------------------");
             }
             else if (nivel->obstaculos[i].tipo == FUEGO_TIPO)
             {
@@ -879,15 +888,18 @@ bool sin_piso(nivel_t *nivel, jugador_t *jugador)
 pre:
     - juego debe tener un nivel cargado y un jugador cargado
 post:
-    - mueve al jugador una posicion hacia abajo
+    - mueve al jugador una posicion hacia abajo mientras no tenga un suelo debajo
 */
 void chequear_gravedad(juego_t *juego)
 {
-    detener_el_tiempo(0.5);
-    system("clear");
-    juego->jugador.posicion.fil++;
-    confirmar_colision(&juego->niveles[juego->nivel_actual - 1], &juego->jugador);
-    imprimir_terreno(*juego);
+    while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
+    {
+        detener_el_tiempo(0.5);
+        system("clear");
+        juego->jugador.posicion.fil++;
+        confirmar_colision(&juego->niveles[juego->nivel_actual - 1], &juego->jugador);
+        imprimir_terreno(*juego);
+    }
 }
 
 /*
@@ -908,6 +920,45 @@ bool viene_randall(int movimientos, int numero_nivel)
 
 /*
 pre:
+    - nivel y coodenadas_libres deben estar inicializados
+    - tope_espacios_libres debe ser un entero positivo
+post:
+    - asigna a los valores de espacios libres de coordenadas_libres como usados en caso de que un objeto del nivel se encuentre ahí
+*/
+void aniadir_objetos_espacios_libres(nivel_t *nivel, coordenada_libre_t *coordenadas_libres, int tope_espacios_libres)
+{
+    for (int j = 0; j < tope_espacios_libres; j++)
+    {
+        int fil_libre = coordenadas_libres[j].fil;
+        int col_libre = coordenadas_libres[j].col;
+        for (int i = 0; i < nivel->tope_obstaculos; i++)
+        {
+            if (nivel->obstaculos[i].posicion.col == col_libre && nivel->obstaculos[i].posicion.fil == fil_libre)
+            {
+                coordenadas_libres[j].usado = true;
+            }
+        }
+
+        for (int i = 0; i < nivel->tope_herramientas; i++)
+        {
+            if (nivel->herramientas[i].posicion.col == col_libre && nivel->herramientas[i].posicion.fil == fil_libre)
+            {
+                coordenadas_libres[j].usado = true;
+            }
+        }
+
+        for (int i = 0; i < nivel->tope_papeleos; i++)
+        {
+            if (nivel->papeleos[i].posicion.col == col_libre && nivel->papeleos[i].posicion.fil == fil_libre)
+            {
+                coordenadas_libres[j].usado = true;
+            }
+        }
+    }
+}
+
+/*
+pre:
     - nivel y jugador deben estar inicializados
     - numero_nivel debe ser un numero de nivel valido
 post:
@@ -919,11 +970,17 @@ void mover_papeleo(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     coordenada_libre_t espacios_libres[MAX_PAREDES];
 
     get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres, jugador->posicion.fil, jugador->posicion.col);
+    aniadir_objetos_espacios_libres(nivel, espacios_libres, tope_espacios_libres);
 
     bool papeleo_movido = false;
+    int rand_num = 0;
     if (tope_espacios_libres > 0 && !jugador->ahuyenta_randall)
     {
-        int rand_num = rand() % tope_espacios_libres;
+        do
+        {
+            rand_num = rand() % tope_espacios_libres;
+        } while (espacios_libres[rand_num].usado);
+        
         while (!papeleo_movido)
         {
             int rand_num_papeleo = rand() % nivel->tope_papeleos;
@@ -966,10 +1023,15 @@ void aniadir_pared(nivel_t *nivel, jugador_t *jugador, int numero_nivel)
     coordenada_libre_t espacios_libres[MAX_PAREDES];
 
     get_espacios_libres(nivel, espacios_libres, numero_nivel, &tope_espacios_libres, jugador->posicion.fil, jugador->posicion.col);
+    aniadir_objetos_espacios_libres(nivel, espacios_libres, tope_espacios_libres);
 
+    int rand_num = 0;
     if (tope_espacios_libres > 0)
     {
-        int rand_num = rand() % tope_espacios_libres;
+        do
+        {
+            rand_num = rand() % tope_espacios_libres;
+        } while (espacios_libres[rand_num].usado);
         nivel->paredes[nivel->tope_paredes].col = espacios_libres[rand_num].col;
         nivel->paredes[nivel->tope_paredes].fil = espacios_libres[rand_num].fil;
         nivel->tope_paredes++;
@@ -1135,6 +1197,7 @@ void usar_extintor(nivel_t *nivel, jugador_t *jugador, char direccion)
             if (jugador->extintores > 0)
             {
                 nivel->obstaculos[i] = nivel->obstaculos[nivel->tope_obstaculos - 1];
+                nivel->tope_obstaculos--;
                 jugador->extintores--;
                 printf("\nFuego apagado con exito. 0)\n");
             }
@@ -1173,10 +1236,8 @@ post:
 */
 void resolver_jugada(juego_t *juego, bool movimiento_valido)
 {
-    while (sin_piso(&juego->niveles[juego->nivel_actual - 1], &juego->jugador))
-    {
-        chequear_gravedad(juego);
-    }
+
+    chequear_gravedad(juego);
 
     if (movimiento_valido && hay_que_aniadir_pared(juego->jugador.movimientos_realizados, juego->nivel_actual))
     {
@@ -1228,7 +1289,7 @@ void realizar_jugada(juego_t *juego)
         char direccion_extintor = pedir_accion_extintor();
         usar_extintor(&juego->niveles[(juego->nivel_actual) - 1], &juego->jugador, direccion_extintor);
     }
-    else if (accion == 'G')
+    else if (accion == 'G') // AIUDA SACAR DEBUG TOOL
     {
         for (int i = 0; i < juego->niveles[(juego->nivel_actual) - 1].tope_papeleos; i++)
         {

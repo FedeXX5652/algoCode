@@ -569,10 +569,6 @@ void restar_movimientos(jugador_t *jugador, int cantidad_movimientos)
     {
         jugador->movimientos -= cantidad_movimientos;
     }
-    else
-    {
-        jugador->movimientos = 0;
-    }
 }
 
 /*
@@ -1383,13 +1379,7 @@ int estado_juego(juego_t juego)
     bool estado_establecido = false;
     while (i >= 0 && !estado_establecido)
     {
-        if (juego.jugador.movimientos < 0)
-        {
-            estado = PERDIDO;
-            estado_establecido = true;
-            printf("TOCASTE UN FUEGO 0o\n");
-        }
-        else if (juego.jugador.movimientos == 0)
+        if (juego.jugador.movimientos <= 0)
         {
             estado = PERDIDO;
             estado_establecido = true;

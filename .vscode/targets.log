@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Jun 22 23:01:50 2022
+# Make data base, printed on Fri Jun 24 15:15:34 2022
 
 # Variables
 
@@ -79,7 +79,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/fedexx-V:@/tmp/.ICE-unix/932,unix/fedexx-V:/tmp/.ICE-unix/932
+SESSION_MANAGER = local/fedexx-V:@/tmp/.ICE-unix/904,unix/fedexx-V:/tmp/.ICE-unix/904
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -99,7 +99,7 @@ XDG_SESSION_DESKTOP = cinnamon
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 1915
+GIO_LAUNCHED_DESKTOP_FILE_PID = 1809
 # automatic
 %F = $(notdir $%)
 # environment
@@ -115,7 +115,7 @@ QT_QPA_PLATFORMTHEME = qt5ct
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1084
+SSH_AGENT_PID = 1056
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = X-Cinnamon
 # environment
@@ -149,7 +149,7 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-3c5d1a3b-e00d-455c-af46-9bb05b328833.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-44b024ca-7d86-4fca-8fc8-0ac93292797c.sock
 # environment
 XDG_SESSION_ID = c1
 # environment
@@ -205,7 +205,7 @@ CHROME_DESKTOP = code-url-handler.desktop
 # environment
 LANG = C
 # environment
-VSCODE_PID = 1915
+VSCODE_PID = 1809
 # variable set hash-table stats:
 # Load=97/1024=9%, Rehash=0, Collisions=7/119=6%
 
@@ -215,7 +215,7 @@ VSCODE_PID = 1915
 
 # Directories
 
-# . (device 2053, inode 1708092): 9 files, no impossibilities.
+# . (device 2053, inode 1708090): 9 files, no impossibilities.
 
 # 9 files, no impossibilities in 1 directories.
 
@@ -273,6 +273,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=2/20=10%
-# Finished Make data base on Wed Jun 22 23:01:50 2022
+# Finished Make data base on Fri Jun 24 15:15:34 2022
 
  

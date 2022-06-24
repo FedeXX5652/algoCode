@@ -714,12 +714,12 @@ bool chequear_movimiento(nivel_t *nivel, jugador_t *jugador, bool movimiento)
 pre:
     - nivel y jugador deben estar inicializados
 post:
-    - verifica si la posicion de un jugador es igual a la posicion de una herramienta, obstaculo o papeleo. Si coincide con alguno realiza la accion correspondiente
+    - revisa si la posicion del jugador coincide con la posicion de un fuego o una media. Si coincide con alguno realiza la accion correspondiente
 */
-void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
-{
-    bool choque_confirmado = false;
+bool confirmar_colision_obstaculos(nivel_t *nivel, jugador_t *jugador){
     int i = 0;
+    bool choque_confirmado = false;
+
     while (!choque_confirmado && i < nivel->tope_obstaculos)
     {
         if (nivel->obstaculos[i].posicion.col == jugador->posicion.col && nivel->obstaculos[i].posicion.fil == jugador->posicion.fil)
@@ -728,7 +728,6 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
             if (nivel->obstaculos[i].tipo == MEDIA_TIPO)
             {
                 restar_movimientos(jugador, MEDIA_SACA_MOVIMIENTOS);
-                printf("SE RESTAN MOVIMIENTOS POR MEDIA-------------------------------------------------------------------------------------------------------------\n");
             }
             else if (nivel->obstaculos[i].tipo == FUEGO_TIPO)
             {
@@ -737,8 +736,19 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
         }
         i++;
     }
+    return choque_confirmado;
+}
 
-    i = 0;
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+post:
+    - revisa si la posicion del jugador coincide con la posicion de una botella o el interruptor. Si coincide con alguno realiza la accion correspondiente
+*/
+bool confirmar_colision_herramientas(nivel_t *nivel, jugador_t *jugador){
+    int i = 0;
+    bool choque_confirmado = false;
+
     while (!choque_confirmado && i < nivel->tope_herramientas)
     {
         if (nivel->herramientas[i].posicion.col == jugador->posicion.col && nivel->herramientas[i].posicion.fil == jugador->posicion.fil)
@@ -762,9 +772,21 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
         }
         i++;
     }
+    return choque_confirmado;
+}
 
-    i = 0;
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+post:
+    - revisa si la posicion del jugador coincide con la posicion de un papeleo. Si coincide con alguno realiza la accion correspondiente
+    - si falta el papeleo de ID anterior al que se desea agarrar no se hará nada
+*/
+bool confirmar_colision_papeleos(nivel_t *nivel, jugador_t *jugador){
+    int i=0;
     bool falta_papeleo_anterior = false;
+    bool choque_confirmado = false;
+
     while (!choque_confirmado && i < nivel->tope_papeleos && !falta_papeleo_anterior)
     {
         if (nivel->papeleos[i].posicion.col == jugador->posicion.col && nivel->papeleos[i].posicion.fil == jugador->posicion.fil)
@@ -789,6 +811,27 @@ void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
         }
         i++;
     }
+    return choque_confirmado;
+}
+
+/*
+pre:
+    - nivel y jugador deben estar inicializados
+post:
+    - verifica si la posicion de un jugador es igual a la posicion de una herramienta, obstaculo o papeleo. Si coincide con alguno realiza la accion correspondiente
+*/
+void confirmar_colision(nivel_t *nivel, jugador_t *jugador)
+{
+    bool choque_confirmado = confirmar_colision_obstaculos(nivel, jugador);
+
+    if(!choque_confirmado){
+        confirmar_colision_herramientas(nivel, jugador);
+    }
+
+    if(!choque_confirmado){
+        confirmar_colision_papeleos(nivel, jugador);
+    }
+
 }
 
 /*

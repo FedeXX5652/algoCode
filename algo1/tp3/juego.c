@@ -10,8 +10,7 @@ const int GANADO_MAIN = 1;
 const int PERDIDO_MAIN = -1;
 
 int main(){
-    //char personaje_elegido = elegir_personaje();
-    char personaje_elegido = 'O';
+    char personaje_elegido = elegir_personaje();
 
     int status_juego = JUGANDO_MAIN;
 

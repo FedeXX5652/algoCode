@@ -555,7 +555,7 @@ char pedir_movimiento()
 /*
 pre:
     - jugador debe estar inicializado
-    - cantidad_movimientos debe ser entero no menor a -1
+    - cantidad_movimientos debe ser entero
 post:
     - resta movimientos al jugador, poniendolo en -1 en caso de que haya tocado un fuego
 */
@@ -565,7 +565,7 @@ void restar_movimientos(jugador_t *jugador, int cantidad_movimientos)
     {
         jugador->movimientos = MOVIMIENTOS_TOCA_FUEGO;
     }
-    else if (jugador->movimientos - cantidad_movimientos >= 0)
+    else
     {
         jugador->movimientos -= cantidad_movimientos;
     }

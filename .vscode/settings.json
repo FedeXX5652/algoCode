@@ -2,11 +2,14 @@
     "workbench.colorTheme": "Default Dark+",
     "workbench.preferredDarkColorTheme": "Default Dark+",
     "files.associations": {
+        "*.log": "log",
         "papeleo.h": "c",
         "stdbool.h": "c",
         "stdio.h": "c",
         "time.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "ostream": "cpp",
+        "iostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

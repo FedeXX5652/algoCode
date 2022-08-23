@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Aug 23 13:13:18 2022
+# Make data base, printed on Tue Aug 23 14:33:02 2022
 
 # Variables
 
@@ -24,8 +24,6 @@ DESKTOP_SESSION = cinnamon
 XDG_SESSION_CLASS = user
 # environment
 XDG_SESSION_TYPE = x11
-# environment
-VSCODE_LOG_NATIVE = false
 # environment
 GTK3_MODULES = xapp-gtk3-module
 # automatic
@@ -65,8 +63,6 @@ XDG_DATA_DIRS = /usr/share/cinnamon:/usr/share/gnome:/home/fedexx/.local/share/f
 # environment
 DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
-VSCODE_VERBOSE_LOGGING = true
-# environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 VSCODE_CWD = /home/fedexx
@@ -79,11 +75,9 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/fedexx-V:@/tmp/.ICE-unix/938,unix/fedexx-V:/tmp/.ICE-unix/938
+SESSION_MANAGER = local/fedexx-V:@/tmp/.ICE-unix/904,unix/fedexx-V:/tmp/.ICE-unix/904
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
-# environment
-VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
@@ -99,13 +93,11 @@ XDG_SESSION_DESKTOP = cinnamon
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 1774
+GIO_LAUNCHED_DESKTOP_FILE_PID = 1595
 # automatic
 %F = $(notdir $%)
 # environment
 DISPLAY = :0
-# environment
-VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /home/fedexx/Documentos/algoCode
 # environment
@@ -115,7 +107,7 @@ QT_QPA_PLATFORMTHEME = qt5ct
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1092
+SSH_AGENT_PID = 1056
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = X-Cinnamon
 # environment
@@ -127,7 +119,7 @@ HOME = /home/fedexx
 # environment
 LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
-VSCODE_CODE_CACHE_PATH = /home/fedexx/.config/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
+VSCODE_CODE_CACHE_PATH = /home/fedexx/.config/Code/CachedData/e4503b30fc78200f846c62cf8091b76ff5547662
 # environment
 LOGNAME = fedexx
 # environment
@@ -149,8 +141,6 @@ MAKECMDGOALS := all
 # environment
 SHLVL = 0
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-1dc10fe3-7e48-4c39-b3ed-72101b24bef0.sock
-# environment
 XDG_SESSION_ID = c1
 # environment
 USER = fedexx
@@ -171,7 +161,7 @@ LANGUAGE = es_AR:es
 # environment
 XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-5690d5c0-1.68.1-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-5690d5c0-1.70.2-main.sock
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -205,9 +195,9 @@ CHROME_DESKTOP = code-url-handler.desktop
 # environment
 LANG = C
 # environment
-VSCODE_PID = 1774
+VSCODE_PID = 1595
 # variable set hash-table stats:
-# Load=97/1024=9%, Rehash=0, Collisions=7/119=6%
+# Load=92/1024=9%, Rehash=0, Collisions=6/114=5%
 
 # Pattern-specific Variable Values
 
@@ -273,6 +263,6 @@ GNUmakefile:
 # strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=2/21=10%
-# Finished Make data base on Tue Aug 23 13:13:18 2022
+# Finished Make data base on Tue Aug 23 14:33:02 2022
 
  

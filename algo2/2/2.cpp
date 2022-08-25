@@ -112,6 +112,16 @@ int main(){
         int cargar(){   // definicion (las definiciones lo correcto es mandarlas a otro archivo .cpp, crear una lib)
             ...
         }
+
+    el precompilador permite modularizar el codigo, define directivas de precompilacion
+
+    problema del precompilador:
+        -puede que necesite un archivo en varios otros, lo que al precompilar duplica el codigo copiado
+        -se soluciona con el (en el .h): 
+            #ifndef _FILE_H_
+            #define _FILE_H_
+            ...
+            #endif
     */
 
     return 0;

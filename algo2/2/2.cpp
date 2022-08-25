@@ -42,6 +42,7 @@ void mostrar_vec(int vec[], int n){
 void cargar_mat(int mat[][5], int fil, int col){        // se requiere que la cantidad de filas se indique al pasar la matriz
     for(int f=0; f<fil; f++){                           // (para poder ubicar donde se almacena el valor)
         for(int c=0; c<col; c++){
+            // cin >> mat[f][c];
             mat[f][c] = (f+1)*(c+1);
         }
     }
@@ -102,7 +103,15 @@ int main(){
             *si hay varios archivos los une a todos en un ejecutable
 
     declaracion vs definicion:
-        
+        void cargar(int vec[], int n);  // declaracion (las manod al .h, creando el link, reemplazo por el #include "wasd.h")
+
+        int main(){
+            ...
+        }
+
+        int cargar(){   // definicion (las definiciones lo correcto es mandarlas a otro archivo .cpp, crear una lib)
+            ...
+        }
     */
 
     return 0;

@@ -1,34 +1,37 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cstring> 
+#include "csv_manage_link.h"
 
 using namespace std;
 
-void read_csv(){
-    // ifstream f("data.csv")   //lectura
-    // ofstream f("data.csv")   //escritura
+bool read_csv(){
+    book_data books[5];
+    book_data temp_book;
 
-    // fstream f("data.csv", tipo) //ambas, en el tipo va si es escritura o lectura
+    ifstream file("data.csv");
 
-    ifstream f("data.csv");
-    if(f.is_open()){
-        cout<<"ARCHIVO ABIERTO para leer :>"<<endl;
-        string line;
-        while(getline(f, line, '\0')){
-            cout<<line<<endl;
-        }
+    if (!file.is_open()){
+        cout << "ERROR: File Open" << endl;
     }
-    f.close();
-    
-    // ofstream f2("data.csv");
-    // if(f2.is_open()){
-    //     cout<<"ARCHIVO ABIERTO para escribir :>"<<endl;
-    // }
-    // f2.close();
-}
+    string name;
+    string genre;
+    string score;
 
-int main(){
-    read_csv();
-    return 0;
+    while (file.good()){
+
+        getline(file, name, ',');
+        getline(file, genre, ',');
+        getline(file, score, '\n');
+
+        temp_book.name = name;
+        temp_book.genre = genre[0];
+        temp_book.score = stoi(score);
+        
+        cout << temp_book.name << " - " << temp_book.genre << " - " << temp_book.score << endl;
+    }
+
+
+    file.close();
+    return false;
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "csv_manage_link.h"
 
 using namespace std;
 
@@ -21,7 +22,8 @@ void list_read_books(){
     int x=1;
 }
 
-void vector_resize(BookData* books_data, int &max_books){
+void vector_resize(BookData* &books_data, int &max_books){
+    cout << "VAMO A RESIZEAR" << endl;
     cout << max_books << endl;
     for(int j=0; j<max_books; j++){
         cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << endl;

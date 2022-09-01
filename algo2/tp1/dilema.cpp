@@ -56,6 +56,6 @@ int main(){
             break;
         }
     }
-    delete books_data;
+    delete [] books_data;
     return 0;
 }

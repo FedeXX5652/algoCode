@@ -2,12 +2,14 @@
 #include <fstream>
 #include <string>
 #include "csv_manage_link.h"
+#include "functions_link.h"
 
 using namespace std;
 
-bool read_csv(){
-    book_data books[5];
-    book_data temp_book;
+void read_csv(BookData* books_data, int &max_books){
+    BookData temp_book;
+
+    cout << "MAX: " << max_books << endl;
 
     ifstream file("data.csv");
 
@@ -18,6 +20,8 @@ bool read_csv(){
     string genre;
     string score;
 
+    int i=0;
+
     while (file.good()){
 
         getline(file, name, ',');
@@ -27,11 +31,15 @@ bool read_csv(){
         temp_book.name = name;
         temp_book.genre = genre[0];
         temp_book.score = stoi(score);
-        
-        cout << temp_book.name << " - " << temp_book.genre << " - " << temp_book.score << endl;
+
+        if(i>=max_books){
+            vector_resize(books_data, max_books);
+        }
+        else if(i<max_books){
+            books_data[i] = temp_book;
+        }
+        i++;
     }
 
-
     file.close();
-    return false;
 }

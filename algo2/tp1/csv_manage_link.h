@@ -3,12 +3,12 @@
 
 using namespace std;
 
-struct book_data{
+struct BookData{
     string name;
     char genre;
     int score;
 };
 
-bool read_csv();
+void read_csv(BookData* books_data, int &max_books);
 
 #endif

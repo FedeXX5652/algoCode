@@ -35,10 +35,17 @@ void read_csv(BookData* books_data, int &max_books){
         if(i>=max_books){
             vector_resize(books_data, max_books);
         }
-        else if(i<max_books){
+        if(i<max_books){
             books_data[i] = temp_book;
         }
         i++;
+    }
+
+    cout << sizeof(books_data) << endl;
+
+    for(int j=0; j<max_books; j++){
+        cout << "Read: ";
+        cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << " - " << books_data << endl;
     }
 
     file.close();

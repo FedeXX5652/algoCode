@@ -24,11 +24,21 @@ void list_read_books(){
 }
 
 void vector_resize(BookData* &books_data, int &max_books){
-    cout << "VAMO A RESIZEAR" << endl;
-    cout << max_books << " - " << books_data << endl;
+    int new_size = max_books*2;
+    BookData* books_data_resize = new BookData[new_size];
+    
+    cout << "RESIZE\n";
     for(int j=0; j<max_books; j++){
-        cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << endl;
+        books_data_resize[j].name = books_data[j].name;
+        books_data_resize[j].genre = books_data[j].genre;
+        books_data_resize[j].score = books_data[j].score;
     }
-
+    
+    max_books = new_size;
     delete [] books_data;       // no se si esto deletea bien o no
+    for(int j=0; j<max_books; j++){
+        cout << "post resize delete: ";
+        cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << " - " << books_data << endl;
+    }
+    books_data = books_data_resize;
 }

@@ -57,7 +57,8 @@ int main(){
             break;
         }
     }
+
     delete [] books_data;
-    cout << "\nCLOSING APP" << endl;
+    cout << "\nCLOSING APP";
     return 0;
 }

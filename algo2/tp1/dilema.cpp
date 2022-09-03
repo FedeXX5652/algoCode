@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 #include "csv_manage_link.h"
 #include "functions_link.h"
@@ -57,5 +58,6 @@ int main(){
         }
     }
     delete [] books_data;
+    cout << "\nCLOSING APP" << endl;
     return 0;
 }

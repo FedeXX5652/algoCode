@@ -20,12 +20,15 @@ bool is_valid_input(char* input){
 
 void list_read_books(){
     int x=1;
+    x++;
 }
 
 void vector_resize(BookData* &books_data, int &max_books){
     cout << "VAMO A RESIZEAR" << endl;
-    cout << max_books << endl;
+    cout << max_books << " - " << books_data << endl;
     for(int j=0; j<max_books; j++){
         cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << endl;
     }
+
+    delete [] books_data;       // no se si esto deletea bien o no
 }

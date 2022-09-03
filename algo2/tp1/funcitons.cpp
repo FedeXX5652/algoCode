@@ -22,9 +22,35 @@ bool is_valid_input(char *input)
 
 void list_read_books(BookData *&books_data, int &books_top)
 {
+    cout << "\nEstos son tus libros:" << endl;
     for (int j = 0; j < books_top; j++)
     {
-        cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << endl;
+        cout << "---------------------------\n" << "Nombre: " << books_data[j].name << endl;
+        switch (books_data[j].genre)
+        {
+        case 'A':
+            cout << "Genero: Aventura" << endl;
+            break;
+        case 'C':
+            cout << "Genero: Ciencia Ficcion" << endl;
+            break;
+        case 'D':
+            cout << "Genero: Didactica" << endl;
+            break;
+        case 'P':
+            cout << "Genero: Policiaca" << endl;
+            break;
+        case 'R':
+            cout << "Genero: Romance" << endl;
+            break;
+        case 'T':
+            cout << "Genero: Terror" << endl;
+            break;
+        default:
+            cout << "Genero: Invalido" << endl;
+            break;
+        }
+        cout << "Puntaje: " << books_data[j].score << endl;
     }
 }
 

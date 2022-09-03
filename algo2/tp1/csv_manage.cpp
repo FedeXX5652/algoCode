@@ -6,23 +6,24 @@
 
 using namespace std;
 
-void read_csv(BookData* books_data, int &max_books){
+void read_csv(BookData *&books_data, int &books_top, int &max_books)
+{
     BookData temp_book;
-
-    cout << "MAX: " << max_books << endl;
 
     ifstream file("data.csv");
 
-    if (!file.is_open()){
+    if (!file.is_open())
+    {
         cout << "ERROR: File Open" << endl;
     }
     string name;
     string genre;
     string score;
 
-    int i=0;
+    int i = 0;
 
-    while (file.good()){
+    while (file.good())
+    {
 
         getline(file, name, ',');
         getline(file, genre, ',');
@@ -32,21 +33,16 @@ void read_csv(BookData* books_data, int &max_books){
         temp_book.genre = genre[0];
         temp_book.score = stoi(score);
 
-        if(i>=max_books){
+        if (i >= max_books)
+        {
             vector_resize(books_data, max_books);
         }
-        if(i<max_books){
+        if (i < max_books)
+        {
             books_data[i] = temp_book;
+            books_top++;
         }
         i++;
     }
-
-    cout << sizeof(books_data) << endl;
-
-    for(int j=0; j<max_books; j++){
-        cout << "Read: ";
-        cout << books_data[j].name << " - " << books_data[j].genre << " - " << books_data[j].score << " - " << books_data << endl;
-    }
-
     file.close();
 }

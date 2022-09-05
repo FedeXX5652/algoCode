@@ -9,7 +9,25 @@ using namespace std;
 #define ACEPTED_GENRE_MAX 6
 
 const char ACEPTED_INPUTS[ACEPTED_INPUTS_MAX] = {'1', '2', '3', '4', '5', '6', '7', '8'};
-const char ACEPTED_GENRE[ACEPTED_GENRE_MAX] = {'A', 'C', 'D', 'P', 'R', 'T'};
+const char GENRE_CHAR[ACEPTED_GENRE_MAX] = {'A', 'C', 'D', 'P', 'R', 'T'};
+const string GENRE_FULL_NAME[ACEPTED_GENRE_MAX] = {"Accion", "Ciencia Ficcion", "Didactico", "Policiaco", "Romance", "Terror"};
+
+void vector_resize(BookData *&books_data, int &max_books)
+{
+    int new_size = max_books * 2;
+    BookData *books_data_resize = new BookData[new_size];
+
+    for (int j = 0; j < max_books; j++)
+    {
+        books_data_resize[j].title = books_data[j].title;
+        books_data_resize[j].genre = books_data[j].genre;
+        books_data_resize[j].score = books_data[j].score;
+    }
+
+    max_books = new_size;
+    delete[] books_data; // no se si esto deletea bien o no
+    books_data = books_data_resize;
+}
 
 bool validate_input(char *input)
 {
@@ -24,11 +42,12 @@ bool validate_input(char *input)
     return is_valid;
 }
 
-bool validate_genre(char *genre){
+bool validate_genre(char *genre)
+{
     bool is_valid = false;
     for (int i = 0; i < ACEPTED_GENRE_MAX; i++)
     {
-        if (ACEPTED_GENRE[i] == toupper(*genre))
+        if (GENRE_CHAR[i] == toupper(*genre))
         {
             is_valid = true;
         }
@@ -36,94 +55,126 @@ bool validate_genre(char *genre){
     return is_valid;
 }
 
-void list_read_books(BookData *&books_data, int &books_top)
+void list_read_books(BookData * books_data, int books_top)
 {
+    bool genre_found = false;
+    int genre_index = 0;
     cout << "\nEstos son tus libros:" << endl;
     for (int j = 0; j < books_top; j++)
     {
-        cout << "---------------------------\n"
-             << "Nombre: " << books_data[j].name << endl;
-        switch (books_data[j].genre)
+        genre_found = false;
+        genre_index = 0;
+        cout << "---------------------------\nNombre: " << books_data[j].title << endl;
+        while (genre_found == false && genre_index < ACEPTED_GENRE_MAX)
         {
-        case 'A':
-            cout << "Genero: Aventura" << endl;
-            break;
-        case 'C':
-            cout << "Genero: Ciencia Ficcion" << endl;
-            break;
-        case 'D':
-            cout << "Genero: Didactica" << endl;
-            break;
-        case 'P':
-            cout << "Genero: Policiaca" << endl;
-            break;
-        case 'R':
-            cout << "Genero: Romance" << endl;
-            break;
-        case 'T':
-            cout << "Genero: Terror" << endl;
-            break;
-        default:
-            cout << "Genero: Invalido" << endl;
-            break;
+            if (GENRE_CHAR[genre_index] == books_data[j].genre)
+            {
+                genre_found = true;
+                cout << "Genero: " << GENRE_FULL_NAME[genre_index] << endl;
+            }
+            genre_index++;
         }
+
         cout << "Puntaje: " << books_data[j].score << endl;
     }
 }
 
 void add_book(BookData *&books_data, int &books_top, int &max_books)
 {
-    string title;
-    char genre;
-    int score;
+    BookData temp_book;
 
     bool is_valid_title = true;
 
     cout << "Ingrese el titulo del libro: ";
-    getline(cin >> ws, title);
-    
+    getline(cin >> ws, temp_book.title);
+
     int i = 0;
-    while(i < books_top && is_valid_title != false){
-        if(title == books_data[i].name){
+    while (i < books_top && is_valid_title != false)
+    {
+        if (temp_book.title == books_data[i].title)
+        {
             is_valid_title = false;
         }
         i++;
     }
 
-    if(!is_valid_title){
+    if (!is_valid_title)
+    {
         cout << "El titulo ya esta en la lista" << endl;
     }
-    else{
-        cout << "A: Aventura - C: Ciencia Ficcion - D: Didactica - P: Policiaca - R: Romance - T: Terror\nIngrese el genero del libro: ";
-        cin >> genre;
-        while(validate_genre(&genre) == false){
+    else
+    {
+        for (int i = 0; i < (ACEPTED_GENRE_MAX - 1); i++)
+        {
+            cout << GENRE_CHAR[i] << ": " << GENRE_FULL_NAME[i] << " - ";
+        }
+        cout << GENRE_CHAR[ACEPTED_GENRE_MAX - 1] << ": " << GENRE_FULL_NAME[ACEPTED_GENRE_MAX - 1] << endl;
+
+        cout << "Ingrese el genero del libro: ";
+        cin >> temp_book.genre;
+        while (validate_genre(&temp_book.genre) == false)
+        {
             cout << "Ingrese un genero valido: ";
-            cin >> genre;
+            cin >> temp_book.genre;
+            temp_book.genre = (char)toupper(temp_book.genre);
         }
         cout << "Ingrese el puntaje (0-100): ";
-        cin >> score;
-        while(score > 100 || score < 0){
+        cin >> temp_book.score;
+        while (temp_book.score > 100 || temp_book.score < 0)
+        {
             cout << "Ingrese un puntaje valido: ";
-            cin >> score;
+            cin >> temp_book.score;
         }
 
-        cout << title << " - " << (char)toupper(genre) << " - " << score << endl;
+        cout << temp_book.title << " - " << temp_book.genre << " - " << temp_book.score << endl;
+
+        if (books_top >= max_books)
+        {
+            vector_resize(books_data, max_books);
+        }
+        books_data[books_top] = temp_book;
+
+        books_top++;
     }
 }
 
-void vector_resize(BookData *&books_data, int &max_books)
-{
-    int new_size = max_books * 2;
-    BookData *books_data_resize = new BookData[new_size];
+void edit_score(BookData *&books_data, int books_top){
+    bool title_found = false;
+    int title_index = 0;
+    int new_score = 0;
+    string title;
 
-    for (int j = 0; j < max_books; j++)
+    cout << "Ingrese el titulo del libro: ";
+    getline(cin >> ws, title);
+
+    while (title_index < books_top && title_found == false)
     {
-        books_data_resize[j].name = books_data[j].name;
-        books_data_resize[j].genre = books_data[j].genre;
-        books_data_resize[j].score = books_data[j].score;
+        if (title == books_data[title_index].title)
+        {
+            title_found = true;
+        }
+        else{
+            title_index++;
+        }
     }
 
-    max_books = new_size;
-    delete[] books_data; // no se si esto deletea bien o no
-    books_data = books_data_resize;
+    if (!title_found)
+    {
+        cout << "No existe el titulo '" << title << "'" << endl;
+    }
+    else{
+        cout << "El puntaje actual es: " << books_data[title_index].score << endl;
+        cout << "Ingrese el nuevo puntaje (0-100): ";
+        cin >> new_score;
+        while (new_score > 100 || new_score < 0)
+        {
+            cout << "Ingrese un puntaje valido: ";
+            cin >> new_score;
+        }
+        books_data[title_index].score = new_score;
+    }
+}
+
+void show_favorite(BookData *books_data, int books_top){
+    
 }

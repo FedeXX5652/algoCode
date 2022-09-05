@@ -16,7 +16,7 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
     {
         cout << "ERROR: File Open" << endl;
     }
-    string name;
+    string title;
     string genre;
     string score;
 
@@ -25,11 +25,11 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
     while (file.good())
     {
 
-        getline(file, name, ',');
+        getline(file, title, ',');
         getline(file, genre, ',');
         getline(file, score, '\n');
 
-        temp_book.name = name;
+        temp_book.title = title;
         temp_book.genre = genre[0];
         temp_book.score = stoi(score);
 

@@ -5,7 +5,7 @@ using namespace std;
 
 struct BookData
 {
-    string name;
+    string title;
     char genre;
     int score;
 };

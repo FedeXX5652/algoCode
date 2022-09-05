@@ -41,8 +41,10 @@ int main()
             add_book(books_data, books_top, max_books);
             break;
         case '3': // edit score
+            edit_score(books_data, books_top);
             break;
         case '4': // show favorite
+            show_favorite(books_data, books_top);
             break;
         case '5': // show 3 worst
             break;

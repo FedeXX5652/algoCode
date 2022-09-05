@@ -176,5 +176,35 @@ void edit_score(BookData *&books_data, int books_top){
 }
 
 void show_favorite(BookData *books_data, int books_top){
-    
+    int top_score = 0;
+    int i = 0;
+    bool genre_found = false;
+    int genre_index = 0;
+
+    while(i<books_top && top_score != 100){
+        if(books_data[i].score > top_score){
+            top_score = books_data[i].score;
+        }
+        i++;
+    }
+
+    cout << "Estos son tus mejores libros:" << endl;
+    for(int j = 0; j < books_top; j++){
+        if(books_data[j].score == top_score){
+            genre_found = false;
+            genre_index = 0;
+            cout << "---------------------------\nNombre: " << books_data[j].title << endl;
+            while (genre_found == false && genre_index < ACEPTED_GENRE_MAX)
+            {
+                if (GENRE_CHAR[genre_index] == books_data[j].genre)
+                {
+                    genre_found = true;
+                    cout << "Genero: " << GENRE_FULL_NAME[genre_index] << endl;
+                }
+                genre_index++;
+            }
+
+            cout << "Puntaje: " << books_data[j].score << endl;
+        }
+    }
 }

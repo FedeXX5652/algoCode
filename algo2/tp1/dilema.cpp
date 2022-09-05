@@ -62,6 +62,6 @@ int main()
     }
 
     delete[] books_data;
-    cout << "\nCLOSING APP";
+    cout << "Cerrando app";
     return 0;
 }

@@ -26,7 +26,7 @@ int main()
         cout << "\nIngrese la accion a realizar:\n1. Listar libros leidos.\n2. Agregar libro.\n3. Editar puntaje de un libro por titulo.\n4. Mostrar libro favorito.\n5. Mostrar los 3 libros con menor puntaje.\n6. Mostrar genero mas leido.\n7. Mostrar genero favorito.\n8. Guardar y salir." << endl;
         cin >> input;
 
-        while (is_valid_input(&input) == false)
+        while (validate_input(&input) == false)
         {
             cout << "Ingrese una opcion valida: ";
             cin >> input;
@@ -38,6 +38,7 @@ int main()
             list_read_books(books_data, books_top);
             break;
         case '2': // add book
+            add_book(books_data, books_top, max_books);
             break;
         case '3': // edit score
             break;

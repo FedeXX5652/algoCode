@@ -1,23 +1,39 @@
 #include <iostream>
 #include <string>
+#include <cctype>
 #include "csv_manage_link.h"
 
 using namespace std;
 
 #define ACEPTED_INPUTS_MAX 8
+#define ACEPTED_GENRE_MAX 6
 
 const char ACEPTED_INPUTS[ACEPTED_INPUTS_MAX] = {'1', '2', '3', '4', '5', '6', '7', '8'};
+const char ACEPTED_GENRE[ACEPTED_GENRE_MAX] = {'A', 'C', 'D', 'P', 'R', 'T'};
 
-bool is_valid_input(char *input)
+bool validate_input(char *input)
 {
+    bool is_valid = false;
     for (int i = 0; i < ACEPTED_INPUTS_MAX; i++)
     {
         if (ACEPTED_INPUTS[i] == *input)
         {
-            return true;
+            is_valid = true;
         }
     }
-    return false;
+    return is_valid;
+}
+
+bool validate_genre(char *genre){
+    bool is_valid = false;
+    for (int i = 0; i < ACEPTED_GENRE_MAX; i++)
+    {
+        if (ACEPTED_GENRE[i] == toupper(*genre))
+        {
+            is_valid = true;
+        }
+    }
+    return is_valid;
 }
 
 void list_read_books(BookData *&books_data, int &books_top)
@@ -25,7 +41,8 @@ void list_read_books(BookData *&books_data, int &books_top)
     cout << "\nEstos son tus libros:" << endl;
     for (int j = 0; j < books_top; j++)
     {
-        cout << "---------------------------\n" << "Nombre: " << books_data[j].name << endl;
+        cout << "---------------------------\n"
+             << "Nombre: " << books_data[j].name << endl;
         switch (books_data[j].genre)
         {
         case 'A':
@@ -51,6 +68,46 @@ void list_read_books(BookData *&books_data, int &books_top)
             break;
         }
         cout << "Puntaje: " << books_data[j].score << endl;
+    }
+}
+
+void add_book(BookData *&books_data, int &books_top, int &max_books)
+{
+    string title;
+    char genre;
+    int score;
+
+    bool is_valid_title = true;
+
+    cout << "Ingrese el titulo del libro: ";
+    getline(cin >> ws, title);
+    
+    int i = 0;
+    while(i < books_top && is_valid_title != false){
+        if(title == books_data[i].name){
+            is_valid_title = false;
+        }
+        i++;
+    }
+
+    if(!is_valid_title){
+        cout << "El titulo ya esta en la lista" << endl;
+    }
+    else{
+        cout << "A: Aventura - C: Ciencia Ficcion - D: Didactica - P: Policiaca - R: Romance - T: Terror\nIngrese el genero del libro: ";
+        cin >> genre;
+        while(validate_genre(&genre) == false){
+            cout << "Ingrese un genero valido: ";
+            cin >> genre;
+        }
+        cout << "Ingrese el puntaje (0-100): ";
+        cin >> score;
+        while(score > 100 || score < 0){
+            cout << "Ingrese un puntaje valido: ";
+            cin >> score;
+        }
+
+        cout << title << " - " << (char)toupper(genre) << " - " << score << endl;
     }
 }
 

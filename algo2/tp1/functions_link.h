@@ -13,4 +13,6 @@ void edit_score(BookData *&books_data, int books_top);
 
 void show_favorite(BookData *books_data, int books_top);
 
+void show_worst(BookData *books_data, int books_top, int worst_qty);
+
 #endif

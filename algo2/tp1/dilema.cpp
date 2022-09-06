@@ -7,6 +7,8 @@
 
 using namespace std;
 
+const int WORST_QTY = 5;
+
 // https://campus.fi.uba.ar/pluginfile.php/527918/mod_resource/content/1/El%20eterno%20dilema%20del%20lector.pdf
 // entregar como: 109435_Galante_TP1.zip
 // compilar con g++ *.cpp -Wall -Werror -Wconversion
@@ -47,10 +49,11 @@ int main()
             show_favorite(books_data, books_top);
             break;
         case '5': // show 3 worst
+            show_worst(books_data, books_top, WORST_QTY);
             break;
         case '6': // show most read genre
             break;
-        case '7': // show favorit genre
+        case '7': // show favorite genre
             break;
         case '8': // save and exit
             is_exit = true;

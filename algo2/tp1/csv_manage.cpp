@@ -28,21 +28,22 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
         getline(file, title, ',');
         getline(file, genre, ',');
         getline(file, score, '\n');
+        if(title != ""){        
+            temp_book.title = title;
+            temp_book.genre = genre[0];
+            temp_book.score = stoi(score);
 
-        temp_book.title = title;
-        temp_book.genre = genre[0];
-        temp_book.score = stoi(score);
-
-        if (i >= max_books)
-        {
-            vector_resize(books_data, max_books);
+            if (i >= max_books)
+            {
+                vector_resize(books_data, max_books);
+            }
+            if (i < max_books)
+            {
+                books_data[i] = temp_book;
+                books_top++;
+            }
+            i++;
         }
-        if (i < max_books)
-        {
-            books_data[i] = temp_book;
-            books_top++;
-        }
-        i++;
     }
     file.close();
 }

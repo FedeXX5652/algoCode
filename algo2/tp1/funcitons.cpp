@@ -116,6 +116,7 @@ void add_book(BookData *&books_data, int &books_top, int &max_books)
 
         cout << "Ingrese el genero del libro: ";
         cin >> temp_book.genre;
+        temp_book.genre = (char)toupper(temp_book.genre);
         while (validate_genre(&temp_book.genre) == false)
         {
             cout << "Ingrese un genero valido: ";
@@ -136,8 +137,8 @@ void add_book(BookData *&books_data, int &books_top, int &max_books)
         {
             vector_resize(books_data, max_books);
         }
-        books_data[books_top] = temp_book;
 
+        books_data[books_top] = temp_book;
         books_top++;
     }
 }

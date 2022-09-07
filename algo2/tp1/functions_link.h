@@ -3,7 +3,7 @@
 
 void vector_resize(BookData *&books_data, int &max_books);
 
-bool validate_input(char *input);
+bool validate_input(char input);
 
 void list_read_books(BookData *books_data, int books_top);
 

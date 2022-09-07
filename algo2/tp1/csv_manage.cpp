@@ -9,6 +9,10 @@ using namespace std;
 void read_csv(BookData *&books_data, int &books_top, int &max_books)
 {
     BookData temp_book;
+    string title;
+    string genre;
+    string score;
+    int i = 0;
 
     ifstream file("data.csv");
 
@@ -16,11 +20,7 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
     {
         cout << "ERROR: File Open" << endl;
     }
-    string title;
-    string genre;
-    string score;
 
-    int i = 0;
 
     while (file.good())
     {
@@ -43,6 +43,20 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
             books_top++;
         }
         i++;
+    }
+    file.close();
+}
+
+void read_csv(BookData *books_data, int books_top){
+    ofstream file("data.csv");
+    
+    if (!file.is_open())
+    {
+        cout << "ERROR: File Open" << endl;
+    }
+
+    for(int i = 0; i<books_top; i++){
+        file << books_data[i].title << "," << (char)toupper(books_data[i].genre) << "," << books_data[i].score << "\n";
     }
     file.close();
 }

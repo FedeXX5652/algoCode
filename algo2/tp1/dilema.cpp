@@ -58,9 +58,9 @@ int main()
             show_favorite_genre(books_data, books_top);
             break;
         case '8': // save and exit
+            read_csv(books_data, books_top);
             is_exit = true;
             break;
-
         default:
             break;
         }

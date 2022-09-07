@@ -15,4 +15,8 @@ void show_favorite(BookData *books_data, int books_top);
 
 void show_worst(BookData *books_data, int books_top, int worst_qty);
 
+void show_most_read_genre(BookData *books_data, int books_top);
+
+void show_favorite_genre(BookData *books_data, int books_top);
+
 #endif

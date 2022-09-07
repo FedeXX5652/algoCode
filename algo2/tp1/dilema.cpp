@@ -52,8 +52,10 @@ int main()
             show_worst(books_data, books_top, WORST_QTY);
             break;
         case '6': // show most read genre
+            show_most_read_genre(books_data, books_top);
             break;
         case '7': // show favorite genre
+            show_favorite_genre(books_data, books_top);
             break;
         case '8': // save and exit
             is_exit = true;

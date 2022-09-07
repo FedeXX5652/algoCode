@@ -233,3 +233,77 @@ void show_worst(BookData *books_data, int books_top, int worst_qty){        // F
         print_book(books_data[worst_indexs[i]]);
     }
 }
+
+void show_most_read_genre(BookData *books_data, int books_top){
+    bool genre_found = false;
+    int j=0, most_read_genre_count = 0;
+    int genre_read_count[ACEPTED_GENRE_MAX];
+
+    for(int i=0; i<ACEPTED_GENRE_MAX; i++){
+        genre_read_count[i] = 0;
+    }
+
+    for(int i=0; i<books_top; i++){
+        j=0;
+        while(!genre_found && j<ACEPTED_GENRE_MAX){
+            if(GENRE_CHAR[j] == books_data[i].genre){
+                genre_read_count[j]++;
+            }
+            j++;
+        }
+    }
+
+    for(int i=0; i<ACEPTED_GENRE_MAX; i++){
+        if(genre_read_count[i] > most_read_genre_count){
+            most_read_genre_count = genre_read_count[i];
+        }
+    }
+
+    cout << "Estos son tus generos mas leidos:" << endl;
+    for(int i=0; i<ACEPTED_GENRE_MAX; i++){
+        if(genre_read_count[i] == most_read_genre_count){
+            cout << "\t- " << GENRE_FULL_NAME[i] << endl;
+        }
+    }
+    cout << "con " << most_read_genre_count << " libros leidos" << endl;
+}
+
+void show_favorite_genre(BookData *books_data, int books_top){
+    bool genre_found = false;
+    int j=0;
+    float highest_genre_score_average = 0, average = 0;
+    int genre_read_count[ACEPTED_GENRE_MAX];
+    int genre_read_score_sum[ACEPTED_GENRE_MAX];
+
+    for(int i=0; i<ACEPTED_GENRE_MAX; i++){
+        genre_read_count[i] = 0;
+        genre_read_score_sum[i] = 0;
+    }
+
+    for(int i=0; i<books_top; i++){
+        j=0;
+        while(!genre_found && j<ACEPTED_GENRE_MAX){
+            if(GENRE_CHAR[j] == books_data[i].genre){
+                genre_read_count[j]++;
+                genre_read_score_sum[j]+=books_data[i].score;
+            }
+            j++;
+        }
+    }
+
+    for(int i=0; i<ACEPTED_GENRE_MAX; i++){
+        average = (float)genre_read_score_sum[i]/(float)genre_read_count[i];
+        if(average > highest_genre_score_average){
+            highest_genre_score_average = average;
+        }
+    }
+
+    cout << "Estos son tus generos favoritos:" << endl;
+    for(int i=0; i<ACEPTED_GENRE_MAX; i++){
+        average = (float)genre_read_score_sum[i]/(float)genre_read_count[i];
+        if(average == highest_genre_score_average){
+            cout << "\t- " << GENRE_FULL_NAME[i] << endl;
+        }
+    }
+    cout << "con un puntaje promedio de " << highest_genre_score_average << endl;
+}

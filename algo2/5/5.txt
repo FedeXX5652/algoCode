@@ -1,0 +1,17 @@
+GIT:
+soft de control de versiones
+git != github != gitlab
+estos permiten almacenar repositorios de git
+repositorio = archivos + control de versiones
+
+CONGIF LOCAL:
+git config --global user.name "nombre"
+git config --global user.email "email"
+
+CLONE REPO:
+git clone GITHUB_URL (cambia respecto de si tenes SSH o no)
+
+CREAR .GITIGNORE FORZADO:
+touch .gitignore (linux)
+
+https://www.toptal.com/developers/gitignore (para ver lo que se suele ignorar en la tecnología a usar)

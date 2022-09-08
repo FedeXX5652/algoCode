@@ -30,4 +30,3 @@ git checkout <commit_id> ---> vuelve a un commit anterior, main para volver al m
 git revese HEAD ---> crea un comit que revierte a los cambios del commit anterior
 git reverse <commit_id> ---> crea un comit que revierte a los cambios del commit_id
 git commit --amend ---> agrega lo ultimo modificado al mismo commit ya creado
-

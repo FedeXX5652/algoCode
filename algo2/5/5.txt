@@ -15,3 +15,15 @@ CREAR .GITIGNORE FORZADO:
 touch .gitignore (linux)
 
 https://www.toptal.com/developers/gitignore (para ver lo que se suele ignorar en la tecnología a usar)
+
+TREE MOVEMENTS:
+working dir ---> stash ---> history
+
+COMMANDS:
+git stage ---> muestra lo que se modificó
+git add <file> / git add . (un file / todos los files modificados) ---> añade al stage lo que se modificó
+git rm --cached <file> ---> remueve file del stage
+git rm -f <file> ---> remueve file del stage y elimina el file
+git commit -m "Message" ---> agrega un commit
+git log ---> lista los commits realizados
+git log 

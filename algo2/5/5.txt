@@ -26,4 +26,4 @@ git rm --cached <file> ---> remueve file del stage
 git rm -f <file> ---> remueve file del stage y elimina el file
 git commit -m "Message" ---> agrega un commit
 git log ---> lista los commits realizados
-git log 
+git checkout <commit_id> ---> vuelve a un commit anterior

@@ -1,0 +1,55 @@
+POO:
+
+- en Programacion Estructurada tenemos funciones por un lado y datos por el otro. Los datos se pasan a las fucniones como parametro
+- la programacion se hacer top-down (desde modulos mas complejos a los mas simples)
+- desventajas de Programacion Estructurada:
+    - dificil para hacer desarrollos complejos
+    - dificil para ubicar y corregir errores
+    - dificil de mantener (realizar cambios)
+
+- en Programacion Orientada a Objetos (POO), todos los elementos son objetos que interactuan entre si a traves de mensajes (metodos -funciones- para comunicarse)
+- la programacion se hace de abajo hacia arriba: se contruyen primero los objetos mas simples y luego los objetos que utilizan a esos mas simples
+- los objetos pueden representar elementos:
+    - concretos: una radio, un celular, un auto
+    - abstractos: un nro complejo
+
+ -estructurado vs POO:
+    - estructurado:
+        cargar(vector, n)
+        ordenar(vector, n)
+        mostrar(vector, n)
+
+    - POO:
+        vector.cargar()
+        vector.ordenar()
+        vector.mostrar()
+
+- 3 etapas/3 elementos/3 roles:
+    - diseño:
+        - TDA (Tipo de Dato Abstracto):
+            - EJ:
+                Persona:      --->  nombre
+                    -DNI      --->  atributo
+                    -nombre   --->  atributo
+                    +comer()  --->  metodo
+                    +dormir() --->  metodo
+                (el "-" es privado, el "+" es publico)
+        - diseñador
+    - implementacion:
+        - clase:
+            - EJ:
+                class Persona{
+                    string nombre;
+                    void comer();
+                    ...
+                }
+        - implementador
+    - utilizacion:
+        - objeto:
+            - EJ:
+                int main(){
+                    Persona hermano;
+                    hermano.comer();
+                    ...
+                }
+        - usuario

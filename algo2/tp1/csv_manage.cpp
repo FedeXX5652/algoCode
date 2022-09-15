@@ -6,14 +6,7 @@
 
 using namespace std;
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be initialized
-    - max_books be initialized
-post:
-    - fills books_data with the data read from the indicated csv
-*/
+
 void read_csv(BookData *&books_data, int &books_top, int &max_books)
 {
     BookData temp_book;
@@ -55,13 +48,6 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be initialized
-post:
-    - saves books_data in the indicated csv
-*/
 void read_csv(BookData *books_data, int books_top){
     ofstream file("data.csv");
     

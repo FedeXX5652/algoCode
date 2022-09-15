@@ -10,11 +10,18 @@ class PuntoR2{
     // Metodos
     public:
         /*
-        Constructor
+        Constructor sin parametros
+        Pre: 
+        Post: construye un PuntoR2 con (0,0)
+        */
+       PuntoR2();   // no le paso parametros, tiene que llevar el mismo nombre que la clase y no retorna nada, van en public
+
+        /*
+        Constructor con parametros
         Pre: 
         Post: construye un PuntoR2 con (cx,cy)
         */
-       PuntoR2(double cx, double cy);   // no le paso parametros, tiene que llevar el mismo nombre que la clase y no retorna nada, van en public
+       PuntoR2(double x, double y);   // le paso parametros, tiene que llevar el mismo nombre que la clase y no retorna nada, van en public
 
 
         /*
@@ -44,6 +51,15 @@ class PuntoR2{
         Post: devuelve el valor de la segunda coordenada
         */
         double obtener_y();
+
+        void mostrar();
+
+        /*
+        Destructor
+        Pre: 
+        Post: 
+        */
+       ~PuntoR2();
 };
 
 #endif // PUNTO_R2_H_INCLUDED

@@ -4,9 +4,9 @@
 using namespace std;
 
 // contructor
-PuntoR2::PuntoR2(){
-    x = 0;
-    y = 0;
+PuntoR2::PuntoR2(double cx, double cy){
+    x = cx;
+    y = cy;
 }
 
 

@@ -12,9 +12,9 @@ class PuntoR2{
         /*
         Constructor
         Pre: 
-        Post: construye un PuntoR2 en el origen (0,0)
+        Post: construye un PuntoR2 con (cx,cy)
         */
-       PuntoR2();   // no le paso parametros, tiene que llevar el mismo nombre que la clase y no retorna nada, van en public
+       PuntoR2(double cx, double cy);   // no le paso parametros, tiene que llevar el mismo nombre que la clase y no retorna nada, van en public
 
 
         /*

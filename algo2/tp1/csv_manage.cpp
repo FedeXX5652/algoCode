@@ -13,7 +13,7 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
     string line_content, title, genre, score;
     int i = 0;
 
-    ifstream file("data.csv");
+    ifstream file("libros.csv");
 
     if (!file.is_open())
     {
@@ -27,7 +27,7 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
         getline(file, genre, ',');
         getline(file, score, '\n');       
         temp_book.title = title;
-        temp_book.genre = genre[0];
+        temp_book.genre = genre;
         temp_book.score = stoi(score);
 
         if (i >= max_books)
@@ -42,23 +42,21 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
         i++;
     }
     file.close();
-
-    for(int i=0; i<(int)sizeof(books_data); i++){
-        cout << books_data[i].title << " - " << books_data[i].genre << " - " << books_data[i].score << endl;
-    }
 }
 
 
 void read_csv(BookData *books_data, int books_top){
-    ofstream file("data.csv");
+    ofstream file("libros.csv");
     
     if (!file.is_open())
     {
         cout << "ERROR: File Open" << endl;
     }
 
-    for(int i = 0; i<books_top; i++){
-        file << books_data[i].title << "," << (char)toupper(books_data[i].genre) << "," << books_data[i].score << "\n";
+    for(int i = 0; i<(books_top-1); i++){
+        file << books_data[i].title << "," << books_data[i].genre << "," << books_data[i].score << "\n";
     }
+
+    file << books_data[books_top-1].title << "," << books_data[books_top-1].genre << "," << books_data[books_top-1].score;
     file.close();
 }

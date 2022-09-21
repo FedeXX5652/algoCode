@@ -30,31 +30,6 @@ void show_genres(){
 
 /*
 pre:
-    - books_data vector has to be initialized
-    - max_books must be a positive int
-post:
-    - changes the books_data pointer to a bigger vector (double the max_data size)
-*/
-void vector_resize(BookData *&books_data, int &max_books)
-{
-    int new_size = max_books * 2;
-    BookData *books_data_resize = new BookData[new_size];
-
-    for (int j = 0; j < max_books; j++)
-    {
-        books_data_resize[j].title = books_data[j].title;
-        books_data_resize[j].genre = books_data[j].genre;
-        books_data_resize[j].score = books_data[j].score;
-    }
-
-    max_books = new_size;
-    delete[] books_data;
-    books_data = books_data_resize;
-}
-
-
-/*
-pre:
     - input must be a string
 post:
     - returns true if input is in ACEPTED_INPUTS, false otherwise
@@ -96,12 +71,24 @@ bool validate_genre(string genre)
 }
 
 
-/*
-pre:
-    - book_data must be initialized
-post:
-    - prints the data of the book (title, genre, score)
-*/
+void vector_resize(BookData *&books_data, int &max_books)
+{
+    int new_size = max_books * 2;
+    BookData *books_data_resize = new BookData[new_size];
+
+    for (int j = 0; j < max_books; j++)
+    {
+        books_data_resize[j].title = books_data[j].title;
+        books_data_resize[j].genre = books_data[j].genre;
+        books_data_resize[j].score = books_data[j].score;
+    }
+
+    max_books = new_size;
+    delete[] books_data;
+    books_data = books_data_resize;
+}
+
+
 void print_book(BookData book_data){
     bool genre_found = false;
     int genre_index = 0;
@@ -120,13 +107,6 @@ void print_book(BookData book_data){
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-post:
-    - prints all the books with their data
-*/
 void list_read_books(BookData * books_data, int books_top)
 {
     cout << "\nEstos son tus libros:" << endl;
@@ -137,14 +117,6 @@ void list_read_books(BookData * books_data, int books_top)
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-    - max_books must be a positive int
-post:
-    - adds the new book to the last position of the books_data vector
-*/
 void add_book(BookData *&books_data, int &books_top, int &max_books)
 {
     BookData temp_book;
@@ -199,13 +171,6 @@ void add_book(BookData *&books_data, int &books_top, int &max_books)
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-post:
-    - changes the score of the selected title
-*/
 void edit_score(BookData *&books_data, int books_top){
     bool title_found = false;
     int title_index = 0;
@@ -244,13 +209,6 @@ void edit_score(BookData *&books_data, int books_top){
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-post:
-    - prints the best rated book
-*/
 void show_favorite(BookData *books_data, int books_top){
     int top_score = 0;
     int i = 0;
@@ -271,14 +229,6 @@ void show_favorite(BookData *books_data, int books_top){
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-    - worst_qty must be a positive int
-post:
-    - prints the worst rated books up to worst_qty
-*/
 void show_worst(BookData *books_data, int books_top, int worst_qty){
     int worst_indexs[worst_qty];
     int j=0;
@@ -323,13 +273,6 @@ void show_worst(BookData *books_data, int books_top, int worst_qty){
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-post:
-    - prints the most read genre
-*/
 void show_most_read_genre(BookData *books_data, int books_top){
     bool genre_found = false;
     int j=0, most_read_genre_count = 0;
@@ -339,7 +282,7 @@ void show_most_read_genre(BookData *books_data, int books_top){
         genre_read_count[i] = 0;
     }
 
-    for(int i=0; i<books_top; i++){
+    for(int i=0; i<books_top; i++){         // sum of each genre
         j=0;
         while(!genre_found && j<ACEPTED_GENRE_MAX){
             if(GENRE_SHORT_NAME[j] == books_data[i].genre){
@@ -365,13 +308,6 @@ void show_most_read_genre(BookData *books_data, int books_top){
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be a positive int
-post:
-    - prints the highest average genre
-*/
 void show_favorite_genre(BookData *books_data, int books_top){
     bool genre_found = false;
     int j=0;
@@ -384,7 +320,7 @@ void show_favorite_genre(BookData *books_data, int books_top){
         genre_read_score_sum[i] = 0;
     }
 
-    for(int i=0; i<books_top; i++){
+    for(int i=0; i<books_top; i++){             // sum of score of each genre & sum of each genre
         j=0;
         while(!genre_found && j<ACEPTED_GENRE_MAX){
             if(GENRE_SHORT_NAME[j] == books_data[i].genre){

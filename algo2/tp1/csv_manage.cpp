@@ -7,18 +7,10 @@
 using namespace std;
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be initialized
-    - max_books be initialized
-post:
-    - fills books_data with the data read from the indicated csv
-*/
 void read_csv(BookData *&books_data, int &books_top, int &max_books)
 {
     BookData temp_book;
-    string line_content, title, genre, score;
+    string line_content, title, genre, score, line;
     int i = 0;
 
     ifstream file("libros.csv");
@@ -33,7 +25,7 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
     {
         getline(file, title, ',');
         getline(file, genre, ',');
-        getline(file, score, '\n');       
+        getline(file, score, '\n');      
         temp_book.title = title;
         temp_book.genre = genre;
         temp_book.score = stoi(score);
@@ -53,13 +45,6 @@ void read_csv(BookData *&books_data, int &books_top, int &max_books)
 }
 
 
-/*
-pre:
-    - books_data must be initialized
-    - books_top must be initialized
-post:
-    - saves books_data in the indicated csv
-*/
 void read_csv(BookData *books_data, int books_top){
     ofstream file("libros.csv");
     

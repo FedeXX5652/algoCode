@@ -152,7 +152,7 @@ void add_book(BookData *&books_data, int &books_top, int &max_books)
         }
         cout << "Ingrese el puntaje (0-100): ";
         cin >> temp_book.score;
-        while (temp_book.score > MAX_SCORE || temp_book.score < MIN_SCORE)
+        while (temp_book.score >= MAX_SCORE || temp_book.score <= MIN_SCORE)
         {
             cout << "Ingrese un puntaje valido: ";
             cin >> temp_book.score;

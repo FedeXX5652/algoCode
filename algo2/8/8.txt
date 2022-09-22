@@ -1,0 +1,131 @@
+UML:    Unified Modeling Language
+
+-lenguaje grafico para visualizar, especificar, construir y documentar artefactos de software
+
+-es standard
+
+-provee herramientas para documentar:
+    -proceso de negocios
+    -requerimientos
+    -clases (codigo fuente)
+    -esquema de DB
+    -componentes
+    -interacciones
+
+-diagramas:
+    -estaticos:
+        casos de uso
+        clases
+        objetos
+        componentes
+        despliegue
+    -dinamicos:
+        estados
+        actividad
+        secuencia
+        colaboracion
+
+-diagrama de clase: describe las clases que conforman el modelo de el sistema
+
+-relevamiento por observacion: sirve para averiguar las funcionalidades que el sistema tiene que abarcar
+
+-3 perspectivas:
+    -conceptual
+    -especificacion
+    -implementacion
+
+-una clase es una descripccion de un conjunto de objetos que comparten los mismos atributos, operaciones, relaciones y semantica
+
+-se escribe como se escribiria en el lenguaje a implementar
+
+-atributos:
+    -son props que posee una clase
+    -poseen un rango de valores asociados (int, decimal, long, alguna clase, etc)
+    -ej:
+            Automovil
+        ------------------------
+            +color: String
+            #patente: String
+            -velocidadMax; Integer
+            ~peso: Float
+            -nombre: String
+            -conductor: String
+        ------------------------
+            +acelerar(aFondo: Boolean): void
+            +frenar(): void
+    -visibilidad:
+        privado (-): no es visible ni fuera ni en clases derivadas (herencia)
+        publico (+): visible desde cualquier clase, no recomendado, rompe encapsulamiento
+        protegido (#): visible fuera de la clase y en clases derivadas
+        paquete (~): solo accesible desde claes dentro del mismo paquete
+
+-operaciones:
+    -servicios que expone la clase
+    -es el "contrato" que cumple la clase
+    -llamadas metodos
+
+-relaciones (asociaciones entre clases):
+    -forma en la que las clases se conectan una con otras con el fin de resolver determinada funcionalidad
+    -existen muchas relaciones entre clases (tiene, crea, usa, es un...)
+    -ej:
+            Automovil
+        ------------------------                              Persona
+            +color: String                                ------------------------
+            #patente: String                                  +dni: Long
+            -velocidadMax; Integer        <----------         +nombre: String
+            ~peso: Float                                      +apellidos: String
+            -nombre: String
+            -conductor: String
+        ------------------------
+            +acelerar(aFondo: Boolean): void
+            +frenar(): void
+    
+    -asociacion:
+
+                +empleado       trabaja en      +empleador
+        Persona-------------------------------------------->Compañia
+                |                   |
+                rol         Nombre de la relacion
+
+    -multiplicidad:
+        - 1: atributo debe tener un unico valor
+        - 0...1: atributo puede o no tener un valor
+        - 0...*: atributo puede tener varios valores o ninguno
+        - 1...*: atributo puede tener varios valores, al menos uno
+        - *: atributo puede tener varios valores
+        - M...N: atributo puede puede tener entre M y N valores
+        -ej:
+                cursa en                    tiene inscripto
+        Materia-------------------------------------------->Alumno
+                [0...*]                         [1...*]
+
+                conductor                    es conducido
+        Automovil-------------------------------------------->Piloto
+                [1...*]
+
+    -generalizacion:
+                                        FiguraGeometrica
+                                    ------------------------
+                                        +color: String
+                                    ------------------------
+                                        +dibujar(): void
+                                           ↑
+                    ┌──────────────────────┼──────────────────────────┐
+                Circulo                 Cuadrado                    Rectangulo
+
+    -agregacion:
+        -una clase posee como atributo a un objeto. Ambos objetos no comparten el tiempo de vida
+    
+    -dependencia:
+        -una clase depende de otra para poder ejecutar cierta funcionalidad
+        -ej:
+                PS5                                     Juego
+            ------------------------        ---->    -----------
+                +jugar: (v: Juego)                      GTAVI
+
+    -herencia multiple:
+        -NO HAY QUE USARLO
+    
+    -clases abstractas:
+        -las clases abstractas no pueden ser instanciadas
+        -los metodos abstractos no pueden ser definidos

@@ -10,7 +10,7 @@ using namespace std;
 
 const int WORST_QTY = 3;
 
-// https://campus.fi.uba.ar/pluginfile.php/527918/mod_resource/content/1/El%20eterno%20dilema%20del%20lector.pdf
+// https://campusgrado.fi.uba.ar/pluginfile.php/149459/mod_resource/content/1/El%20eterno%20dilema%20del%20lector.pdf
 // entregar como: 109435_Galante_TP1.zip
 // compilar con g++ *.cpp -Wall -Werror -Wconversion
 

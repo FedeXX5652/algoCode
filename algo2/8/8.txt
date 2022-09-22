@@ -129,3 +129,44 @@ UML:    Unified Modeling Language
     -clases abstractas:
         -las clases abstractas no pueden ser instanciadas
         -los metodos abstractos no pueden ser definidos
+
+-interfaces:
+    -es una clase abstracta con todos sus metodos abstractos
+
+-TDA x UML:
+            TDA                           |             UML
+------------------------------------------------------------------------------------
+tipo de dato abstracto                    |   lenguaje modelado unificado
+INDEPENDIENTE del codigo del lenguaje     |   DEPENDIENTE del codigo y del lenguaje
+abstraccion del codigo                    |   documentacion del codigo
+
+-TDA ej:
+    -Nombre: Persona
+    -Invariantes:
+        -edad c enteros
+        -nombre, conj de caracteres alfabeticos
+        -fecha de nacimiento, fecha conformada por dia, mes y año (dd/mm/yyyy)
+    -operaciones:
+        -Persona: entero x cadena x fecha ---> Persona
+        -incrementar edad
+        -incrementar edad: fecha
+        -esMayor: Persona ---> booleano
+        -esMayor: fecha ---> booleano
+        -tiene mismo nombre: cadena ---> booleano
+        -es misma persona: Persona ---> booleano
+        -es misma persona: cadena x fecha ---> booleano
+        -tiene mismo nacimiento: fecha ---> booleano
+
+    -detalle:
+        -Operación: Persona
+            -Descripción: construye una persona en base a 3 parámetros. El primero es la edad, el segundo es el nombre y el tercero es la fecha de nacimiento
+            -Precondición: la edad debe ser un número entero mayor a 0, el nombre debe estar compuesto por caracteres alfabéticos y la fecha debe tener un formato correcto (dd/mm/aaaa)
+            -Postcondición construye una persona con la edad, el nombre y la fecha apropiados.
+        -Operación: Incrementar edad
+            - Descripción: aumenta la edad de la Persona en 1.
+            -Precondición: -
+            -Postcondición: Incrementa la edad de la Persona en 1.
+        -Operación: Incrementar edad 
+            -Descripción aumenta la edad de la Persona en 1 si el día y el mes de la fecha indicada por parámetro son los mismos que los de la fecha de nacimiento 
+            -Precondición: - 
+            -Postcondición: Si el dia y el mes de la fecha indicada por parámetro son los mismos que los de la fecha de nacimiento, incrementa la edad de la persona en 1.

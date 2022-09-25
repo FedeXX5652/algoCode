@@ -39,7 +39,8 @@ int main()
             cin >> input;
         }
 
-        if (input == "1"){
+        if (input == "1")
+        {
             list_read_books(books_data, books_top);
         }
         else if (input == "2")
@@ -71,7 +72,8 @@ int main()
             read_csv(books_data, books_top);
             is_exit = true;
         }
-        else{
+        else
+        {
             cout << "Error: input invalida" << endl;
             is_exit = true;
         }

@@ -10,7 +10,6 @@ struct BookData
     int score;
 };
 
-
 /*
 pre:
     - books_data must be initialized
@@ -21,7 +20,6 @@ post:
     - fills books_data with the data read from the indicated csv
 */
 void read_csv(BookData *&books_data, int &books_top, int &max_books);
-
 
 /*
 pre:

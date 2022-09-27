@@ -1,0 +1,87 @@
+HERENCIA y POLIMORFISMO:
+Herencia:
+    - relacion entre clases por la cual se define que una clase puede ser un caso particular de otra
+
+    - clases hijas heredan las clases y atributos de la clase madre
+
+    - ej:
+            Vehiculo <--- Auto
+                    ^---- Camion
+                    ^---- Camioneta
+
+        class Vehiculo{
+            ...
+        };
+
+        class Auto: public Vehiculo{
+            ...
+        };
+    
+    - solo se debe hacer herencia solamente para aquellos casos en los que la clase madre NO tenga metodos que sobren en la clase hija
+
+    - constructores y destructores:
+        - primero se contruyen los antecesores y despues los predecesores
+        - primero se destruyen los predecesores y despues los antecesores
+
+    - si B hereda A, y A no tiene contructor por defecto, debemos llamar al constructor necesario antes de realizar cualquier cosa:
+
+        Auto(string patente, bool esManual): Vehiculo(patente){
+            ...                              |_______________|
+        };                                     Inicializador
+
+    - Sobrecarga: metodo con el mismo nombre pero difiere en parametros
+
+    - Redefinicion: metodo hijo que redefine lo que la funcion padre hace (la sobreescribe)
+
+    - Protected (#): propiedad solo accesible a las clases madres e hijas
+
+    - Clases abstractas: 
+    
+        - no pueden ser instanciadas en forma directa
+
+        - cuanquier clase que al menos uno de sus metodos es abstacto
+        
+        class Figura{
+            protected:
+                int color[3];
+            public:
+                virtual void dibujar() = 0;
+                void renderizar();
+        };
+
+        class Cuadrado: public Figura{
+            private:
+                int base;
+            public:
+                void dibujar();
+        };
+
+    - no usar herencia porque si, usar cuando ña subclasificacion es parte del dominio del sistema
+
+    - desventajas:
+        
+        - estatica, poco flexible en comparacion con la composicion
+
+        - puede romper el encapsulamiento (los hijos pueden acceder a ciertos valores protegidos)
+
+    
+Polimorfismo:
+    - posibilidad de que distintos objetos respondan de manera diferente ante la llegada del mismo mensaje
+
+    - decile al objeto lo que tiene que hacer, no evalues quien es el objeto para decirle como tiene que hacerlo
+
+    - en C++ hay que indicar que el metodo es virtual
+
+    class Figura{
+        public:
+            virtual void dibujar();     <-----  Metodos virtuales para que se produzca el polimorfismo con las clases hijas
+            virtual ~Figura();
+    }
+
+    - usos:
+        - estructuras de datos polimorficas
+
+        - pasaje de parametros en funcion
+
+    - conexiones polimorficas:
+        - cualquier clase padre puede acceder a las clases hijas, pero las clases hijas no pueden acceder a las clases herederas

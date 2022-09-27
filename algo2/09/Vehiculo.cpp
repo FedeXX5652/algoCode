@@ -3,24 +3,9 @@
 
 using namespace std;
 
-// contructor con parametros
-Vehiculo::Vehiculo(unsigned int ruedas){
-    this->ruedas = ruedas;
-    this->telepase = false;
-}
-
-Vehiculo::~Vehiculo(){
-    cout << "DESTRUYO EL VEHICULO EN: " << this << endl;
-}
-
-void Vehiculo::verificarTelepase(bool is_telepase){
-    this->telepase = is_telepase;
-}
-
 float Vehiculo::montoAPagar(int monto_por_rueda){
     return ((float)(this->ruedas)*(float)monto_por_rueda)-((float)(this->ruedas)*(float)monto_por_rueda*descuento())/100;
 }
-
 
 
 Moto::Moto(){

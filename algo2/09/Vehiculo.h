@@ -6,20 +6,16 @@ class Vehiculo{
         unsigned int ruedas;
         bool telepase;
     public:
-        Vehiculo(){};
-
         float montoAPagar(int monto_por_rueda);
-
         virtual void verificarTelepase(bool is_telepase) = 0;
-
-        virtual void descuento() = 0;
+        virtual float descuento() = 0;
 };
 
 
 class Moto: public Vehiculo{
     public:
         Moto();
-        void verificarTelepase(bool telepase):
+        void verificarTelepase(bool telepase);
         float descuento();
 };
 
@@ -27,7 +23,7 @@ class Moto: public Vehiculo{
 class Auto: public Vehiculo{
     public:
         Auto();
-        void verificarTelepase(bool telepase):
+        void verificarTelepase(bool telepase);
         float descuento();
 };
 
@@ -35,7 +31,7 @@ class Auto: public Vehiculo{
 class Camion: public Vehiculo{
     public:
         Camion(unsigned int ruedas);
-        void verificarTelepase(bool telepase):
+        void verificarTelepase(bool telepase);
         float descuento();
 };
 

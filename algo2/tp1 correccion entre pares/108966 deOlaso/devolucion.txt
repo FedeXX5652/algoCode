@@ -1,0 +1,41 @@
+Originalmente se utilizó un "entrada.txt" para el archivo de datos de libros, lo cual no es correcto. Lo tuve que modificar para poder hacer andar el código (como se ve en la foto adjuntada, en amarillo).
+
+FUNCIONALIDAD:
+
+Si al momento de ingresar el numero en el menú se le ingresa un numero fuera del rango (0>ingresado ó ingresado>8) este dice que no es una opción valida, pero luego al reingresar un valor nuevo lo indica como invalido, aunque este no lo sea. La única forma de solucionar el error es reiniciando el programa.
+
+Al momento de mostrar el mejor libro (opción 4), si hay 2 libros con puntaje máximo, solo se muestra el primero que aparezca.
+
+Al momento de mostrar los 3 peores libros (opción 5), si hay un empate en el 3er puesto no se muestra el primero alfabéticamente, si no que se muestra el primero listado.
+
+
+
+MODULARIZACIÓN:
+
+Se separaron algunas funciones de otras para hacer mas legible el código, pero hay algunas funciones modularizadas y otras no.
+
+Hay varios vectores y funciones estáticas que podrían crearse dinámicamente, como es el caso de la función "genero_a_representacion", que podría ser reemplazada por un vector con los nombres de los géneros. También se ve en las líneas 340, 370 y 371 del archivo /libros.cpp en las funciones "mostrar_genero_favorito" y "mostrar_genero_mas_leido", siendo que si se agregan nuevos géneros no se verán contemplados por estas funciones.
+
+
+EFICIENCIA ESPACIAL:
+Hay varios literales a lo largo del código, estos deberían ser constantes en caso de querer ser modificados, tal es el caso del puntaje máximo admitido.
+Hay varios registros en /libros.hpp que no son necesarios.
+
+NOMBRES:
+
+Se repiten algunos nombres en distintas funciones, aunque estos se usen para cosas distintas, tal como el caso de "contador" en "mostrar_genero_favorito" y "mostrar_genero_mas_leido" por ejemplo.
+
+
+
+BUENAS PRACTICAS:
+
+Hay varios return que cortan la ejecución de la función, siendo que dichas funciones son VOID, tal es el ejemplo de las siguientes funciones de /libros.cpp, mostrar_libros, agregar_libro, editar_libro, mostrar_mejor_libro, mostrar_peores_libros, mostrar_genero_mas_leido y mostrar_genero_favorito.
+
+
+INTERFAZ DE USUARIO:
+Tiene un diseño algo complejo, mas encima se ve raro al momento de utilizar mayúsculas (como se ve en la foto indicado en verde).
+
+COMENTARIOS:
+Faltan algunas pre y post (tal como en "mostrar_ayuda")
+Hay algunas post que deberían estar en las post (tal como en "validar_comando")
+Faltan algunas post (tal como en "procesar_comando")

@@ -1,0 +1,24 @@
+FUNCIONALIDAD:
+
+En la opción 2 (agregar libro), al momento de ingresar el género, se dice que se permite ingresar el género completo o solo la inicial (respetando mayúsculas y acentos), pero solo funciona ingresando el género completo (tampoco funcionan los géneros que tienen acentos).
+
+En la opción 2 (agregar libro) permite el ingreso de un titulo repetido (respetando mayúsculas y acentos).
+
+
+
+MODULARIZACIÓN:
+
+Hay varios bloques de código que superan el tamaño máximo indicado.
+
+
+
+ESPACIO TEMPORAL:
+
+Hay algunos cálculos innecesarios, tal como es el ejemplo de "procesar_puntaje" en la parte de "EDITAR_PUNTAJE" en el file /menu.cpp, donde se pide 
+
+
+
+compilacion mb
+funcionalidad b
+modularizacion r
+eficiencia temp b, terminar

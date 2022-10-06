@@ -1,0 +1,21 @@
+ESTRUCTURAS LINEALES:
+
+Listas:
+    - puede crecer a medida que se insertan nuevos elementos o acortarse cuando se borren
+    - tipos: pilas/colas/listas
+    - operaciones:
+        A: alta
+        B: baja
+        C: consulta
+        M: modificacion
+
+Pilas: FIFO
+    - la alta, baja y consulta se hacen al final (solo podes consultar el ultimo, para consultar el anteultimo tengo que dar de baja el ultimo y consultar de nuevo)
+    - ej de pila: teclado
+
+Colas: LIFO
+    - alta y consulta solo al principio
+    - baja al final
+
+Listas:
+    - alta, baja, consulta en la posicion que quiera

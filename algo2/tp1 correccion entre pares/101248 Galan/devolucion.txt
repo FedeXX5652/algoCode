@@ -12,7 +12,7 @@ Hay varios bloques de código que superan el tamaño máximo indicado.
 
 
 
-ESPACIO TEMPORAL:
+EFICIENCIA TEMPORAL:
 
 Hay algunos cálculos innecesarios, tal como es el ejemplo de "procesar_puntaje" en la parte de "EDITAR_PUNTAJE" en el file /menu.cpp, donde se pide 
 
@@ -21,4 +21,8 @@ Hay algunos cálculos innecesarios, tal como es el ejemplo de "procesar_puntaje"
 compilacion mb
 funcionalidad b
 modularizacion r
-eficiencia temp b, terminar
+eficiencia temp b
+eficiencia esp mb
+nombres mb
+buenas practicas, falta
+mem dinamica mb

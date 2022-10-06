@@ -1,0 +1,59 @@
+COMPILACION (B):
+
+Lanza un warning de comparación en /archivo_controllers.cpp línea 475, se realiza una comparación de un int contra un long long unsigned int.
+
+
+
+FUNCIONALIDAD (B):
+
+Al agregar un libro no permite ingresar el valor 100.
+
+Al modificar el score de un titulo, si se ingresa un valor incorrecto, el siguiente valor ingresado (cuando se pide que se reingrese un titulo) siempre resulta incorrecto, aunque este sea valido.
+
+
+
+MODULARIZACIÓN (MB):
+
+
+
+EFICIENCIA TEMPORAL (B):
+
+En el file /archivo_controllers.cpp, a la función abrir_menu se le pasa un valor cantidad_acciones, el cual se va aumentando cada vez que se accede al menu, pero este valor es solo utilizado para mostrar el texto de bienvenida.
+
+
+
+EFICIENCIA ESPACIAL (B):
+
+Hay partes del programa donde no se hace uso de las constantes declaradas, tal es el caso de la funcion genero_valido en el file /archivo_controllers.cpp, donde no se hace uso de las constantes de los caracteres de genero
+
+
+
+NOMBRES (MB):
+
+
+
+BUENAS PRACTICAS (B):
+
+Se mezclaron idiomas, /archivo_controllers.cpp
+
+
+
+MEMORIA DINAMICA (MB):
+
+
+
+INTERFAZ DE USUARIO (R):
+
+No se separan las indicaciones con un salto de linea, dificultando la lectura de las ordenes
+
+Al momento de ingresar un nuevo libro no se indican los generos validos, ni los valoes aceptados del puntaje
+
+No era obligatorio, pero no se indica el porcentaje del genero favorito, para que el usuario sepa con cuanto puntaje tiene su genero favorito
+
+
+
+COMENTARIOS (MB):
+
+
+
+Compilado con g++ *.cpp -Wall -Werror -Wconversion
